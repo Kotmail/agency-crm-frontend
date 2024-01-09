@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IUser } from '../../models/IUser'
 
-type LoginResponseData = {
+export type LoginResponseData = {
   user: IUser
   access_token: string
 }
