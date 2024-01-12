@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { Avatar, Box, Typography } from "@mui/material";
 import { LoginForm } from "../components/LoginForm";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { blue } from '@mui/material/colors';
 
-export const LoginPage = () => {
+export const LoginPage: FC = () => {
   return (
     <Box
       display='flex'
