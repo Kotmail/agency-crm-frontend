@@ -7,6 +7,7 @@ import * as Yup from "yup"
 import { useLoginUserMutation } from "../redux/api/authApi";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type Fields = {
   email: string;
@@ -16,14 +17,15 @@ type Fields = {
 const schema = Yup.object({
   email: Yup
     .string()
-    .email('Введён некорректный e-mail')
-    .required('Необходимо ввести e-mail'),
+    .email('form_errors.email.invalid')
+    .required('form_errors.email.required'),
   password: Yup
     .string()
-    .required('Необходимо ввести пароль')
+    .required('form_errors.password.required')
 })
 
 export const LoginForm: FC = () => {
+  const { t } = useTranslation()
   const [loginUser, { isSuccess: isLoginSuccess, isError: isLoginError }] = useLoginUserMutation()
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Fields>({
     resolver: yupResolver(schema)
@@ -35,13 +37,13 @@ export const LoginForm: FC = () => {
   
   useEffect(() => {
     if (isLoginError) {
-      enqueueSnackbar('Введены некорректные данные', {
+      enqueueSnackbar(t('notifications.login.fail'), {
         variant: 'error',
       })
     }
 
     if (isLoginSuccess) {
-      enqueueSnackbar('Вы успешно вошли в систему', {
+      enqueueSnackbar(t('notifications.login.success'), {
         variant: 'success',
       })
 
@@ -58,19 +60,26 @@ export const LoginForm: FC = () => {
     >
       <Stack spacing={2}>
         <TextField
-          label='E-mail *'
+          label={`${t('input_placeholders.email')} *`}
           {...register('email')}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={t(errors.email?.message || '')}
         />
         <TextField
           type='password'
-          label='Пароль *'
+          label={`${t('input_placeholders.password')} *`}
           {...register('password')}
           error={!!errors.password}
-          helperText={errors.password?.message}
+          helperText={t(errors.password?.message || '')}
         />
-        <LoadingButton loading={isSubmitting} type="submit" size='large' variant='contained'>Войти</LoadingButton>
+        <LoadingButton
+          type="submit"
+          loading={isSubmitting}
+          size='large'
+          variant='contained'
+        >
+          {t('buttons.login')}
+        </LoadingButton>
       </Stack>
     </Box>
   )

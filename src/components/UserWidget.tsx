@@ -5,21 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { clearAuthData } from "../redux/features/authSlice";
+import { useTranslation } from "react-i18next";
 
 const options = [
   {
     key: 'settings',
     icon: Settings,
-    text: 'Настройки',
   },
   {
     key: 'logout',
     icon: Logout,
-    text: 'Выйти',
   }
 ]
 
 export const UserWidget: FC = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const {user} = useAppSelector((state) => state.auth)
@@ -42,7 +42,7 @@ export const UserWidget: FC = () => {
 
   return (
     <>
-      <Tooltip title='Меню пользователя'>
+      <Tooltip title={t('tooltips.user_menu')}>
         <IconButton onClick={openOptionsHandler} sx={{p: 0}}>
           <Avatar sx={{width: 34, height: 34}} />
         </IconButton>
@@ -70,6 +70,7 @@ export const UserWidget: FC = () => {
           }
         }}>
           <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>{user?.fullName}</Typography>
+          <Typography fontSize={14} fontWeight={300} color="gray">{t(`user.roles.${user?.role}`)}</Typography>  
         </MenuItem>
         <Divider />
         {options.map(option =>
@@ -77,7 +78,7 @@ export const UserWidget: FC = () => {
             <ListItemIcon>
               <option.icon fontSize="small" />
             </ListItemIcon>
-            {option.text}
+            {t(option.key)}
           </MenuItem>
         )}
       </Menu>

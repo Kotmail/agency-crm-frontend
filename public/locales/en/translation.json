@@ -1,0 +1,37 @@
+{
+  "user": {
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Manager",
+      "installer": "Installer"
+    }
+  },
+  "buttons": {
+    "login": "Login"
+  },
+  "tooltips": {
+    "user_menu": "User menu"
+  },
+  "form_errors": {
+    "email": {
+      "required": "E-mail is a required field",
+      "invalid": "Value must be a valid e-mail"
+    },
+    "password": {
+      "required": "Password is a required field"
+    }
+  },
+  "input_placeholders": {
+    "email": "E-mail",
+    "password": "Password"
+  },
+  "notifications": {
+    "login": {
+      "fail": "Incorrect data has been entered",
+      "success": "You have successfully logged in"
+    }
+  },
+  "signin": "Sign In",
+  "settings": "Settings",
+  "logout": "Logout"
+}

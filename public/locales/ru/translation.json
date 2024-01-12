@@ -1,0 +1,37 @@
+{
+  "user": {
+    "roles": {
+      "admin": "Администратор",
+      "manager": "Менеджер",
+      "installer": "Монтажник"
+    }
+  },
+  "buttons": {
+    "login": "Войти"
+  },
+  "tooltips": {
+    "user_menu": "Меню пользователя"
+  },
+  "form_errors": {
+    "email": {
+      "required": "Необходимо ввести e-mail",
+      "invalid": "Некорректный e-mail"
+    },
+    "password": {
+      "required": "Необходимо ввести пароль"
+    }
+  },
+  "input_placeholders": {
+    "email": "E-mail",
+    "password": "Пароль"
+  },
+  "notifications": {
+    "login": {
+      "fail": "Введены некорректные данные",
+      "success": "Вы успешно вошли в систему"
+    }
+  },
+  "signin": "Вход в систему",
+  "settings": "Настройки",
+  "logout": "Выйти"
+}

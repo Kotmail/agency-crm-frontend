@@ -3,8 +3,11 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { LoginForm } from "../components/LoginForm";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { blue } from '@mui/material/colors';
+import { useTranslation } from "react-i18next";
 
 export const LoginPage: FC = () => {
+  const { t } = useTranslation()
+
   return (
     <Box
       display='flex'
@@ -24,7 +27,7 @@ export const LoginPage: FC = () => {
           marginBottom={3}
           textAlign='center'
         >
-          Вход в систему
+          {t('signin')}
         </Typography>
         <LoginForm />
       </Box>
