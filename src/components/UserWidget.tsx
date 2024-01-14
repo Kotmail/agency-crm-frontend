@@ -6,8 +6,9 @@ import { useAppSelector } from "../hooks/useAppSelector";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { clearAuthData } from "../redux/features/authSlice";
 import { useTranslation } from "react-i18next";
+import { Confirm } from "./dialogs/Confirm";
 
-const options = [
+const dropdownOptions = [
   {
     key: 'settings',
     icon: Settings,
@@ -19,31 +20,35 @@ const options = [
 ]
 
 export const UserWidget: FC = () => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { t } = useTranslation()
   const {user} = useAppSelector((state) => state.auth)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [isConfirmOpened, setIsConfirmOpened] = useState(false)
 
-  const openOptionsHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
-
-  const closeOptionsHandler = () => setAnchorEl(null)
+  const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+  const closeDropdownHandler = () => setAnchorEl(null)
 
   const selectOptionHandler = (optionKey: string) => {
     switch (optionKey) {
       case 'logout':
-        dispatch(clearAuthData())
-        navigate('/')
+        setIsConfirmOpened(true)
         break;
     }
 
-    closeOptionsHandler()
+    closeDropdownHandler()
+  }
+
+  const logoutHandler = () => {
+    dispatch(clearAuthData())
+    navigate('/')
   }
 
   return (
     <>
       <Tooltip title={t('tooltips.user_menu')}>
-        <IconButton onClick={openOptionsHandler} sx={{p: 0}}>
+        <IconButton onClick={openDropdownHandler} sx={{p: 0}}>
           <Avatar sx={{width: 34, height: 34}} />
         </IconButton>
       </Tooltip>
@@ -59,7 +64,7 @@ export const UserWidget: FC = () => {
           horizontal: 'right',
         }}
         open={Boolean(anchorEl)}
-        onClose={closeOptionsHandler}
+        onClose={closeDropdownHandler}
       >
         <MenuItem disabled sx={{
           display: 'block',
@@ -70,10 +75,10 @@ export const UserWidget: FC = () => {
           }
         }}>
           <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>{user?.fullName}</Typography>
-          <Typography fontSize={14} fontWeight={300} color="gray">{t(`user.roles.${user?.role}`)}</Typography>  
+          <Typography fontSize={14} fontWeight={300} color="gray">{t(`user.roles.${user?.role}`)}</Typography>
         </MenuItem>
         <Divider />
-        {options.map(option =>
+        {dropdownOptions.map(option =>
           <MenuItem key={option.key} onClick={() => selectOptionHandler(option.key)}>
             <ListItemIcon>
               <option.icon fontSize="small" />
@@ -82,6 +87,16 @@ export const UserWidget: FC = () => {
           </MenuItem>
         )}
       </Menu>
+      <Confirm
+        title={t('dialogs.logout_title')}
+        description={t('dialogs.logout_desc')}
+        cancelBtnHandler={() => setIsConfirmOpened(false)}
+        confirmBtnLabel={t('buttons.logout')}
+        confirmBtnHandler={logoutHandler}
+        open={isConfirmOpened}
+        maxWidth="xs"
+        fullWidth
+      />
     </>
   );
 }

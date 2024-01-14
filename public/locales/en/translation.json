@@ -7,7 +7,9 @@
     }
   },
   "buttons": {
-    "login": "Login"
+    "login": "Login",
+    "cancel": "Cancel",
+    "logout": "Logout"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -30,6 +32,10 @@
       "fail": "Incorrect data has been entered",
       "success": "You have successfully logged in"
     }
+  },
+  "dialogs": {
+    "logout_title": "Are you leaving?",
+    "logout_desc": "The current session will be completed."
   },
   "signin": "Sign In",
   "settings": "Settings",
