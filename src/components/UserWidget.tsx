@@ -7,6 +7,7 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { clearAuthData } from "../redux/features/authSlice";
 import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
+import { UserSettingsDialog } from "./dialogs/UserSettingsDialog";
 
 const dropdownOptions = [
   {
@@ -26,12 +27,16 @@ export const UserWidget: FC = () => {
   const {user} = useAppSelector((state) => state.auth)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [isConfirmOpened, setIsConfirmOpened] = useState(false)
+  const [isUserSettingsOpened, setIsUserSettingsOpened] = useState(false)
 
   const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const closeDropdownHandler = () => setAnchorEl(null)
 
   const selectOptionHandler = (optionKey: string) => {
     switch (optionKey) {
+      case 'settings':
+        setIsUserSettingsOpened(true)
+        break;
       case 'logout':
         setIsConfirmOpened(true)
         break;
@@ -87,6 +92,7 @@ export const UserWidget: FC = () => {
           </MenuItem>
         )}
       </Menu>
+      <UserSettingsDialog onClose={() => setIsUserSettingsOpened(false)} open={isUserSettingsOpened} />
       <Confirm
         title={t('dialogs.logout_title')}
         description={t('dialogs.logout_desc')}

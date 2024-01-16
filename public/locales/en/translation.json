@@ -9,7 +9,8 @@
   "buttons": {
     "login": "Login",
     "cancel": "Cancel",
-    "logout": "Logout"
+    "logout": "Logout",
+    "save": "Save"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -20,22 +21,40 @@
       "invalid": "Value must be a valid e-mail"
     },
     "password": {
-      "required": "Password is a required field"
+      "required": "Password is a required field",
+      "min_length": "The password must contain at least 10 characters",
+      "has_lower_case": "The password must contain at least 1 lower case letter",
+      "has_upper_case": "The password must contain at least 1 upper case letter",
+      "has_number": "The password must contain at least 1 number",
+      "has_special_char": "The password must contain at least 1 special character"
+    },
+    "password_confirm": {
+      "match": "Passwords must match"
+    },
+    "full_name": {
+      "required": "You must enter your full name"
     }
   },
   "input_placeholders": {
     "email": "E-mail",
-    "password": "Password"
+    "password": "Password",
+    "password_confirm": "Confirm password",
+    "login": "Login",
+    "full_name": "Full name"
   },
   "notifications": {
     "login": {
       "fail": "Incorrect data has been entered",
       "success": "You have successfully logged in"
+    },
+    "account_settings": {
+      "success": "Settings have been successfully updated"
     }
   },
   "dialogs": {
     "logout_title": "Are you leaving?",
-    "logout_desc": "The current session will be completed."
+    "logout_desc": "The current session will be completed.",
+    "account_settings_title": "Account Settings"
   },
   "signin": "Sign In",
   "settings": "Settings",

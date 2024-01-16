@@ -9,7 +9,8 @@
   "buttons": {
     "login": "Войти",
     "cancel": "Отмена",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "save": "Сохранить"
   },
   "tooltips": {
     "user_menu": "Меню пользователя"
@@ -20,22 +21,40 @@
       "invalid": "Некорректный e-mail"
     },
     "password": {
-      "required": "Необходимо ввести пароль"
+      "required": "Необходимо ввести пароль",
+      "min_length": "Пароль должен содержать минимум 10 символов",
+      "has_lower_case": "Необходимо ввести минимум 1 символ нижнего регистра",
+      "has_upper_case": "Необходимо ввести минимум 1 символ верхнего регистра",
+      "has_number": "Необходимо ввести минимум 1 цифру",
+      "has_special_char": "Необходимо ввести минимум 1 специальный символ"
+    },
+    "password_confirm": {
+      "match": "Пароли должны совпадать"
+    },
+    "full_name": {
+      "required": "Необходимо ввести ФИО"
     }
   },
   "input_placeholders": {
     "email": "E-mail",
-    "password": "Пароль"
+    "password": "Пароль",
+    "password_confirm": "Повторите пароль",
+    "login": "Логин",
+    "full_name": "ФИО"
   },
   "notifications": {
     "login": {
       "fail": "Введены некорректные данные",
       "success": "Вы успешно вошли в систему"
+    },
+    "account_settings": {
+      "success": "Настройки обновлены"
     }
   },
   "dialogs": {
     "logout_title": "Выйти из системы?",
-    "logout_desc": "Текущая сессия будет завершена."
+    "logout_desc": "Текущая сессия будет завершена.",
+    "account_settings_title": "Настройки учётной записи"
   },
   "signin": "Вход в систему",
   "settings": "Настройки",
