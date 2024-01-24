@@ -1,4 +1,4 @@
-import { Logout, Settings } from "@mui/icons-material";
+import { SvgIconComponent, Logout, Settings } from "@mui/icons-material";
 import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,19 @@ import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
 import { UserSettingsDialog } from "./dialogs/UserSettingsDialog";
 
-const dropdownOptions = [
+type dropdownOption = {
+  key: dialogVariantsEnum;
+  icon: SvgIconComponent;
+}
+
+type dialogVariants = {
+  settings: boolean;
+  logout: boolean;
+}
+
+type dialogVariantsEnum = keyof dialogVariants
+
+const dropdownOptions: dropdownOption[] = [
   {
     key: 'settings',
     icon: Settings,
@@ -26,21 +38,23 @@ export const UserWidget: FC = () => {
   const { t } = useTranslation()
   const {user} = useAppSelector((state) => state.auth)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [isConfirmOpened, setIsConfirmOpened] = useState(false)
-  const [isUserSettingsOpened, setIsUserSettingsOpened] = useState(false)
+  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+    settings: false,
+    logout: false,
+  })
 
   const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const closeDropdownHandler = () => setAnchorEl(null)
 
-  const selectOptionHandler = (optionKey: string) => {
-    switch (optionKey) {
-      case 'settings':
-        setIsUserSettingsOpened(true)
-        break;
-      case 'logout':
-        setIsConfirmOpened(true)
-        break;
-    }
+  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
+    setOpenedDialogs({
+      ...openedDialogs,
+      [dialogName]: isOpened,
+    })
+  }
+
+  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
+    dialogStateHandler(optionKey, true)
 
     closeDropdownHandler()
   }
@@ -92,14 +106,14 @@ export const UserWidget: FC = () => {
           </MenuItem>
         )}
       </Menu>
-      <UserSettingsDialog onClose={() => setIsUserSettingsOpened(false)} open={isUserSettingsOpened} />
+      <UserSettingsDialog onClose={() => dialogStateHandler('settings', false)} open={openedDialogs.settings} />
       <Confirm
         title={t('dialogs.logout_title')}
         description={t('dialogs.logout_desc')}
-        cancelBtnHandler={() => setIsConfirmOpened(false)}
+        cancelBtnHandler={() => dialogStateHandler('logout', false)}
         confirmBtnLabel={t('buttons.logout')}
         confirmBtnHandler={logoutHandler}
-        open={isConfirmOpened}
+        open={openedDialogs.logout}
         maxWidth="xs"
         fullWidth
       />
