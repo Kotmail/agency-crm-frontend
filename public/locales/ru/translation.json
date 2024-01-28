@@ -58,5 +58,18 @@
   },
   "signin": "Вход в систему",
   "settings": "Настройки",
-  "logout": "Выйти"
+  "logout": "Выйти",
+  "user_list_table": {
+    "label": "Список пользователей",
+    "headings": {
+      "actions": "Действия",
+      "login": "Логин",
+      "full_name": "ФИО",
+      "position": "Должность"
+    },
+    "actions": {
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    }
+  }
 }

@@ -16,6 +16,11 @@ export const userApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    users: builder.query<IUser[], void>({
+      query: () => ({
+        url: '/user',
+      }),
+    }),
     updateUser: builder.mutation<IUser, Partial<IUser> & Pick<IUser, 'id'>>({
       query: ({ id, ...body }) => ({
         url: `/user/${id}`,
@@ -26,4 +31,4 @@ export const userApi = createApi({
   }),
 })
 
-export const { useUpdateUserMutation } = userApi
+export const { useUsersQuery, useUpdateUserMutation } = userApi

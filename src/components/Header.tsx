@@ -4,7 +4,7 @@ import { UserWidget } from "./UserWidget";
 
 export const Header: FC = () => {
   return (
-    <AppBar>
+    <AppBar position="static">
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <Typography variant="h5">
