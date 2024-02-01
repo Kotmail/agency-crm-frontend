@@ -10,7 +10,8 @@
     "login": "Login",
     "cancel": "Cancel",
     "logout": "Logout",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -54,7 +55,11 @@
   "dialogs": {
     "logout_title": "Are you leaving?",
     "logout_desc": "The current session will be completed.",
-    "account_settings_title": "Account Settings"
+    "account_settings_title": "Account Settings",
+    "delete_user": {
+      "title": "Are you sure?",
+      "desc": "The user will be permanently deleted from the system!"
+    }
   },
   "signin": "Sign In",
   "settings": "Settings",
@@ -66,10 +71,10 @@
       "login": "Login",
       "full_name": "Full name",
       "position": "Position"
-    },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Delete"
     }
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

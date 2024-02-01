@@ -1,18 +1,91 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { MoreHoriz, Edit, Delete } from '@mui/icons-material';
+import { MoreHoriz, Edit, Delete, SvgIconComponent } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
-import { useUsersQuery } from "../redux/api/userApi";
+import { useDeleteUserMutation, useUsersQuery } from "../redux/api/userApi";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../hooks/useAppSelector";
+import { Confirm } from "./dialogs/Confirm";
+import { enqueueSnackbar } from "notistack";
+import { IUser } from "../models/IUser";
+import { EditUserDialog } from "./dialogs/EditUserDialog";
+
+type dropdownOption = {
+  key: dialogVariantsEnum;
+  icon: SvgIconComponent;
+}
+
+type dialogVariants = {
+  edit: boolean;
+  delete: boolean;
+}
+
+type dialogVariantsEnum = keyof dialogVariants
+
+const dropdownOptions: dropdownOption[] = [
+  {
+    key: 'edit',
+    icon: Edit,
+  },
+  {
+    key: 'delete',
+    icon: Delete,
+  },
+]
 
 export const UserList: FC = () => {
   const { data: users, isLoading: isUsersLoading, isError: isUsersLoadingError } = useUsersQuery()
+  const { user: authUser } = useAppSelector((state) => state.auth)
+  const [deleteUser, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteUserMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedUser, setSelectedUser] = useState<null | IUser>(null)
+  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+    edit: false,
+    delete: false,
+  })
   const isActionsMenuOpened = Boolean(anchorEl);
   const { t } = useTranslation()
-  
-  const openActionsMenuHandler = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+
+  const openActionsMenuHandler = (event: React.MouseEvent<HTMLButtonElement>, user: IUser) => {
+    setSelectedUser(user)
+    setAnchorEl(event.currentTarget);
+  }
   const closeActionsMenuHandler = () => setAnchorEl(null);
+
+  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
+    dialogStateHandler(optionKey, true)
+
+    closeActionsMenuHandler()
+  }
+
+  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
+    setOpenedDialogs({
+      ...openedDialogs,
+      [dialogName]: isOpened,
+    })
+  }
+
+  const deleteUserHandler = () => {
+    if (selectedUser) {
+      deleteUser(selectedUser.id)
+    }
+
+    dialogStateHandler('delete', false)
+  }
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      enqueueSnackbar(t('Пользователь удалён'), {
+        variant: 'success',
+      })
+    }
+    
+    if (isDeleteError) {
+      enqueueSnackbar(t('Не удалось удалить пользователя'), {
+        variant: 'error',
+      })
+    }
+  }, [isDeleteSuccess, isDeleteError])
 
   if (isUsersLoading) {
     return <CircularProgress />
@@ -52,7 +125,7 @@ export const UserList: FC = () => {
                     aria-haspopup="true"
                     aria-controls={isActionsMenuOpened ? 'userActionsMenu' : undefined}
                     aria-expanded={isActionsMenuOpened ? 'true' : undefined}
-                    onClick={openActionsMenuHandler}
+                    onClick={(e) => openActionsMenuHandler(e, user)}
                   >
                     <MoreHoriz fontSize="small" />
                   </IconButton>
@@ -76,19 +149,38 @@ export const UserList: FC = () => {
           'aria-labelledby': 'userActionsBtn',
         }}
       >
-        <MenuItem dense onClick={closeActionsMenuHandler}>
-          <ListItemIcon>
-            <Edit fontSize="small" />
-          </ListItemIcon>
-          {t('user_list_table.actions.edit')}
-        </MenuItem>
-        <MenuItem dense onClick={closeActionsMenuHandler}>
-          <ListItemIcon>
-            <Delete fontSize="small" />
-          </ListItemIcon>
-          {t('user_list_table.actions.delete')}
-        </MenuItem>
+        {dropdownOptions.map(option => {
+          if (selectedUser && selectedUser.id === authUser?.id && option.key === 'delete') {
+            return false
+          }
+
+          return <MenuItem key={option.key} dense onClick={() => selectOptionHandler(option.key)}>
+            <ListItemIcon>
+              <option.icon fontSize="small" />
+            </ListItemIcon>
+            {t(`actions.${option.key}`)}
+          </MenuItem>
+        }
+        )}
       </Menu>
+      {
+        selectedUser &&
+        <EditUserDialog
+          open={openedDialogs.edit}
+          onClose={() => dialogStateHandler('edit', false)}
+          user={selectedUser}
+        />
+      }
+      <Confirm
+        title={t('dialogs.delete_user.title')}
+        description={t('dialogs.delete_user.desc')}
+        cancelBtnHandler={() => dialogStateHandler('delete', false)}
+        confirmBtnLabel={t('buttons.delete')}
+        confirmBtnHandler={deleteUserHandler}
+        open={openedDialogs.delete}
+        maxWidth="xs"
+        fullWidth
+      />
     </>
   );
 }
