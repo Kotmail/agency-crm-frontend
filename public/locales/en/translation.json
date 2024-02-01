@@ -50,12 +50,20 @@
     },
     "account_settings": {
       "success": "Settings have been successfully updated"
+    },
+    "update_user": {
+      "success": "The user has been updated"
+    },
+    "delete_user": {
+      "fail": "The user could not be deleted",
+      "success": "The user has been deleted"
     }
   },
   "dialogs": {
     "logout_title": "Are you leaving?",
     "logout_desc": "The current session will be completed.",
     "account_settings_title": "Account Settings",
+    "update_user_title": "Edit user",
     "delete_user": {
       "title": "Are you sure?",
       "desc": "The user will be permanently deleted from the system!"

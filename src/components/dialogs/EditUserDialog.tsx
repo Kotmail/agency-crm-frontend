@@ -51,9 +51,11 @@ const schema = Yup.object({
 
 type EditUserDialogProps = {
   user: IUser;
+  title?: string;
+  successMessage?: string;
 } & DialogProps
 
-export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, user, ...props }) => {
+export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, successMessage, user, ...props }) => {
   const { t } = useTranslation()
   const [updateUser] = useUpdateUserMutation()
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Fields>({
@@ -79,7 +81,7 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, user, ...prop
         ...data
       }).unwrap()
 
-      enqueueSnackbar(t('notifications.account_settings.success'), {
+      enqueueSnackbar(successMessage || t('notifications.update_user.success'), {
         variant: 'success',
       })
 
@@ -119,7 +121,7 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, user, ...prop
           paddingTop: '20px'
         }
       }}>
-        {t('dialogs.account_settings_title')}
+        {title || t('dialogs.update_user_title')}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>

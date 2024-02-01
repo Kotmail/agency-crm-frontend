@@ -7,7 +7,7 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { clearAuthData } from "../redux/features/authSlice";
 import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
-import { UserSettingsDialog } from "./dialogs/UserSettingsDialog";
+import { EditUserDialog } from "./dialogs/EditUserDialog";
 
 type dropdownOption = {
   key: dialogVariantsEnum;
@@ -106,7 +106,16 @@ export const UserWidget: FC = () => {
           </MenuItem>
         )}
       </Menu>
-      <UserSettingsDialog onClose={() => dialogStateHandler('settings', false)} open={openedDialogs.settings} />
+      {
+        user &&
+        <EditUserDialog
+          open={openedDialogs.settings}
+          onClose={() => dialogStateHandler('settings', false)}
+          title={t('dialogs.account_settings_title')}
+          successMessage={t('notifications.account_settings.success')}
+          user={user}
+        />
+      }
       <Confirm
         title={t('dialogs.logout_title')}
         description={t('dialogs.logout_desc')}

@@ -75,13 +75,13 @@ export const UserList: FC = () => {
 
   useEffect(() => {
     if (isDeleteSuccess) {
-      enqueueSnackbar(t('Пользователь удалён'), {
+      enqueueSnackbar(t('notifications.delete_user.success'), {
         variant: 'success',
       })
     }
     
     if (isDeleteError) {
-      enqueueSnackbar(t('Не удалось удалить пользователя'), {
+      enqueueSnackbar(t('notifications.delete_user.fail'), {
         variant: 'error',
       })
     }
