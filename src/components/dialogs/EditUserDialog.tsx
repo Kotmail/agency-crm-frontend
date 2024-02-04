@@ -17,7 +17,7 @@ type Fields = {
   fullName: string;
   password: string;
   passwordConfirm: string;
-  role?: UserRole;
+  role: UserRole;
 }
 
 const schema = Yup.object({
@@ -52,6 +52,7 @@ const schema = Yup.object({
   role: Yup
     .mixed<UserRole>()
     .oneOf(Object.values(UserRole))
+    .defined()
 })
 
 type EditUserDialogProps = {
@@ -161,7 +162,7 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, succes
             size="small"
           />
           {
-            authUser?.id !== user.id && authUser?.role === 'admin' &&
+            authUser?.id !== user.id &&
             <FormControl>
               <FormLabel>{t(`input_placeholders.role`)}</FormLabel>
               <Controller
