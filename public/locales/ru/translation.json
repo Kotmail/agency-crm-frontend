@@ -41,7 +41,8 @@
     "password": "Пароль",
     "password_confirm": "Повторите пароль",
     "login": "Логин",
-    "full_name": "ФИО"
+    "full_name": "ФИО",
+    "role": "Роль"
   },
   "notifications": {
     "login": {

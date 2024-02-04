@@ -41,7 +41,8 @@
     "password": "Password",
     "password_confirm": "Confirm password",
     "login": "Login",
-    "full_name": "Full name"
+    "full_name": "Full name",
+    "role": "Role"
   },
   "notifications": {
     "login": {

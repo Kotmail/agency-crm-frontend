@@ -1,14 +1,15 @@
 import { FC, useEffect } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Stack, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useUpdateUserMutation } from "../../redux/api/userApi";
 import { useSnackbar } from "notistack";
 import { isQueryError } from "../../redux/api/helpers";
-import { IUser } from "../../models/IUser";
+import { IUser, UserRole } from "../../models/IUser";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 type Fields = {
   login: string;
@@ -16,6 +17,7 @@ type Fields = {
   fullName: string;
   password: string;
   passwordConfirm: string;
+  role?: UserRole;
 }
 
 const schema = Yup.object({
@@ -46,7 +48,10 @@ const schema = Yup.object({
   passwordConfirm: Yup
     .string()
     .defined()
-    .oneOf([Yup.ref('password')], 'form_errors.password_confirm.match')
+    .oneOf([Yup.ref('password')], 'form_errors.password_confirm.match'),
+  role: Yup
+    .mixed<UserRole>()
+    .oneOf(Object.values(UserRole))
 })
 
 type EditUserDialogProps = {
@@ -57,16 +62,10 @@ type EditUserDialogProps = {
 
 export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, successMessage, user, ...props }) => {
   const { t } = useTranslation()
+  const { user: authUser } = useAppSelector(state => state.auth)
   const [updateUser] = useUpdateUserMutation()
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<Fields>({
+  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<Fields>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      login: user.login,
-      email: user.email,
-      fullName: user.fullName,
-      password: '',
-      passwordConfirm: '',
-    },
   })
   const { enqueueSnackbar } = useSnackbar()
 
@@ -161,6 +160,30 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, succes
             label={t('input_placeholders.password_confirm')}
             size="small"
           />
+          {
+            authUser?.id !== user.id && authUser?.role === 'admin' &&
+            <FormControl>
+              <FormLabel>{t(`input_placeholders.role`)}</FormLabel>
+              <Controller
+                control={control}
+                name="role"
+                render={
+                  ({ field }) => (
+                    <RadioGroup {...field}>
+                      {Object.values(UserRole).map(role =>
+                        <FormControlLabel
+                          control={<Radio size="small" />}
+                          value={role}
+                          label={t(`user.roles.${role}`)}
+                          key={role}
+                        />
+                      )}
+                    </RadioGroup>
+                  )
+                }
+              />
+            </FormControl>
+          }
         </Stack>
       </DialogContent>
       <DialogActions sx={{padding: '8px 24px 16px'}}>
