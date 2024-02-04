@@ -25,6 +25,14 @@ export const userApi = createApi({
       }),
       providesTags: ['Users'],
     }),
+    addUser: builder.mutation<IUser, Omit<IUser, 'id'>>({
+      query: (body) => ({
+        url: 'user',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Users'],
+    }),
     updateUser: builder.mutation<IUser, Partial<IUser> & Pick<IUser, 'id'>>({
       query: ({ id, ...body }) => ({
         url: `/user/${id}`,
@@ -55,5 +63,9 @@ export const userApi = createApi({
   }),
 })
 
-export const { useUsersQuery, useUpdateUserMutation, useDeleteUserMutation } =
-  userApi
+export const {
+  useUsersQuery,
+  useAddUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = userApi

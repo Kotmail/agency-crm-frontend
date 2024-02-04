@@ -10,6 +10,7 @@
     "login": "Login",
     "cancel": "Cancel",
     "logout": "Logout",
+    "add": "Add",
     "save": "Save",
     "delete": "Delete"
   },
@@ -52,6 +53,9 @@
     "account_settings": {
       "success": "Settings have been successfully updated"
     },
+    "add_user": {
+      "success": "The user has been added"
+    },
     "update_user": {
       "success": "The user has been updated"
     },
@@ -64,6 +68,7 @@
     "logout_title": "Are you leaving?",
     "logout_desc": "The current session will be completed.",
     "account_settings_title": "Account Settings",
+    "add_user_title": "Add user",
     "update_user_title": "Edit user",
     "delete_user": {
       "title": "Are you sure?",
