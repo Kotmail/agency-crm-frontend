@@ -6,6 +6,16 @@
       "installer": "Installer"
     }
   },
+  "priorities": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "statuses": {
+    "waiting": "Waiting",
+    "accepted": "Accepted",
+    "done": "Done"
+  },
   "buttons": {
     "login": "Login",
     "cancel": "Cancel",
@@ -78,6 +88,20 @@
   "signin": "Sign In",
   "settings": "Settings",
   "logout": "Logout",
+  "order_list_table": {
+    "label": "List of orders",
+    "headings": {
+      "actions": "Actions",
+      "deadline": "Date of completion",
+      "description": "Type of work",
+      "priority": "Priority",
+      "brand": "Brand",
+      "creator": "Manager",
+      "executor": "Executor",
+      "cost": "Cost",
+      "status": "Status"
+    }
+  },
   "user_list_table": {
     "label": "List of users",
     "headings": {

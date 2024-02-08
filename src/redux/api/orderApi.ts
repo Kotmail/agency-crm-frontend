@@ -4,9 +4,20 @@ import { IOrder } from '../../models/IOrder'
 export const orderApi = createApi({
   reducerPath: 'orderApi',
   tagTypes: ['Orders'],
-  baseQuery: fetchBaseQuery({}),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_SERVER_BASE_ENDPOINT,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('access_token')
+
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
+
+      return headers
+    },
+  }),
   endpoints: (builder) => ({
-    orders: builder.query<IOrder, void>({
+    orders: builder.query<IOrder[], void>({
       query: () => ({
         url: '/order',
         provideTags: ['Orders'],

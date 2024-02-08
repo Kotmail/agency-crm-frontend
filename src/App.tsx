@@ -6,6 +6,7 @@ import { Dashboard } from "./pages/dashboard"
 import { useVerifyUserQuery } from "./redux/api/authApi"
 import { FC, useLayoutEffect } from "react"
 import { UsersPage } from "./pages/dashboard/UsersPage"
+import { OrdersPage } from "./pages/dashboard/OrdersPage"
 
 const App: FC = () => {
   const location = useLocation()
@@ -29,6 +30,7 @@ const App: FC = () => {
           <Route path='/' element={<LoginPage />} />
           <Route path='/dashboard' element={<Dashboard />}>
             <Route path='users' element={<UsersPage />} />
+            <Route path='orders' element={<OrdersPage />} />
           </Route>
         </Routes>
       </SnackbarProvider>

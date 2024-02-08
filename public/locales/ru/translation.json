@@ -6,6 +6,16 @@
       "installer": "Монтажник"
     }
   },
+  "priorities": {
+    "low": "Низкий",
+    "medium": "Средний",
+    "high": "Высокий"
+  },
+  "statuses": {
+    "waiting": "В ожидании",
+    "accepted": "Принято",
+    "done": "Выполнено"
+  },
   "buttons": {
     "login": "Войти",
     "cancel": "Отмена",
@@ -78,6 +88,20 @@
   "signin": "Вход в систему",
   "settings": "Настройки",
   "logout": "Выйти",
+  "order_list_table": {
+    "label": "List of orders",
+    "headings": {
+      "actions": "Действия",
+      "deadline": "Дата выполнения",
+      "description": "Вид работ",
+      "priority": "Приоритет",
+      "brand": "Бренд",
+      "creator": "Менеджер",
+      "executor": "Исполнитель",
+      "cost": "Стоимость",
+      "status": "Статус"
+    }
+  },
   "user_list_table": {
     "label": "Список пользователей",
     "headings": {
