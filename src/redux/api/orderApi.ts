@@ -20,8 +20,8 @@ export const orderApi = createApi({
     orders: builder.query<IOrder[], void>({
       query: () => ({
         url: '/order',
-        provideTags: ['Orders'],
       }),
+      providesTags: ['Orders'],
     }),
     addOrder: builder.mutation<IOrder, Omit<IOrder, 'id'>>({
       query: (body) => ({
@@ -53,4 +53,9 @@ export const orderApi = createApi({
   }),
 })
 
-export const { useOrdersQuery, useAddOrderMutation } = orderApi
+export const {
+  useOrdersQuery,
+  useAddOrderMutation,
+  useUpdateOrderMutation,
+  useDeleteOrderMutation,
+} = orderApi

@@ -72,6 +72,14 @@
     "delete_user": {
       "fail": "The user could not be deleted",
       "success": "The user has been deleted"
+    },
+    "update_order": {
+      "fail": "The order could not be updated",
+      "success": "The order has been updated"
+    },
+    "delete_order": {
+      "fail": "The order could not be deleted",
+      "success": "The order has been deleted"
     }
   },
   "dialogs": {
@@ -83,6 +91,10 @@
     "delete_user": {
       "title": "Are you sure?",
       "desc": "The user will be permanently deleted from the system!"
+    },
+    "delete_order": {
+      "title": "Are you sure?",
+      "desc": "The order will be permanently deleted from the system!"
     }
   },
   "signin": "Sign In",

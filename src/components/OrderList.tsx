@@ -1,11 +1,13 @@
-import { FC, MouseEvent, useState } from "react";
-import { Box, Button, ButtonProps, Chip, CircularProgress, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { FC, MouseEvent, useEffect, useState } from "react";
+import { Box, Button, ButtonProps, Chip, CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { visuallyHidden } from '@mui/utils';
-import { KeyboardArrowDown, MoreHoriz } from "@mui/icons-material";
+import { Delete, Edit, KeyboardArrowDown, MoreHoriz, SvgIconComponent } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { useOrdersQuery } from "../redux/api/orderApi";
+import { useDeleteOrderMutation, useOrdersQuery, useUpdateOrderMutation } from "../redux/api/orderApi";
 import { lightBlue, orange, teal } from '@mui/material/colors';
 import { IOrder, OrderStatuses } from "../models/IOrder";
+import { Confirm } from "./dialogs/Confirm";
+import { enqueueSnackbar } from "notistack";
 
 const priorityColors = {
   low: {
@@ -28,22 +30,116 @@ const statusColors: {[key in OrderStatuses]: ButtonProps['color'] } = {
   done: 'success',
 }
 
+type dropdownOption = {
+  key: dialogVariantsEnum;
+  icon: SvgIconComponent;
+}
+
+type dialogVariants = {
+  edit: boolean;
+  delete: boolean;
+}
+
+type dialogVariantsEnum = keyof dialogVariants
+
+const dropdownOptions: dropdownOption[] = [
+  {
+    key: 'edit',
+    icon: Edit,
+  },
+  {
+    key: 'delete',
+    icon: Delete,
+  },
+]
+
 export const OrderList: FC = () => {
   const { data: orders, isLoading: isOrdersLoading, isError: isOrdersLoadingError } = useOrdersQuery()
+  const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateOrderMutation()
+  const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteOrderMutation()
+  const [anchorActionsMenu, setAnchorActionsMenu] = useState<null | HTMLElement>(null)
   const [anchorStatusMenu, setAnchorStatusMenu] = useState<null | HTMLElement>(null)
-  const isOpenedStatusMenu = Boolean(anchorStatusMenu)
+  const isActionsMenuOpened = Boolean(anchorActionsMenu)
+  const isStatusMenuOpened = Boolean(anchorStatusMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
+  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+    edit: false,
+    delete: false,
+  })
   const { t } = useTranslation()
+
+  const openActionsMenuHandler = (event: React.MouseEvent<HTMLButtonElement>, order: IOrder) => {
+    setSelectedOrder(order)
+    setAnchorActionsMenu(event.currentTarget);
+  }
+  const closeActionsMenuHandler = () => setAnchorActionsMenu(null);
 
   const openStatusMenuHandler = (e: MouseEvent<HTMLElement>, order: IOrder) => {
     setAnchorStatusMenu(e.currentTarget)
     setSelectedOrder(order)
   }
-
   const closeStatusMenuHandler = () => {
     setAnchorStatusMenu(null)
     setSelectedOrder(null)
   }
+
+  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
+    setOpenedDialogs({
+      ...openedDialogs,
+      [dialogName]: isOpened,
+    })
+  }
+
+  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
+    dialogStateHandler(optionKey, true)
+
+    closeActionsMenuHandler()
+  }
+
+  const updateOrderHandler = (status: OrderStatuses) => {
+    if (selectedOrder && selectedOrder.status !== status) {
+      updateOrder({
+        id: selectedOrder.id,
+        status,
+      })
+    }
+
+    closeStatusMenuHandler()
+  }
+
+  const deleteOrderHandler = () => {
+    if (selectedOrder) {
+      deleteOrder(selectedOrder.id)
+    }
+
+    dialogStateHandler('delete', false)
+  }
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
+      enqueueSnackbar(t('notifications.update_order.success'), {
+        variant: 'success',
+      })
+    }
+
+    if (isDeleteSuccess) {
+      enqueueSnackbar(t('notifications.delete_order.success'), {
+        variant: 'success',
+      })
+    }
+    
+    if (isUpdateError) {
+      enqueueSnackbar(t('notifications.update_order.fail'), {
+        variant: 'error',
+      })
+    }
+
+    if (isDeleteError) {
+      enqueueSnackbar(t('notifications.delete_order.fail'), {
+        variant: 'error',
+      })
+    }
+  }, [isUpdateSuccess, isUpdateError, isDeleteSuccess, isDeleteError])
 
   if (isOrdersLoading) {
     return <CircularProgress />
@@ -98,6 +194,9 @@ export const OrderList: FC = () => {
                       aria-label={t('order_list_table.headings.actions')}
                       size="small"
                       aria-haspopup="true"
+                      aria-controls={isActionsMenuOpened ? 'orderActionsMenu' : undefined}
+                      aria-expanded={isActionsMenuOpened ? 'true' : undefined}
+                      onClick={(e) => openActionsMenuHandler(e, order)}
                     >
                       <MoreHoriz fontSize="small" />
                     </IconButton>}
@@ -163,11 +262,12 @@ export const OrderList: FC = () => {
                       endIcon={<KeyboardArrowDown />}
                       onClick={(e, ) => openStatusMenuHandler(e, order)}
                       aria-haspopup="true"
-                      aria-controls={isOpenedStatusMenu ? 'orderStatusMenu' : undefined}
-                      aria-expanded={isOpenedStatusMenu ? true : undefined}
+                      aria-controls={isStatusMenuOpened ? 'orderStatusMenu' : undefined}
+                      aria-expanded={isStatusMenuOpened ? true : undefined}
                       size="small"
                       fullWidth
                       sx={{
+                        minWidth: '123px',
                         whiteSpace: 'nowrap',
                         textTransform: 'none',
                         justifyContent: 'space-between',
@@ -188,7 +288,7 @@ export const OrderList: FC = () => {
           'aria-labelledby': 'orderStatusMenuButton',
         }}
         anchorEl={anchorStatusMenu}
-        open={isOpenedStatusMenu}
+        open={isStatusMenuOpened}
         onClose={closeStatusMenuHandler}
       >
         {
@@ -197,13 +297,42 @@ export const OrderList: FC = () => {
               key={status}
               dense
               selected={selectedOrder?.status === status}
-              onClick={closeStatusMenuHandler}
+              onClick={() => updateOrderHandler(status)}
             >
               {t(`statuses.${status}`)}
             </MenuItem>
           )
         }
       </Menu>
+      <Menu
+        id="orderActionsMenu"
+        anchorEl={anchorActionsMenu}
+        open={isActionsMenuOpened}
+        onClose={closeActionsMenuHandler}
+        MenuListProps={{
+          'aria-labelledby': 'orderActionsBtn',
+        }}
+      >
+        {dropdownOptions.map(option => {
+          return <MenuItem key={option.key} dense onClick={() => selectOptionHandler(option.key)}>
+            <ListItemIcon>
+              <option.icon fontSize="small" />
+            </ListItemIcon>
+            {t(`actions.${option.key}`)}
+          </MenuItem>
+        }
+        )}
+      </Menu>
+      <Confirm
+        title={t('dialogs.delete_order.title')}
+        description={t('dialogs.delete_order.desc')}
+        cancelBtnHandler={() => dialogStateHandler('delete', false)}
+        confirmBtnLabel={t('buttons.delete')}
+        confirmBtnHandler={deleteOrderHandler}
+        open={openedDialogs.delete}
+        maxWidth="xs"
+        fullWidth
+      />
     </>
   );
 }
