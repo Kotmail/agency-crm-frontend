@@ -45,6 +45,15 @@
     },
     "full_name": {
       "required": "You must enter your full name"
+    },
+    "description": {
+      "required": "Description is a required field"
+    },
+    "brand": {
+      "required": "Brand is a required field"
+    },
+    "cost": {
+      "required": "Cost is a required field"
     }
   },
   "input_placeholders": {
@@ -53,7 +62,13 @@
     "password_confirm": "Confirm password",
     "login": "Login",
     "full_name": "Full name",
-    "role": "Role"
+    "role": "Role",
+    "manager": "Manager",
+    "executor": "Executor",
+    "description": "Description",
+    "brand": "Brand",
+    "cost": "Cost",
+    "priority": "Priority"
   },
   "notifications": {
     "login": {
@@ -72,6 +87,10 @@
     "delete_user": {
       "fail": "The user could not be deleted",
       "success": "The user has been deleted"
+    },
+    "add_order": {
+      "fail": "The order could not be added",
+      "success": "The order has been added"
     },
     "update_order": {
       "fail": "The order could not be updated",
@@ -92,6 +111,7 @@
       "title": "Are you sure?",
       "desc": "The user will be permanently deleted from the system!"
     },
+    "add_order_title": "Add order",
     "delete_order": {
       "title": "Are you sure?",
       "desc": "The order will be permanently deleted from the system!"

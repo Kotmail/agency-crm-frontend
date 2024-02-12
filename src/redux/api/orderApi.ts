@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IOrder } from '../../models/IOrder'
 
+export interface CreateOrderRequest
+  extends Omit<IOrder, 'id' | 'creator' | 'executor'> {
+  creatorId?: number
+  executorId: number
+}
+
 export const orderApi = createApi({
   reducerPath: 'orderApi',
   tagTypes: ['Orders'],
@@ -23,7 +29,7 @@ export const orderApi = createApi({
       }),
       providesTags: ['Orders'],
     }),
-    addOrder: builder.mutation<IOrder, Omit<IOrder, 'id'>>({
+    addOrder: builder.mutation<IOrder, CreateOrderRequest>({
       query: (body) => ({
         url: '/order',
         method: 'POST',
