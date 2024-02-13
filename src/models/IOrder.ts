@@ -21,7 +21,7 @@ export interface IOrder {
   executor: IUser
   priority: OrderPriorities
   status: OrderStatuses
-  deadline: Date
+  deadline: string
   isArchived?: boolean
-  createdAt?: Date
+  createdAt: Date
 }

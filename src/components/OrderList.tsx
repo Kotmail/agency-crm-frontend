@@ -8,6 +8,7 @@ import { lightBlue, orange, teal } from '@mui/material/colors';
 import { IOrder, OrderStatuses } from "../models/IOrder";
 import { Confirm } from "./dialogs/Confirm";
 import { enqueueSnackbar } from "notistack";
+import { EditOrderDialog } from "./dialogs/EditOrderDialog";
 
 const priorityColors = {
   low: {
@@ -78,10 +79,7 @@ export const OrderList: FC = () => {
     setAnchorStatusMenu(e.currentTarget)
     setSelectedOrder(order)
   }
-  const closeStatusMenuHandler = () => {
-    setAnchorStatusMenu(null)
-    setSelectedOrder(null)
-  }
+  const closeStatusMenuHandler = () => setAnchorStatusMenu(null)
 
   const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
     setOpenedDialogs({
@@ -181,7 +179,7 @@ export const OrderList: FC = () => {
           <TableBody>
             {orders && orders.map(order => {
               const createdDate = new Date(Date.parse(order.createdAt.toString()))
-              const deadlineDate = new Date(Date.parse(order.deadline.toString()))
+              const deadlineDate = new Date(Date.parse(order.deadline))
 
               return (
                 <TableRow
@@ -189,7 +187,7 @@ export const OrderList: FC = () => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell>
-                    {<IconButton
+                    <IconButton
                       id="orderActionsBtn"
                       aria-label={t('order_list_table.headings.actions')}
                       size="small"
@@ -199,7 +197,7 @@ export const OrderList: FC = () => {
                       onClick={(e) => openActionsMenuHandler(e, order)}
                     >
                       <MoreHoriz fontSize="small" />
-                    </IconButton>}
+                    </IconButton>
                     </TableCell>
                   <TableCell>
                     <Typography
@@ -323,6 +321,11 @@ export const OrderList: FC = () => {
         }
         )}
       </Menu>
+      <EditOrderDialog
+        open={openedDialogs.edit}
+        onClose={() => dialogStateHandler('edit', false)}
+        order={selectedOrder}
+      />
       <Confirm
         title={t('dialogs.delete_order.title')}
         description={t('dialogs.delete_order.desc')}

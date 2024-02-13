@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
@@ -8,85 +8,82 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useUsersQuery } from "../../redux/api/userApi";
 import { useSnackbar } from "notistack";
 import { isQueryError } from "../../redux/api/helpers";
-import { OrderPriorities, OrderStatuses } from "../../models/IOrder";
-import { CreateOrderRequest, useAddOrderMutation } from "../../redux/api/orderApi";
+import { IOrder, OrderPriorities, OrderStatuses } from "../../models/IOrder";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { UpdateOrderRequest, useUpdateOrderMutation } from "../../redux/api/orderApi";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
+
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc)
 
 const schema = Yup.object({
+  id: Yup
+    .number()
+    .defined(),
   deadline: Yup
     .string()
-    .transform((value) => dayjs(value).format('YYYY-MM-DD'))
-    .required(),
+    .transform((value) => dayjs(value).format('YYYY-MM-DD')),
   description: Yup
     .string()
-    .required('form_errors.description.required'),
+    .min(15, 'form_errors.description.min_length'),
   brand: Yup
     .string()
-    .required('form_errors.brand.required'),
+    .min(5, 'form_errors.brand.min_length'),
   cost: Yup
     .number()
-    .transform(value => Number.isNaN(value) ? undefined : value )
-    .required('form_errors.cost.required'),
+    .positive('form_errors.cost.positive_number')
+    .transform(value => Number.isNaN(value) ? 0 : value),
   creatorId: Yup
     .number(),
   executorId: Yup
-    .number()
-    .required(),
+    .number(),
   priority: Yup
     .mixed<OrderPriorities>()
-    .oneOf(Object.values(OrderPriorities))
-    .defined(),
+    .oneOf(Object.values(OrderPriorities)),
   status: Yup
     .mixed<OrderStatuses>()
-    .oneOf(Object.values(OrderStatuses))
-    .defined(),
+    .oneOf(Object.values(OrderStatuses)),
 })
 
-type AddOrderDialogProps = {
+type EditOrderDialogProps = {
+  order: IOrder | null;
   title?: string;
   successMessage?: string;
 } & DialogProps
 
-export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, successMessage, ...props }) => {
+export const EditOrderDialog: FC<EditOrderDialogProps> = ({ onClose, title, successMessage, order, ...props }) => {
+  const { t } = useTranslation()
   const { user: authUser } = useAppSelector(state => state.auth)
   const { data: users } = useUsersQuery()
   const { managers, executors } = {
     managers: users ? users.filter(user => user.role === 'manager') : [],
     executors: users ? users.filter(user => user.role === 'installer') : [],
   }
-  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<CreateOrderRequest>({
+  const [updateOrder] = useUpdateOrderMutation()
+  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<UpdateOrderRequest>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      deadline: dayjs().format('YYYY-MM-DD'),
-      priority: OrderPriorities.LOW,
-      status: OrderStatuses.WAITING,
-    }
   })
-  const [addOrder] = useAddOrderMutation()
   const { enqueueSnackbar } = useSnackbar()
-  const { t } = useTranslation()
 
-  const onSubmit: SubmitHandler<CreateOrderRequest> = async (data) => {
-    if (!data.creatorId) {
-      data.creatorId = authUser?.id
+  useEffect(()=> {
+    if (order) {
+      reset(order)
     }
+  }, [order])
 
+  const onSubmit: SubmitHandler<UpdateOrderRequest> = async (data) => {
     try {
-      await addOrder(data).unwrap()
+      await updateOrder(data).unwrap()
 
-      enqueueSnackbar(successMessage || t('notifications.add_order.success'), {
+      enqueueSnackbar(successMessage || t('notifications.update_order.success'), {
         variant: 'success',
       })
 
       closeDialogHandler()
-      reset()
     } catch (err) {
       if (isQueryError(err) && err.data && typeof err.data === 'object' && 'message' in err.data) {
         if (Array.isArray(err.data.message)) {
@@ -102,6 +99,10 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
 
   const closeDialogHandler = () => {
     onClose && onClose({}, 'escapeKeyDown')
+  }
+
+  if (!order) {
+    return null
   }
 
   return (
@@ -121,7 +122,7 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
           paddingTop: '20px'
         }
       }}>
-        {title || t('dialogs.add_order_title')}
+        {title || t('dialogs.edit_order.title')}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
@@ -164,7 +165,7 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
                   }
                   control={control}
                   name="creatorId"
-                  defaultValue={managers[0].id}
+                  defaultValue={order.creator.id}
                 />
               </FormControl>
           }
@@ -183,7 +184,7 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
                   }
                   control={control}
                   name="executorId"
-                  defaultValue={executors[0].id}
+                  defaultValue={order.executor.id}
                 />
               </FormControl>
           }
@@ -241,7 +242,7 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
           loading={isSubmitting}
           variant="contained"
         >
-          {t('buttons.add')}
+          {t('buttons.save')}
         </LoadingButton>
       </DialogActions>
     </Dialog>

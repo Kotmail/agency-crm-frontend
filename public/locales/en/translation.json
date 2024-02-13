@@ -47,13 +47,16 @@
       "required": "You must enter your full name"
     },
     "description": {
-      "required": "Description is a required field"
+      "required": "Description is a required field",
+      "min_length": "The description must contain at least 15 characters"
     },
     "brand": {
-      "required": "Brand is a required field"
+      "required": "Brand is a required field",
+      "min_length": "The brand must contain at least 5 characters"
     },
     "cost": {
-      "required": "Cost is a required field"
+      "required": "Cost is a required field",
+      "positive_number": "The cost must contain a positive number"
     }
   },
   "input_placeholders": {
@@ -112,6 +115,9 @@
       "desc": "The user will be permanently deleted from the system!"
     },
     "add_order_title": "Add order",
+    "edit_order": {
+      "title": "Edit order"
+    },
     "delete_order": {
       "title": "Are you sure?",
       "desc": "The order will be permanently deleted from the system!"

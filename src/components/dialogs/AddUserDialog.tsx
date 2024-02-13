@@ -71,8 +71,6 @@ export const AddUserDialog: FC<AddUserDialogProps> = ({ onClose, title, successM
   const { enqueueSnackbar } = useSnackbar()
 
   const onSubmit: SubmitHandler<Fields> = async (data) => {
-    console.log(data)
-
     try {
       await addUser(data).unwrap()
 

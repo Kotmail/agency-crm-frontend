@@ -2,10 +2,14 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IOrder } from '../../models/IOrder'
 
 export interface CreateOrderRequest
-  extends Omit<IOrder, 'id' | 'creator' | 'executor'> {
+  extends Omit<IOrder, 'id' | 'creator' | 'executor' | 'createdAt'> {
   creatorId?: number
   executorId: number
 }
+
+export interface UpdateOrderRequest
+  extends Partial<CreateOrderRequest>,
+    Pick<IOrder, 'id'> {}
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',
@@ -37,16 +41,14 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ['Orders'],
     }),
-    updateOrder: builder.mutation<IOrder, Partial<IOrder> & Pick<IOrder, 'id'>>(
-      {
-        query: ({ id, ...body }) => ({
-          url: `/order/${id}`,
-          method: 'PUT',
-          body,
-        }),
-        invalidatesTags: ['Orders'],
-      },
-    ),
+    updateOrder: builder.mutation<IOrder, UpdateOrderRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/order/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Orders'],
+    }),
     deleteOrder: builder.mutation<{ raw: unknown[]; affected: number }, number>(
       {
         query: (id) => ({
