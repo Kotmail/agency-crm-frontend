@@ -85,7 +85,7 @@ export const UserWidget: FC = () => {
         open={Boolean(anchorEl)}
         onClose={closeDropdownHandler}
       >
-        <MenuItem disabled sx={{
+        <MenuItem disabled dense sx={{
           display: 'block',
           paddingTop: 0,
           paddingBottom: 0,
@@ -98,7 +98,7 @@ export const UserWidget: FC = () => {
         </MenuItem>
         <Divider />
         {dropdownOptions.map(option =>
-          <MenuItem key={option.key} onClick={() => selectOptionHandler(option.key)}>
+          <MenuItem key={option.key} dense onClick={() => selectOptionHandler(option.key)}>
             <ListItemIcon>
               <option.icon fontSize="small" />
             </ListItemIcon>

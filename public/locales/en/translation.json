@@ -152,5 +152,12 @@
   "actions": {
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "pages": {
+    "orders": "Orders",
+    "users": "Users"
+  },
+  "aria_labels": {
+    "list_of_pages": "List of pages"
   }
 }

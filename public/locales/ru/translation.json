@@ -152,5 +152,12 @@
   "actions": {
     "edit": "Редактировать",
     "delete": "Удалить"
+  },
+  "pages": {
+    "orders": "Заказы",
+    "users": "Пользователи"
+  },
+  "aria_labels": {
+    "list_of_pages": "Список страниц"
   }
 }
