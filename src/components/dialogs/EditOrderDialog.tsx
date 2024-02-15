@@ -61,7 +61,7 @@ export const EditOrderDialog: FC<EditOrderDialogProps> = ({ onClose, title, succ
   const { data: users } = useUsersQuery()
   const { managers, executors } = {
     managers: users ? users.filter(user => user.role === 'manager') : [],
-    executors: users ? users.filter(user => user.role === 'installer') : [],
+    executors: users ? users.filter(user => user.role === 'executor') : [],
   }
   const [updateOrder] = useUpdateOrderMutation()
   const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<UpdateOrderRequest>({

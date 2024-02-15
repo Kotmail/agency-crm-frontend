@@ -3,7 +3,7 @@
     "roles": {
       "admin": "Administrator",
       "manager": "Manager",
-      "installer": "Installer"
+      "executor": "Executor"
     }
   },
   "priorities": {
@@ -121,6 +121,10 @@
     "delete_order": {
       "title": "Are you sure?",
       "desc": "The order will be permanently deleted from the system!"
+    },
+    "not_authorized": {
+      "title": "Access error!",
+      "desc": "You are not authorized to view this page."
     }
   },
   "signin": "Sign In",

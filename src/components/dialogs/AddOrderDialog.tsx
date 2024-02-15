@@ -59,7 +59,7 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
   const { data: users } = useUsersQuery()
   const { managers, executors } = {
     managers: users ? users.filter(user => user.role === 'manager') : [],
-    executors: users ? users.filter(user => user.role === 'installer') : [],
+    executors: users ? users.filter(user => user.role === 'executor') : [],
   }
   const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<CreateOrderRequest>({
     resolver: yupResolver(schema),
