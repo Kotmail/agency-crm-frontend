@@ -8,20 +8,19 @@ import { clearAuthData } from "../redux/features/authSlice";
 import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
 import { EditUserDialog } from "./dialogs/EditUserDialog";
+import { useDialogs } from "../hooks/useDialogs";
 
-type dropdownOption = {
-  key: dialogVariantsEnum;
+type DialogVariants = {
+  settings: boolean
+  logout: boolean
+}
+
+type DropdownOption = {
+  key: keyof DialogVariants;
   icon: SvgIconComponent;
 }
 
-type dialogVariants = {
-  settings: boolean;
-  logout: boolean;
-}
-
-type dialogVariantsEnum = keyof dialogVariants
-
-const dropdownOptions: dropdownOption[] = [
+const dropdownOptions: DropdownOption[] = [
   {
     key: 'settings',
     icon: Settings,
@@ -38,7 +37,7 @@ export const UserWidget: FC = () => {
   const { t } = useTranslation()
   const {user} = useAppSelector((state) => state.auth)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+  const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
     settings: false,
     logout: false,
   })
@@ -46,15 +45,8 @@ export const UserWidget: FC = () => {
   const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const closeDropdownHandler = () => setAnchorEl(null)
 
-  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
-    setOpenedDialogs({
-      ...openedDialogs,
-      [dialogName]: isOpened,
-    })
-  }
-
-  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
-    dialogStateHandler(optionKey, true)
+  const selectOptionHandler = (optionKey: keyof DialogVariants) => {
+    setOpenedDialogs(optionKey, true)
 
     closeDropdownHandler()
   }
@@ -110,7 +102,7 @@ export const UserWidget: FC = () => {
         user &&
         <EditUserDialog
           open={openedDialogs.settings}
-          onClose={() => dialogStateHandler('settings', false)}
+          onClose={() => setOpenedDialogs('settings', false)}
           title={t('dialogs.account_settings_title')}
           successMessage={t('notifications.account_settings.success')}
           user={user}
@@ -119,7 +111,7 @@ export const UserWidget: FC = () => {
       <Confirm
         title={t('dialogs.logout_title')}
         description={t('dialogs.logout_desc')}
-        cancelBtnHandler={() => dialogStateHandler('logout', false)}
+        cancelBtnHandler={() => setOpenedDialogs('logout', false)}
         confirmBtnLabel={t('buttons.logout')}
         confirmBtnHandler={logoutHandler}
         open={openedDialogs.logout}

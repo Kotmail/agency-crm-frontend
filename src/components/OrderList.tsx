@@ -9,6 +9,7 @@ import { IOrder, OrderStatuses } from "../models/IOrder";
 import { Confirm } from "./dialogs/Confirm";
 import { enqueueSnackbar } from "notistack";
 import { EditOrderDialog } from "./dialogs/EditOrderDialog";
+import { useDialogs } from "../hooks/useDialogs";
 
 const priorityColors = {
   low: {
@@ -31,19 +32,17 @@ const statusColors: {[key in OrderStatuses]: ButtonProps['color'] } = {
   done: 'success',
 }
 
-type dropdownOption = {
-  key: dialogVariantsEnum;
-  icon: SvgIconComponent;
+type DialogVariants = {
+  edit: boolean
+  delete: boolean
 }
 
-type dialogVariants = {
-  edit: boolean;
-  delete: boolean;
+type DropdownOption = {
+  key: keyof DialogVariants
+  icon: SvgIconComponent
 }
 
-type dialogVariantsEnum = keyof dialogVariants
-
-const dropdownOptions: dropdownOption[] = [
+const dropdownOptions: DropdownOption[] = [
   {
     key: 'edit',
     icon: Edit,
@@ -63,7 +62,7 @@ export const OrderList: FC = () => {
   const isActionsMenuOpened = Boolean(anchorActionsMenu)
   const isStatusMenuOpened = Boolean(anchorStatusMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
-  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+  const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
     edit: false,
     delete: false,
   })
@@ -81,15 +80,8 @@ export const OrderList: FC = () => {
   }
   const closeStatusMenuHandler = () => setAnchorStatusMenu(null)
 
-  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
-    setOpenedDialogs({
-      ...openedDialogs,
-      [dialogName]: isOpened,
-    })
-  }
-
-  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
-    dialogStateHandler(optionKey, true)
+  const selectOptionHandler = (optionKey: keyof DialogVariants) => {
+    setOpenedDialogs(optionKey, true)
 
     closeActionsMenuHandler()
   }
@@ -110,7 +102,7 @@ export const OrderList: FC = () => {
       deleteOrder(selectedOrder.id)
     }
 
-    dialogStateHandler('delete', false)
+    setOpenedDialogs('delete', false)
   }
 
   useEffect(() => {
@@ -323,13 +315,13 @@ export const OrderList: FC = () => {
       </Menu>
       <EditOrderDialog
         open={openedDialogs.edit}
-        onClose={() => dialogStateHandler('edit', false)}
+        onClose={() => setOpenedDialogs('edit', false)}
         order={selectedOrder}
       />
       <Confirm
         title={t('dialogs.delete_order.title')}
         description={t('dialogs.delete_order.desc')}
-        cancelBtnHandler={() => dialogStateHandler('delete', false)}
+        cancelBtnHandler={() => setOpenedDialogs('delete', false)}
         confirmBtnLabel={t('buttons.delete')}
         confirmBtnHandler={deleteOrderHandler}
         open={openedDialogs.delete}

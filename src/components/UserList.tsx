@@ -9,20 +9,19 @@ import { Confirm } from "./dialogs/Confirm";
 import { enqueueSnackbar } from "notistack";
 import { IUser } from "../models/IUser";
 import { EditUserDialog } from "./dialogs/EditUserDialog";
+import { useDialogs } from "../hooks/useDialogs";
 
-type dropdownOption = {
-  key: dialogVariantsEnum;
-  icon: SvgIconComponent;
+type DialogVariants = {
+  edit: boolean
+  delete: boolean
 }
 
-type dialogVariants = {
-  edit: boolean;
-  delete: boolean;
+type DropdownOption = {
+  key: keyof DialogVariants
+  icon: SvgIconComponent
 }
 
-type dialogVariantsEnum = keyof dialogVariants
-
-const dropdownOptions: dropdownOption[] = [
+const dropdownOptions: DropdownOption[] = [
   {
     key: 'edit',
     icon: Edit,
@@ -33,13 +32,13 @@ const dropdownOptions: dropdownOption[] = [
   },
 ]
 
-export const UserList: FC = () => {
+export const UserList: FC = () => { 
   const { data: users, isLoading: isUsersLoading, isError: isUsersLoadingError } = useUsersQuery()
   const { user: authUser } = useAppSelector((state) => state.auth)
   const [deleteUser, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteUserMutation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedUser, setSelectedUser] = useState<null | IUser>(null)
-  const [openedDialogs, setOpenedDialogs] = useState<dialogVariants>({
+  const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
     edit: false,
     delete: false,
   })
@@ -52,17 +51,10 @@ export const UserList: FC = () => {
   }
   const closeActionsMenuHandler = () => setAnchorEl(null);
 
-  const selectOptionHandler = (optionKey: dialogVariantsEnum) => {
-    dialogStateHandler(optionKey, true)
+  const selectOptionHandler = (optionKey: keyof DialogVariants) => {
+    setOpenedDialogs(optionKey, true)
 
     closeActionsMenuHandler()
-  }
-
-  const dialogStateHandler = (dialogName: dialogVariantsEnum, isOpened: boolean) => {
-    setOpenedDialogs({
-      ...openedDialogs,
-      [dialogName]: isOpened,
-    })
   }
 
   const deleteUserHandler = () => {
@@ -70,7 +62,7 @@ export const UserList: FC = () => {
       deleteUser(selectedUser.id)
     }
 
-    dialogStateHandler('delete', false)
+    setOpenedDialogs('delete', false)
   }
 
   useEffect(() => {
@@ -167,14 +159,14 @@ export const UserList: FC = () => {
         selectedUser &&
         <EditUserDialog
           open={openedDialogs.edit}
-          onClose={() => dialogStateHandler('edit', false)}
+          onClose={() => setOpenedDialogs('edit', false)}
           user={selectedUser}
         />
       }
       <Confirm
         title={t('dialogs.delete_user.title')}
         description={t('dialogs.delete_user.desc')}
-        cancelBtnHandler={() => dialogStateHandler('delete', false)}
+        cancelBtnHandler={() => setOpenedDialogs('delete', false)}
         confirmBtnLabel={t('buttons.delete')}
         confirmBtnHandler={deleteUserHandler}
         open={openedDialogs.delete}
