@@ -148,8 +148,6 @@ export const AddOrderDialog: FC<AddOrderDialogProps> = ({ onClose, title, succes
             name="deadline"
           />
           {
-            authUser?.role === 'admin'
-              &&
             managers.length > 0
               &&
               <FormControl size="small">

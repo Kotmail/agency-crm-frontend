@@ -9,7 +9,6 @@ import { useUsersQuery } from "../../redux/api/userApi";
 import { useSnackbar } from "notistack";
 import { isQueryError } from "../../redux/api/helpers";
 import { IOrder, OrderPriorities, OrderStatuses } from "../../models/IOrder";
-import { useAppSelector } from "../../hooks/useAppSelector";
 import { UpdateOrderRequest, useUpdateOrderMutation } from "../../redux/api/orderApi";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -57,7 +56,6 @@ type EditOrderDialogProps = {
 
 export const EditOrderDialog: FC<EditOrderDialogProps> = ({ onClose, title, successMessage, order, ...props }) => {
   const { t } = useTranslation()
-  const { user: authUser } = useAppSelector(state => state.auth)
   const { data: users } = useUsersQuery()
   const { managers, executors } = {
     managers: users ? users.filter(user => user.role === 'manager') : [],
@@ -149,8 +147,6 @@ export const EditOrderDialog: FC<EditOrderDialogProps> = ({ onClose, title, succ
             name="deadline"
           />
           {
-            authUser?.role === 'admin'
-              &&
             managers.length > 0
               &&
               <FormControl size="small">

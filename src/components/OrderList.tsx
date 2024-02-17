@@ -10,6 +10,8 @@ import { Confirm } from "./dialogs/Confirm";
 import { enqueueSnackbar } from "notistack";
 import { EditOrderDialog } from "./dialogs/EditOrderDialog";
 import { useDialogs } from "../hooks/useDialogs";
+import { Hider } from "./Hider";
+import { UserRole } from "../models/IUser";
 
 const priorityColors = {
   low: {
@@ -154,16 +156,22 @@ export const OrderList: FC = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Typography component="span" sx={visuallyHidden}>{t('order_list_table.headings.actions')}</Typography>
-              </TableCell>
+              <Hider roles={[UserRole.EXECUTOR]}>
+                <TableCell>
+                  <Typography component="span" sx={visuallyHidden}>{t('order_list_table.headings.actions')}</Typography>
+                </TableCell>
+              </Hider>
               <TableCell>№</TableCell>
               <TableCell>{t('order_list_table.headings.deadline')}</TableCell>
               <TableCell>{t('order_list_table.headings.description')}</TableCell>
               <TableCell>{t('order_list_table.headings.priority')}</TableCell>
               <TableCell>{t('order_list_table.headings.brand')}</TableCell>
-              <TableCell>{t('order_list_table.headings.creator')}</TableCell>
-              <TableCell>{t('order_list_table.headings.executor')}</TableCell>
+              <Hider roles={[UserRole.MANAGER]}>
+                <TableCell>{t('order_list_table.headings.creator')}</TableCell>
+              </Hider>
+              <Hider roles={[UserRole.EXECUTOR]}>
+                <TableCell>{t('order_list_table.headings.executor')}</TableCell>
+              </Hider>
               <TableCell>{t('order_list_table.headings.cost')}</TableCell>
               <TableCell>{t('order_list_table.headings.status')}</TableCell>
             </TableRow>
@@ -178,19 +186,21 @@ export const OrderList: FC = () => {
                   key={order.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell>
-                    <IconButton
-                      id="orderActionsBtn"
-                      aria-label={t('order_list_table.headings.actions')}
-                      size="small"
-                      aria-haspopup="true"
-                      aria-controls={isActionsMenuOpened ? 'orderActionsMenu' : undefined}
-                      aria-expanded={isActionsMenuOpened ? 'true' : undefined}
-                      onClick={(e) => openActionsMenuHandler(e, order)}
-                    >
-                      <MoreHoriz fontSize="small" />
-                    </IconButton>
+                  <Hider roles={[UserRole.EXECUTOR]}>
+                    <TableCell>
+                      <IconButton
+                        id="orderActionsBtn"
+                        aria-label={t('order_list_table.headings.actions')}
+                        size="small"
+                        aria-haspopup="true"
+                        aria-controls={isActionsMenuOpened ? 'orderActionsMenu' : undefined}
+                        aria-expanded={isActionsMenuOpened ? 'true' : undefined}
+                        onClick={(e) => openActionsMenuHandler(e, order)}
+                      >
+                        <MoreHoriz fontSize="small" />
+                      </IconButton>
                     </TableCell>
+                  </Hider>
                   <TableCell>
                     <Typography
                       component="span"
@@ -231,8 +241,12 @@ export const OrderList: FC = () => {
                     />
                   </TableCell>
                   <TableCell>{order.brand}</TableCell>
-                  <TableCell>{order.creator.fullName}</TableCell>
-                  <TableCell>{order.executor.fullName}</TableCell>
+                  <Hider roles={[UserRole.MANAGER]}>
+                    <TableCell>{order.creator.fullName}</TableCell>
+                  </Hider>
+                  <Hider roles={[UserRole.EXECUTOR]}>
+                    <TableCell>{order.executor.fullName}</TableCell>
+                  </Hider>
                   <TableCell>
                     {
                       new Intl.NumberFormat('ru', {
