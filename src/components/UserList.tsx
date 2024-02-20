@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { MoreHoriz, Edit, Delete, SvgIconComponent } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
-import { useDeleteUserMutation, useUsersQuery } from "../redux/api/userApi";
+import { useDeleteUserMutation, useUsersQuery } from "../redux/api/usersApi";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { Confirm } from "./dialogs/Confirm";

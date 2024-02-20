@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { apiSlice } from '.'
 import { IOrder } from '../../models/IOrder'
 
 export interface CreateOrderRequest
@@ -11,31 +11,21 @@ export interface UpdateOrderRequest
   extends Partial<CreateOrderRequest>,
     Pick<IOrder, 'id'> {}
 
-export const orderApi = createApi({
-  reducerPath: 'orderApi',
-  tagTypes: ['Orders'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_SERVER_BASE_ENDPOINT,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('access_token')
+const apiWithTag = apiSlice.enhanceEndpoints({
+  addTagTypes: ['Orders'],
+})
 
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-
-      return headers
-    },
-  }),
+const ordersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
     orders: builder.query<IOrder[], void>({
       query: () => ({
-        url: '/order',
+        url: '/orders',
       }),
       providesTags: ['Orders'],
     }),
     addOrder: builder.mutation<IOrder, CreateOrderRequest>({
       query: (body) => ({
-        url: '/order',
+        url: '/orders',
         method: 'POST',
         body,
       }),
@@ -43,7 +33,7 @@ export const orderApi = createApi({
     }),
     updateOrder: builder.mutation<IOrder, UpdateOrderRequest>({
       query: ({ id, ...body }) => ({
-        url: `/order/${id}`,
+        url: `/orders/${id}`,
         method: 'PUT',
         body,
       }),
@@ -52,7 +42,7 @@ export const orderApi = createApi({
     deleteOrder: builder.mutation<{ raw: unknown[]; affected: number }, number>(
       {
         query: (id) => ({
-          url: `/order/${id}`,
+          url: `/orders/${id}`,
           method: 'DELETE',
         }),
         invalidatesTags: ['Orders'],
@@ -66,4 +56,4 @@ export const {
   useAddOrderMutation,
   useUpdateOrderMutation,
   useDeleteOrderMutation,
-} = orderApi
+} = ordersApi

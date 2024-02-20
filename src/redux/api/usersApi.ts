@@ -1,33 +1,23 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { apiSlice } from '.'
 import { IUser } from '../../models/IUser'
 import { RootState } from '../store'
 import { updateAuthUser } from '../features/authSlice'
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  tagTypes: ['Users'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_SERVER_BASE_ENDPOINT,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('access_token')
+const apiWithTag = apiSlice.enhanceEndpoints({
+  addTagTypes: ['Users'],
+})
 
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-
-      return headers
-    },
-  }),
+const usersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
     users: builder.query<IUser[], void>({
       query: () => ({
-        url: '/user',
+        url: '/users',
       }),
       providesTags: ['Users'],
     }),
     addUser: builder.mutation<IUser, Omit<IUser, 'id'>>({
       query: (body) => ({
-        url: 'user',
+        url: '/users',
         method: 'POST',
         body,
       }),
@@ -35,7 +25,7 @@ export const userApi = createApi({
     }),
     updateUser: builder.mutation<IUser, Partial<IUser> & Pick<IUser, 'id'>>({
       query: ({ id, ...body }) => ({
-        url: `/user/${id}`,
+        url: `/users/${id}`,
         method: 'PUT',
         body,
       }),
@@ -55,7 +45,7 @@ export const userApi = createApi({
     }),
     deleteUser: builder.mutation<{ raw: unknown[]; affected: number }, number>({
       query: (id) => ({
-        url: `/user/${id}`,
+        url: `/users/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Users'],
@@ -68,4 +58,4 @@ export const {
   useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-} = userApi
+} = usersApi

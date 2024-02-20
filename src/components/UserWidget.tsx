@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
 import { EditUserDialog } from "./dialogs/EditUserDialog";
 import { useDialogs } from "../hooks/useDialogs";
+import { apiSlice } from "../redux/api";
 
 type DialogVariants = {
   settings: boolean
@@ -53,6 +54,7 @@ export const UserWidget: FC = () => {
 
   const logoutHandler = () => {
     dispatch(clearAuthData())
+    dispatch(apiSlice.util.resetApiState())
     navigate('/')
   }
 

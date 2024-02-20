@@ -5,11 +5,11 @@ import { useTranslation } from "react-i18next";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useUsersQuery } from "../../redux/api/userApi";
+import { useUsersQuery } from "../../redux/api/usersApi";
 import { useSnackbar } from "notistack";
 import { isQueryError } from "../../redux/api/helpers";
 import { OrderPriorities, OrderStatuses } from "../../models/IOrder";
-import { CreateOrderRequest, useAddOrderMutation } from "../../redux/api/orderApi";
+import { CreateOrderRequest, useAddOrderMutation } from "../../redux/api/ordersApi";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

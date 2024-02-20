@@ -1,9 +1,9 @@
 import { FC, MouseEvent, useEffect, useState } from "react";
-import { Box, Button, ButtonProps, Chip, CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonProps, Chip, CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { visuallyHidden } from '@mui/utils';
 import { Delete, Edit, KeyboardArrowDown, MoreHoriz, SvgIconComponent } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { useDeleteOrderMutation, useOrdersQuery, useUpdateOrderMutation } from "../redux/api/orderApi";
+import { useDeleteOrderMutation, useOrdersQuery, useUpdateOrderMutation } from "../redux/api/ordersApi";
 import { lightBlue, orange, teal } from '@mui/material/colors';
 import { IOrder, OrderStatuses } from "../models/IOrder";
 import { Confirm } from "./dialogs/Confirm";
@@ -139,6 +139,10 @@ export const OrderList: FC = () => {
 
   if (isOrdersLoadingError) {
     return <Typography>Error...</Typography>
+  }
+
+  if (!orders?.length) {
+    return <Alert severity="info">Заказы отсутствуют</Alert> 
   }
 
   return (

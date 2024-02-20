@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAddUserMutation } from "../../redux/api/userApi";
+import { useAddUserMutation } from "../../redux/api/usersApi";
 import { useSnackbar } from "notistack";
 import { isQueryError } from "../../redux/api/helpers";
 import { UserRole } from "../../models/IUser";
