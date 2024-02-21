@@ -9,6 +9,7 @@ import { UsersPage } from "./pages/dashboard/UsersPage"
 import { OrdersPage } from "./pages/dashboard/OrdersPage"
 import { AuthGuard } from "./components/AuthGuard"
 import { UserRole } from "./models/IUser"
+import { ArchivePage } from "./pages/dashboard/ArchivePage"
 
 const App: FC = () => {
   const location = useLocation()
@@ -42,6 +43,7 @@ const App: FC = () => {
             <Route path='/dashboard' element={<Dashboard />}>
               <Route path='orders' element={<OrdersPage />} />
               <Route path='users' element={<UsersPage />} />
+              <Route path='archive' element={<ArchivePage />} />
             </Route>
           </Route>
         </Routes>

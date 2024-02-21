@@ -55,8 +55,12 @@ const dropdownOptions: DropdownOption[] = [
   },
 ]
 
-export const OrderList: FC = () => {
-  const { data: orders, isLoading: isOrdersLoading, isError: isOrdersLoadingError } = useOrdersQuery()
+type OrderListProps = {
+  state?: 'opened' | 'closed'
+}
+
+export const OrderList: FC<OrderListProps> = ({ state }) => {
+  const { data: orders, isLoading: isOrdersLoading, isError: isOrdersLoadingError } = useOrdersQuery({ state })
   const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateOrderMutation()
   const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteOrderMutation()
   const [anchorActionsMenu, setAnchorActionsMenu] = useState<null | HTMLElement>(null)

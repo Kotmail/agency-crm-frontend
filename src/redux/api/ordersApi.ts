@@ -1,6 +1,10 @@
 import { apiSlice } from '.'
 import { IOrder } from '../../models/IOrder'
 
+type QueryOrdersRequest = {
+  state?: 'opened' | 'closed'
+}
+
 export interface CreateOrderRequest
   extends Omit<IOrder, 'id' | 'creator' | 'executor' | 'createdAt'> {
   creatorId?: number
@@ -17,9 +21,10 @@ const apiWithTag = apiSlice.enhanceEndpoints({
 
 const ordersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<IOrder[], void>({
-      query: () => ({
+    orders: builder.query<IOrder[], QueryOrdersRequest>({
+      query: (params) => ({
         url: '/orders',
+        params,
       }),
       providesTags: ['Orders'],
     }),

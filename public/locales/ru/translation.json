@@ -159,7 +159,8 @@
   },
   "pages": {
     "orders": "Заказы",
-    "users": "Пользователи"
+    "users": "Пользователи",
+    "archive": "Архив"
   },
   "aria_labels": {
     "list_of_pages": "Список страниц"

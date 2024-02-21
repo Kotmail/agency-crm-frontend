@@ -13,6 +13,10 @@ const pages = [
     pathname: '/dashboard/orders',
   },
   {
+    name: 'archive',
+    pathname: '/dashboard/archive',
+  },
+  {
     name: 'users',
     pathname: '/dashboard/users',
     allowedRoles: [UserRole.ADMIN],

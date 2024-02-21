@@ -159,7 +159,8 @@
   },
   "pages": {
     "orders": "Orders",
-    "users": "Users"
+    "users": "Users",
+    "archive": "Archive"
   },
   "aria_labels": {
     "list_of_pages": "List of pages"
