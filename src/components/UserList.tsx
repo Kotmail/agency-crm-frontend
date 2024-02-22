@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { MoreHoriz, Edit, Delete, SvgIconComponent } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import { useDeleteUserMutation, useUsersQuery } from "../redux/api/usersApi";
@@ -8,10 +8,11 @@ import { useAppSelector } from "../hooks/useAppSelector";
 import { Confirm } from "./dialogs/Confirm";
 import { enqueueSnackbar } from "notistack";
 import { IUser } from "../models/IUser";
-import { EditUserDialog } from "./dialogs/EditUserDialog";
+import { UserFormDialog } from "./dialogs/UserFormDialog";
 import { useDialogs } from "../hooks/useDialogs";
 
 type DialogVariants = {
+  add: boolean
   edit: boolean
   delete: boolean
 }
@@ -39,6 +40,7 @@ export const UserList: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedUser, setSelectedUser] = useState<null | IUser>(null)
   const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
+    add: false,
     edit: false,
     delete: false,
   })
@@ -89,6 +91,14 @@ export const UserList: FC = () => {
 
   return (
     <>
+      <Box paddingBottom={3}>
+        <Button
+          variant="contained"
+          onClick={() => setOpenedDialogs('add', true)}
+        >
+          Добавить пользователя
+        </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 992 }} size="small" aria-label={t('user_list_table.label')}>
           <TableHead>
@@ -155,14 +165,17 @@ export const UserList: FC = () => {
         }
         )}
       </Menu>
-      {
-        selectedUser &&
-        <EditUserDialog
-          open={openedDialogs.edit}
-          onClose={() => setOpenedDialogs('edit', false)}
-          user={selectedUser}
-        />
-      }
+      <UserFormDialog
+        open={openedDialogs.add}
+        onClose={() => setOpenedDialogs('add', false)}
+      />
+      <UserFormDialog
+        open={openedDialogs.edit}
+        onClose={() => setOpenedDialogs('edit', false)}
+        title="dialogs.update_user_title"
+        successMessage="notifications.update_user.success"
+        user={selectedUser}
+      />
       <Confirm
         title={t('dialogs.delete_user.title')}
         description={t('dialogs.delete_user.desc')}

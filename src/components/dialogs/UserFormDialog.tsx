@@ -1,26 +1,46 @@
 import { FC, useEffect } from "react";
+import { IUser, UserRole } from "../../models/IUser";
+import * as Yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import * as Yup from "yup"
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useUpdateUserMutation } from "../../redux/api/usersApi";
-import { useSnackbar } from "notistack";
-import { isQueryError } from "../../redux/api/helpers";
-import { IUser, UserRole } from "../../models/IUser";
+import { useAddUserMutation, useUpdateUserMutation } from "../../redux/api/usersApi";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { isQueryError } from "../../redux/api/helpers";
+import { enqueueSnackbar } from "notistack";
 
-type Fields = {
-  login: string;
-  email: string;
-  fullName: string;
-  password: string;
-  passwordConfirm: string;
-  role: UserRole;
+type UserFormFields = {
+  email: string
+  login: string
+  fullName: string
+  password: string
+  passwordConfirm: string
+  role: UserRole
 }
 
-const schema = Yup.object({
+const yupPasswordFieldHandler = (value: unknown, isRequired = true) => {
+  if (!value) {
+    if (isRequired) {
+      return Yup.string().trim().required('form_errors.password.required')
+    }
+
+    return Yup.string().trim().defined()
+  }
+
+  return Yup
+    .string()
+    .trim()
+    .defined()
+    .min(10, 'form_errors.password.min_length')
+    .matches(/^(?=.*[a-z])/, 'form_errors.password.has_lower_case')
+    .matches(/^(?=.*[A-Z])/, 'form_errors.password.has_upper_case')
+    .matches(/^(?=.*[0-9])/, 'form_errors.password.has_number')
+    .matches(/^(?=.*[!@#%&$*~)(?])/, 'form_errors.password.has_special_char')
+}
+
+const createUserSchema = Yup.object({
   login: Yup
     .string()
     .defined(),
@@ -31,20 +51,7 @@ const schema = Yup.object({
   fullName: Yup
     .string()
     .required('form_errors.full_name.required'),
-  password: Yup.lazy((value) => {
-    const defaultRules = Yup.string().defined().trim()
-
-    if (!value) {
-      return defaultRules;
-    }
-
-    return defaultRules
-      .min(10, 'form_errors.password.min_length')
-      .matches(/^(?=.*[a-z])/, 'form_errors.password.has_lower_case')
-      .matches(/^(?=.*[A-Z])/, 'form_errors.password.has_upper_case')
-      .matches(/^(?=.*[0-9])/, 'form_errors.password.has_number')
-      .matches(/^(?=.*[!@#%&$*~)(?])/, 'form_errors.password.has_special_char')
-  }),
+  password: Yup.lazy(value => yupPasswordFieldHandler(value)),
   passwordConfirm: Yup
     .string()
     .defined()
@@ -55,38 +62,47 @@ const schema = Yup.object({
     .defined()
 })
 
-type EditUserDialogProps = {
-  user: IUser;
-  title?: string;
-  successMessage?: string;
+const updateUserSchema = createUserSchema.shape({
+  password: Yup.lazy(value => yupPasswordFieldHandler(value, false))
+})
+
+type UserFormDialogProps = {
+  title?: string
+  user?: IUser | null
+  successMessage?: string
 } & DialogProps
 
-export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, successMessage, user, ...props }) => {
-  const { t } = useTranslation()
-  const { user: authUser } = useAppSelector(state => state.auth)
-  const [updateUser] = useUpdateUserMutation()
-  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<Fields>({
-    resolver: yupResolver(schema),
+export const UserFormDialog: FC<UserFormDialogProps> = ({ user, title, successMessage, onClose, ...props }) => {
+  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<UserFormFields>({
+    resolver: yupResolver(user ? updateUserSchema : createUserSchema),
+    defaultValues: {
+      role: UserRole.ADMIN,
+    },
   })
-  const { enqueueSnackbar } = useSnackbar()
+  const { user: authUser } = useAppSelector(state => state.auth)
+  const [addUser] = useAddUserMutation()
+  const [updateUser] = useUpdateUserMutation()
+  const { t } = useTranslation()
+  const isUserSameAuth = authUser?.id == user?.id
 
-  useEffect(()=> {
-    reset(user)
+  useEffect(() => {
+    user && reset(user)
   }, [user])
 
-  const onSubmit: SubmitHandler<Fields> = async (data) => {
+  const onSubmit: SubmitHandler<UserFormFields> = async (data) => {
     try {
-      const updatedUser = await updateUser({
-        id: user.id,
-        ...data
-      }).unwrap()
-
-      enqueueSnackbar(successMessage || t('notifications.update_user.success'), {
-        variant: 'success',
-      })
+      if (!user) {
+        await addUser(data).unwrap()
+        reset()
+      } else {
+        await updateUser({ id: user.id, ...data }).unwrap()
+      }
 
       closeDialogHandler()
-      reset(updatedUser)
+
+      enqueueSnackbar(t(successMessage || 'notifications.add_user.success'), {
+        variant: 'success',
+      })
     } catch (err) {
       if (isQueryError(err) && err.data && typeof err.data === 'object' && 'message' in err.data) {
         if (Array.isArray(err.data.message)) {
@@ -121,7 +137,7 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, succes
           paddingTop: '20px'
         }
       }}>
-        {title || t('dialogs.update_user_title')}
+        {t(title || 'dialogs.add_user_title')}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
@@ -160,9 +176,9 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, succes
             helperText={t(errors.passwordConfirm?.message || '')}
             label={t('input_placeholders.password_confirm')}
             size="small"
-          />
+          /> 
           {
-            authUser?.id !== user.id &&
+            !isUserSameAuth &&
             <FormControl>
               <FormLabel>{t(`input_placeholders.role`)}</FormLabel>
               <Controller
@@ -194,9 +210,9 @@ export const EditUserDialog: FC<EditUserDialogProps> = ({ onClose, title, succes
           loading={isSubmitting}
           variant="contained"
         >
-          {t('buttons.save')}
+          {t(`buttons.${user ? 'save' : 'add'}`)}
         </LoadingButton>
       </DialogActions>
     </Dialog>
-  );
+  )
 }

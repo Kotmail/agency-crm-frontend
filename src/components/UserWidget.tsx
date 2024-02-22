@@ -7,9 +7,9 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { clearAuthData } from "../redux/features/authSlice";
 import { useTranslation } from "react-i18next";
 import { Confirm } from "./dialogs/Confirm";
-import { EditUserDialog } from "./dialogs/EditUserDialog";
 import { useDialogs } from "../hooks/useDialogs";
 import { apiSlice } from "../redux/api";
+import { UserFormDialog } from "./dialogs/UserFormDialog";
 
 type DialogVariants = {
   settings: boolean
@@ -100,16 +100,13 @@ export const UserWidget: FC = () => {
           </MenuItem>
         )}
       </Menu>
-      {
-        user &&
-        <EditUserDialog
-          open={openedDialogs.settings}
-          onClose={() => setOpenedDialogs('settings', false)}
-          title={t('dialogs.account_settings_title')}
-          successMessage={t('notifications.account_settings.success')}
-          user={user}
-        />
-      }
+      <UserFormDialog
+        open={openedDialogs.settings}
+        onClose={() => setOpenedDialogs('settings', false)}
+        title="dialogs.account_settings_title"
+        successMessage="notifications.account_settings.success"
+        user={user}
+      />
       <Confirm
         title={t('dialogs.logout_title')}
         description={t('dialogs.logout_desc')}
