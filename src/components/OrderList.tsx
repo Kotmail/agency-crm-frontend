@@ -21,11 +21,13 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import {
+  Archive,
   Delete,
   Edit,
   KeyboardArrowDown,
   MoreHoriz,
   SvgIconComponent,
+  Unarchive,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import {
@@ -66,6 +68,8 @@ const statusColors: { [key in OrderStatus]: ButtonProps['color'] } = {
 type DialogVariants = {
   add: boolean
   edit: boolean
+  archive: boolean
+  unarchive: boolean
   delete: boolean
 }
 
@@ -78,6 +82,14 @@ const dropdownOptions: DropdownOption[] = [
   {
     key: 'edit',
     icon: Edit,
+  },
+  {
+    key: 'archive',
+    icon: Archive,
+  },
+  {
+    key: 'unarchive',
+    icon: Unarchive,
   },
   {
     key: 'delete',
@@ -110,6 +122,8 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
   const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
     add: false,
     edit: false,
+    archive: false,
+    unarchive: false,
     delete: false,
   })
   const { t } = useTranslation()
@@ -144,6 +158,18 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
     }
 
     closeStatusMenuHandler()
+  }
+
+  const archiveOrderHandler = () => {
+    if (selectedOrder) {
+      updateOrder({
+        ...selectedOrder,
+        isArchived: !selectedOrder.isArchived,
+      })
+    }
+
+    setOpenedDialogs('archive', false)
+    setOpenedDialogs('unarchive', false)
   }
 
   const deleteOrderHandler = () => {
@@ -388,6 +414,13 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         }}
       >
         {dropdownOptions.map((option) => {
+          if (
+            (state === 'closed' && option.key !== 'unarchive') ||
+            (state !== 'closed' && option.key === 'unarchive')
+          ) {
+            return
+          }
+
           return (
             <MenuItem
               key={option.key}
@@ -412,6 +445,26 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         title="dialogs.edit_order.title"
         successMessage="notifications.update_order.success"
         order={selectedOrder}
+      />
+      <Confirm
+        title={t('dialogs.move_to_archive.title')}
+        description={t('dialogs.move_to_archive.desc')}
+        cancelBtnHandler={() => setOpenedDialogs('archive', false)}
+        confirmBtnLabel={t('buttons.move')}
+        confirmBtnHandler={archiveOrderHandler}
+        open={openedDialogs.archive}
+        maxWidth="xs"
+        fullWidth
+      />
+      <Confirm
+        title={t('dialogs.move_from_archive.title')}
+        description={t('dialogs.move_from_archive.desc')}
+        cancelBtnHandler={() => setOpenedDialogs('unarchive', false)}
+        confirmBtnLabel={t('buttons.move')}
+        confirmBtnHandler={archiveOrderHandler}
+        open={openedDialogs.unarchive}
+        maxWidth="xs"
+        fullWidth
       />
       <Confirm
         title={t('dialogs.delete_order.title')}

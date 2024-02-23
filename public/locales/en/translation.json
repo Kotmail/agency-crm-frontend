@@ -22,7 +22,8 @@
     "logout": "Logout",
     "add": "Add",
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "move": "Move"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -125,6 +126,14 @@
     "not_authorized": {
       "title": "Access error!",
       "desc": "You are not authorized to view this page."
+    },
+    "move_to_archive": {
+      "title": "Move the order to the archive?",
+      "desc": "The order will disappear from the general list and appear in the archive."
+    },
+    "move_from_archive": {
+      "title": "Move the order to the general list?",
+      "desc": "The order will disappear from the archive and appear in the general list."
     }
   },
   "signin": "Sign In",
@@ -154,6 +163,8 @@
     }
   },
   "actions": {
+    "archive": "Move to archive",
+    "unarchive": "Move from archive",
     "edit": "Edit",
     "delete": "Delete"
   },
