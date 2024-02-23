@@ -1,17 +1,46 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
-import { Alert, Box, Button, ButtonProps, Chip, CircularProgress, IconButton, ListItemIcon, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { visuallyHidden } from '@mui/utils';
-import { Delete, Edit, KeyboardArrowDown, MoreHoriz, SvgIconComponent } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { useDeleteOrderMutation, useOrdersQuery, useUpdateOrderMutation } from "../redux/api/ordersApi";
-import { lightBlue, orange, teal } from '@mui/material/colors';
-import { IOrder, OrderStatuses } from "../models/IOrder";
-import { Confirm } from "./dialogs/Confirm";
-import { enqueueSnackbar } from "notistack";
-import { EditOrderDialog } from "./dialogs/EditOrderDialog";
-import { useDialogs } from "../hooks/useDialogs";
-import { Hider } from "./Hider";
-import { UserRole } from "../models/IUser";
+import { FC, MouseEvent, useEffect, useState } from 'react'
+import {
+  Alert,
+  Box,
+  Button,
+  ButtonProps,
+  Chip,
+  CircularProgress,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
+import {
+  Delete,
+  Edit,
+  KeyboardArrowDown,
+  MoreHoriz,
+  SvgIconComponent,
+} from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
+import {
+  useDeleteOrderMutation,
+  useOrdersQuery,
+  useUpdateOrderMutation,
+} from '../redux/api/ordersApi'
+import { lightBlue, orange, teal } from '@mui/material/colors'
+import { IOrder, OrderStatus } from '../models/IOrder'
+import { Confirm } from './dialogs/Confirm'
+import { enqueueSnackbar } from 'notistack'
+import { useDialogs } from '../hooks/useDialogs'
+import { Hider } from './Hider'
+import { UserRole } from '../models/IUser'
+import { OrderFormDialog } from './dialogs/OrderFormDialog'
 
 const priorityColors = {
   low: {
@@ -28,13 +57,14 @@ const priorityColors = {
   },
 }
 
-const statusColors: {[key in OrderStatuses]: ButtonProps['color'] } = {
+const statusColors: { [key in OrderStatus]: ButtonProps['color'] } = {
   waiting: 'primary',
   accepted: 'warning',
   done: 'success',
 }
 
 type DialogVariants = {
+  add: boolean
   edit: boolean
   delete: boolean
 }
@@ -60,25 +90,38 @@ type OrderListProps = {
 }
 
 export const OrderList: FC<OrderListProps> = ({ state }) => {
-  const { data: orders, isLoading: isOrdersLoading, isError: isOrdersLoadingError } = useOrdersQuery({ state })
-  const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateOrderMutation()
-  const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteOrderMutation()
-  const [anchorActionsMenu, setAnchorActionsMenu] = useState<null | HTMLElement>(null)
-  const [anchorStatusMenu, setAnchorStatusMenu] = useState<null | HTMLElement>(null)
+  const {
+    data: orders,
+    isLoading: isOrdersLoading,
+    isError: isOrdersLoadingError,
+  } = useOrdersQuery({ state })
+  const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] =
+    useUpdateOrderMutation()
+  const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
+    useDeleteOrderMutation()
+  const [anchorActionsMenu, setAnchorActionsMenu] =
+    useState<null | HTMLElement>(null)
+  const [anchorStatusMenu, setAnchorStatusMenu] = useState<null | HTMLElement>(
+    null,
+  )
   const isActionsMenuOpened = Boolean(anchorActionsMenu)
   const isStatusMenuOpened = Boolean(anchorStatusMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
   const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
+    add: false,
     edit: false,
     delete: false,
   })
   const { t } = useTranslation()
 
-  const openActionsMenuHandler = (event: React.MouseEvent<HTMLButtonElement>, order: IOrder) => {
+  const openActionsMenuHandler = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    order: IOrder,
+  ) => {
     setSelectedOrder(order)
-    setAnchorActionsMenu(event.currentTarget);
+    setAnchorActionsMenu(event.currentTarget)
   }
-  const closeActionsMenuHandler = () => setAnchorActionsMenu(null);
+  const closeActionsMenuHandler = () => setAnchorActionsMenu(null)
 
   const openStatusMenuHandler = (e: MouseEvent<HTMLElement>, order: IOrder) => {
     setAnchorStatusMenu(e.currentTarget)
@@ -92,7 +135,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
     closeActionsMenuHandler()
   }
 
-  const updateOrderHandler = (status: OrderStatuses) => {
+  const updateOrderHandler = (status: OrderStatus) => {
     if (selectedOrder && selectedOrder.status !== status) {
       updateOrder({
         id: selectedOrder.id,
@@ -123,7 +166,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         variant: 'success',
       })
     }
-    
+
     if (isUpdateError) {
       enqueueSnackbar(t('notifications.update_order.fail'), {
         variant: 'error',
@@ -146,11 +189,21 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
   }
 
   if (!orders?.length) {
-    return <Alert severity="info">Заказы отсутствуют</Alert> 
+    return <Alert severity="info">Заказы отсутствуют</Alert>
   }
 
   return (
     <>
+      <Hider roles={[UserRole.EXECUTOR]}>
+        <Box paddingBottom={3}>
+          <Button
+            variant="contained"
+            onClick={() => setOpenedDialogs('add', true)}
+          >
+            Добавить заказ
+          </Button>
+        </Box>
+      </Hider>
       <TableContainer component={Paper}>
         <Table
           size="small"
@@ -158,20 +211,24 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
           sx={{
             minWidth: 1300,
             '& .MuiTableCell-head': {
-              lineHeight: 'normal'
-            }
+              lineHeight: 'normal',
+            },
           }}
         >
           <TableHead>
             <TableRow>
               <Hider roles={[UserRole.EXECUTOR]}>
                 <TableCell>
-                  <Typography component="span" sx={visuallyHidden}>{t('order_list_table.headings.actions')}</Typography>
+                  <Typography component="span" sx={visuallyHidden}>
+                    {t('order_list_table.headings.actions')}
+                  </Typography>
                 </TableCell>
               </Hider>
               <TableCell>№</TableCell>
               <TableCell>{t('order_list_table.headings.deadline')}</TableCell>
-              <TableCell>{t('order_list_table.headings.description')}</TableCell>
+              <TableCell>
+                {t('order_list_table.headings.description')}
+              </TableCell>
               <TableCell>{t('order_list_table.headings.priority')}</TableCell>
               <TableCell>{t('order_list_table.headings.brand')}</TableCell>
               <Hider roles={[UserRole.MANAGER]}>
@@ -185,112 +242,119 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders && orders.map(order => {
-              const createdDate = new Date(Date.parse(order.createdAt.toString()))
-              const deadlineDate = new Date(Date.parse(order.deadline))
+            {orders &&
+              orders.map((order) => {
+                const createdDate = new Date(
+                  Date.parse(order.createdAt.toString()),
+                )
+                const deadlineDate = new Date(Date.parse(order.deadline))
 
-              return (
-                <TableRow
-                  key={order.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <Hider roles={[UserRole.EXECUTOR]}>
+                return (
+                  <TableRow
+                    key={order.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <Hider roles={[UserRole.EXECUTOR]}>
+                      <TableCell>
+                        <IconButton
+                          id="orderActionsBtn"
+                          aria-label={t('order_list_table.headings.actions')}
+                          size="small"
+                          aria-haspopup="true"
+                          aria-controls={
+                            isActionsMenuOpened ? 'orderActionsMenu' : undefined
+                          }
+                          aria-expanded={
+                            isActionsMenuOpened ? 'true' : undefined
+                          }
+                          onClick={(e) => openActionsMenuHandler(e, order)}
+                        >
+                          <MoreHoriz fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                    </Hider>
                     <TableCell>
-                      <IconButton
-                        id="orderActionsBtn"
-                        aria-label={t('order_list_table.headings.actions')}
-                        size="small"
-                        aria-haspopup="true"
-                        aria-controls={isActionsMenuOpened ? 'orderActionsMenu' : undefined}
-                        aria-expanded={isActionsMenuOpened ? 'true' : undefined}
-                        onClick={(e) => openActionsMenuHandler(e, order)}
-                      >
-                        <MoreHoriz fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </Hider>
-                  <TableCell>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      fontWeight="500"
-                    >
-                      {order.id}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      marginTop="6px"
-                      lineHeight="1.3"
-                    >
-                      {createdDate.toLocaleDateString()}
-                      <Box
+                      <Typography
                         component="span"
-                        display="block"
-                        color="text.secondary"
+                        variant="body2"
+                        fontWeight="500"
                       >
-                        {createdDate.toLocaleTimeString()}
-                      </Box>
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{deadlineDate.toLocaleDateString()}</TableCell>
-                  <TableCell>{order.description}</TableCell>
-                  <TableCell>
-                    <Chip
-                      variant="outlined"
-                      label={t(`priorities.${order.priority}`)}
-                      sx={{
-                        minWidth: '83px',
-                        borderWidth: '2px',
-                        borderRadius: '4px',
-                        fontWeight: 500,
-                        ...priorityColors[order.priority],
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>{order.brand}</TableCell>
-                  <Hider roles={[UserRole.MANAGER]}>
-                    <TableCell>{order.creator.fullName}</TableCell>
-                  </Hider>
-                  <Hider roles={[UserRole.EXECUTOR]}>
-                    <TableCell>{order.executor.fullName}</TableCell>
-                  </Hider>
-                  <TableCell>
-                    {
-                      new Intl.NumberFormat('ru', {
+                        {order.id}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        marginTop="6px"
+                        lineHeight="1.3"
+                      >
+                        {createdDate.toLocaleDateString()}
+                        <Box
+                          component="span"
+                          display="block"
+                          color="text.secondary"
+                        >
+                          {createdDate.toLocaleTimeString()}
+                        </Box>
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{deadlineDate.toLocaleDateString()}</TableCell>
+                    <TableCell>{order.description}</TableCell>
+                    <TableCell>
+                      <Chip
+                        variant="outlined"
+                        label={t(`priorities.${order.priority}`)}
+                        sx={{
+                          minWidth: '83px',
+                          borderWidth: '2px',
+                          borderRadius: '4px',
+                          fontWeight: 500,
+                          ...priorityColors[order.priority],
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>{order.brand}</TableCell>
+                    <Hider roles={[UserRole.MANAGER]}>
+                      <TableCell>{order.creator.fullName}</TableCell>
+                    </Hider>
+                    <Hider roles={[UserRole.EXECUTOR]}>
+                      <TableCell>{order.executor.fullName}</TableCell>
+                    </Hider>
+                    <TableCell>
+                      {new Intl.NumberFormat('ru', {
                         style: 'currency',
                         currency: 'RUB',
                         currencyDisplay: 'symbol',
                         minimumFractionDigits: 0,
-                      }).format(order.cost)
-                    }
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      id="orderStatusMenuButton"
-                      variant="contained"
-                      color={statusColors[order.status]}
-                      disableElevation
-                      endIcon={<KeyboardArrowDown />}
-                      onClick={(e, ) => openStatusMenuHandler(e, order)}
-                      aria-haspopup="true"
-                      aria-controls={isStatusMenuOpened ? 'orderStatusMenu' : undefined}
-                      aria-expanded={isStatusMenuOpened ? true : undefined}
-                      size="small"
-                      fullWidth
-                      sx={{
-                        minWidth: '123px',
-                        whiteSpace: 'nowrap',
-                        textTransform: 'none',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      {t(`statuses.${order.status}`)}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
+                      }).format(order.cost)}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        id="orderStatusMenuButton"
+                        variant="contained"
+                        color={statusColors[order.status!]}
+                        disableElevation
+                        endIcon={<KeyboardArrowDown />}
+                        onClick={(e) => openStatusMenuHandler(e, order)}
+                        aria-haspopup="true"
+                        aria-controls={
+                          isStatusMenuOpened ? 'orderStatusMenu' : undefined
+                        }
+                        aria-expanded={isStatusMenuOpened ? true : undefined}
+                        size="small"
+                        fullWidth
+                        sx={{
+                          minWidth: '123px',
+                          whiteSpace: 'nowrap',
+                          textTransform: 'none',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        {t(`statuses.${order.status}`)}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -303,18 +367,16 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         open={isStatusMenuOpened}
         onClose={closeStatusMenuHandler}
       >
-        {
-          Object.values(OrderStatuses).map((status) => 
-            <MenuItem
-              key={status}
-              dense
-              selected={selectedOrder?.status === status}
-              onClick={() => updateOrderHandler(status)}
-            >
-              {t(`statuses.${status}`)}
-            </MenuItem>
-          )
-        }
+        {Object.values(OrderStatus).map((status) => (
+          <MenuItem
+            key={status}
+            dense
+            selected={selectedOrder?.status === status}
+            onClick={() => updateOrderHandler(status)}
+          >
+            {t(`statuses.${status}`)}
+          </MenuItem>
+        ))}
       </Menu>
       <Menu
         id="orderActionsMenu"
@@ -325,19 +387,30 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
           'aria-labelledby': 'orderActionsBtn',
         }}
       >
-        {dropdownOptions.map(option => {
-          return <MenuItem key={option.key} dense onClick={() => selectOptionHandler(option.key)}>
-            <ListItemIcon>
-              <option.icon fontSize="small" />
-            </ListItemIcon>
-            {t(`actions.${option.key}`)}
-          </MenuItem>
-        }
-        )}
+        {dropdownOptions.map((option) => {
+          return (
+            <MenuItem
+              key={option.key}
+              dense
+              onClick={() => selectOptionHandler(option.key)}
+            >
+              <ListItemIcon>
+                <option.icon fontSize="small" />
+              </ListItemIcon>
+              {t(`actions.${option.key}`)}
+            </MenuItem>
+          )
+        })}
       </Menu>
-      <EditOrderDialog
+      <OrderFormDialog
+        open={openedDialogs.add}
+        onClose={() => setOpenedDialogs('add', false)}
+      />
+      <OrderFormDialog
         open={openedDialogs.edit}
         onClose={() => setOpenedDialogs('edit', false)}
+        title="dialogs.edit_order.title"
+        successMessage="notifications.update_order.success"
         order={selectedOrder}
       />
       <Confirm
@@ -351,5 +424,5 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         fullWidth
       />
     </>
-  );
+  )
 }

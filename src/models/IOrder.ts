@@ -1,12 +1,12 @@
 import { IUser } from './IUser'
 
-export enum OrderPriorities {
+export enum OrderPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
 }
 
-export enum OrderStatuses {
+export enum OrderStatus {
   WAITING = 'waiting',
   ACCEPTED = 'accepted',
   DONE = 'done',
@@ -19,8 +19,8 @@ export interface IOrder {
   cost: number
   creator: IUser
   executor: IUser
-  priority: OrderPriorities
-  status: OrderStatuses
+  priority: OrderPriority
+  status?: OrderStatus
   deadline: string
   isArchived?: boolean
   createdAt: Date
