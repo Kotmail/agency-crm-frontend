@@ -37,12 +37,16 @@ import {
 } from '../redux/api/ordersApi'
 import { lightBlue, orange, teal } from '@mui/material/colors'
 import { IOrder, OrderStatus } from '../models/IOrder'
-import { Confirm } from './dialogs/Confirm'
+import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { enqueueSnackbar } from 'notistack'
 import { useDialogs } from '../hooks/useDialogs'
 import { Hider } from './Hider'
 import { UserRole } from '../models/IUser'
-import { OrderFormDialog } from './dialogs/OrderFormDialog'
+import {
+  OrderFormDialog,
+  OrderFormDialogProps,
+} from './dialogs/OrderFormDialog'
+import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 
 const priorityColors = {
   low: {
@@ -66,15 +70,12 @@ const statusColors: { [key in OrderStatus]: ButtonProps['color'] } = {
 }
 
 type DialogVariants = {
-  add: boolean
-  edit: boolean
-  archive: boolean
-  unarchive: boolean
-  delete: boolean
+  orderForm: OrderFormDialogProps
+  confirm: ConfirmDialogProps
 }
 
 type DropdownOption = {
-  key: keyof DialogVariants
+  key: 'edit' | 'archive' | 'unarchive' | 'delete'
   icon: SvgIconComponent
 }
 
@@ -119,12 +120,15 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
   const isActionsMenuOpened = Boolean(anchorActionsMenu)
   const isStatusMenuOpened = Boolean(anchorStatusMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
-  const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
-    add: false,
-    edit: false,
-    archive: false,
-    unarchive: false,
-    delete: false,
+  const [dialogs, openDialog, closeDialog] = useDialogs<DialogVariants>({
+    orderForm: {
+      open: false,
+    },
+    confirm: {
+      open: false,
+      ...DIALOG_BASE_OPTIONS.confirm.deleteOrder,
+      confirmBtnHandler: () => deleteOrderHandler(),
+    },
   })
   const { t } = useTranslation()
 
@@ -143,8 +147,30 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
   }
   const closeStatusMenuHandler = () => setAnchorStatusMenu(null)
 
-  const selectOptionHandler = (optionKey: keyof DialogVariants) => {
-    setOpenedDialogs(optionKey, true)
+  const selectOptionHandler = (optionKey: DropdownOption['key']) => {
+    switch (optionKey) {
+      case 'edit':
+        openDialog('orderForm', {
+          ...DIALOG_BASE_OPTIONS.form.editOrder,
+          order: selectedOrder,
+        })
+        break
+      case 'archive':
+        openDialog('confirm', {
+          ...DIALOG_BASE_OPTIONS.confirm.archiveOrder,
+          confirmBtnHandler: () => archiveOrderHandler(),
+        })
+        break
+      case 'unarchive':
+        openDialog('confirm', {
+          ...DIALOG_BASE_OPTIONS.confirm.unarchiveOrder,
+          confirmBtnHandler: () => archiveOrderHandler(),
+        })
+        break
+      case 'delete':
+        openDialog('confirm')
+        break
+    }
 
     closeActionsMenuHandler()
   }
@@ -168,8 +194,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
       })
     }
 
-    setOpenedDialogs('archive', false)
-    setOpenedDialogs('unarchive', false)
+    closeDialog('confirm')
   }
 
   const deleteOrderHandler = () => {
@@ -177,12 +202,12 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
       deleteOrder(selectedOrder.id)
     }
 
-    setOpenedDialogs('delete', false)
+    closeDialog('confirm')
   }
 
   useEffect(() => {
     if (isUpdateSuccess) {
-      enqueueSnackbar(t('notifications.update_order.success'), {
+      enqueueSnackbar(t('notifications.edit_order.success'), {
         variant: 'success',
       })
     }
@@ -194,7 +219,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
     }
 
     if (isUpdateError) {
-      enqueueSnackbar(t('notifications.update_order.fail'), {
+      enqueueSnackbar(t('notifications.edit_order.fail'), {
         variant: 'error',
       })
     }
@@ -224,7 +249,9 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         <Box paddingBottom={3}>
           <Button
             variant="contained"
-            onClick={() => setOpenedDialogs('add', true)}
+            onClick={() =>
+              openDialog('orderForm', DIALOG_BASE_OPTIONS.form.addOrder)
+            }
           >
             Добавить заказ
           </Button>
@@ -435,47 +462,8 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
           )
         })}
       </Menu>
-      <OrderFormDialog
-        open={openedDialogs.add}
-        onClose={() => setOpenedDialogs('add', false)}
-      />
-      <OrderFormDialog
-        open={openedDialogs.edit}
-        onClose={() => setOpenedDialogs('edit', false)}
-        title="dialogs.edit_order.title"
-        successMessage="notifications.update_order.success"
-        order={selectedOrder}
-      />
-      <Confirm
-        title={t('dialogs.move_to_archive.title')}
-        description={t('dialogs.move_to_archive.desc')}
-        cancelBtnHandler={() => setOpenedDialogs('archive', false)}
-        confirmBtnLabel={t('buttons.move')}
-        confirmBtnHandler={archiveOrderHandler}
-        open={openedDialogs.archive}
-        maxWidth="xs"
-        fullWidth
-      />
-      <Confirm
-        title={t('dialogs.move_from_archive.title')}
-        description={t('dialogs.move_from_archive.desc')}
-        cancelBtnHandler={() => setOpenedDialogs('unarchive', false)}
-        confirmBtnLabel={t('buttons.move')}
-        confirmBtnHandler={archiveOrderHandler}
-        open={openedDialogs.unarchive}
-        maxWidth="xs"
-        fullWidth
-      />
-      <Confirm
-        title={t('dialogs.delete_order.title')}
-        description={t('dialogs.delete_order.desc')}
-        cancelBtnHandler={() => setOpenedDialogs('delete', false)}
-        confirmBtnLabel={t('buttons.delete')}
-        confirmBtnHandler={deleteOrderHandler}
-        open={openedDialogs.delete}
-        maxWidth="xs"
-        fullWidth
-      />
+      <OrderFormDialog {...dialogs.orderForm} />
+      <ConfirmDialog {...dialogs.confirm} />
     </>
   )
 }

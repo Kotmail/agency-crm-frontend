@@ -3,7 +3,12 @@ import { IOrder, OrderPriority } from '../../models/IOrder'
 import { UserRole } from '../../models/IUser'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import {
+  Controller,
+  DefaultValues,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form'
 import {
   Button,
   Dialog,
@@ -66,16 +71,23 @@ const createOrderSchema = Yup.object({
     .defined(),
 })
 
-type OrderFormDialogProps = {
+export type OrderFormDialogProps = {
   title?: string
   order?: IOrder | null
   successMessage?: string
+  submitBtnLabel?: string
 } & DialogProps
+
+const defaultValues: DefaultValues<OrderFormFields> = {
+  deadline: dayjs().format('YYYY-MM-DD'),
+  priority: OrderPriority.LOW,
+}
 
 export const OrderFormDialog: FC<OrderFormDialogProps> = ({
   order,
   title,
   successMessage,
+  submitBtnLabel,
   onClose,
   ...props
 }) => {
@@ -87,10 +99,7 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
     formState: { errors, isSubmitting },
   } = useForm<OrderFormFields>({
     resolver: yupResolver(createOrderSchema),
-    defaultValues: {
-      deadline: dayjs().format('YYYY-MM-DD'),
-      priority: OrderPriority.LOW,
-    },
+    defaultValues,
   })
   const { user: authUser } = useAppSelector((state) => state.auth)
   const { data: users } = useUsersQuery()
@@ -103,8 +112,8 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
   const { t } = useTranslation()
 
   useEffect(() => {
-    order && reset(order)
-  }, [order])
+    reset(order || defaultValues)
+  }, [order, reset])
 
   const onSubmit: SubmitHandler<OrderFormFields> = async (data) => {
     try {
@@ -178,7 +187,7 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
           },
         }}
       >
-        {t(title || 'dialogs.add_order_title')}
+        {t(title || 'dialogs.add_order.title')}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
@@ -304,7 +313,7 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
           {t('buttons.cancel')}
         </Button>
         <LoadingButton type="submit" loading={isSubmitting} variant="contained">
-          {t('buttons.add')}
+          {t(submitBtnLabel || (order ? 'buttons.save' : 'buttons.add'))}
         </LoadingButton>
       </DialogActions>
     </Dialog>

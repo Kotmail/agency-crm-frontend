@@ -1,24 +1,34 @@
-import { SvgIconComponent, Logout, Settings } from "@mui/icons-material";
-import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
-import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../hooks/useAppSelector";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { clearAuthData } from "../redux/features/authSlice";
-import { useTranslation } from "react-i18next";
-import { Confirm } from "./dialogs/Confirm";
-import { useDialogs } from "../hooks/useDialogs";
-import { apiSlice } from "../redux/api";
-import { UserFormDialog } from "./dialogs/UserFormDialog";
+import { SvgIconComponent, Logout, Settings } from '@mui/icons-material'
+import {
+  Avatar,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from '@mui/material'
+import { FC, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../hooks/useAppSelector'
+import { useAppDispatch } from '../hooks/useAppDispatch'
+import { clearAuthData } from '../redux/features/authSlice'
+import { useTranslation } from 'react-i18next'
+import { useDialogs } from '../hooks/useDialogs'
+import { apiSlice } from '../redux/api'
+import { UserFormDialog, UserFormDialogProps } from './dialogs/UserFormDialog'
+import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
+import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 
 type DialogVariants = {
-  settings: boolean
-  logout: boolean
+  userForm: UserFormDialogProps
+  confirm: ConfirmDialogProps
 }
 
 type DropdownOption = {
-  key: keyof DialogVariants;
-  icon: SvgIconComponent;
+  key: 'settings' | 'logout'
+  icon: SvgIconComponent
 }
 
 const dropdownOptions: DropdownOption[] = [
@@ -29,25 +39,43 @@ const dropdownOptions: DropdownOption[] = [
   {
     key: 'logout',
     icon: Logout,
-  }
+  },
 ]
 
 export const UserWidget: FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const {user} = useAppSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [openedDialogs, setOpenedDialogs] = useDialogs<DialogVariants>({
-    settings: false,
-    logout: false,
+  const [dialogs, openDialog] = useDialogs<DialogVariants>({
+    userForm: {
+      open: false,
+      ...DIALOG_BASE_OPTIONS.form.accountSettings,
+      user: user,
+    },
+    confirm: {
+      open: false,
+      ...DIALOG_BASE_OPTIONS.confirm.logoutUser,
+      confirmBtnHandler: () => logoutHandler(),
+      maxWidth: 'xs',
+      fullWidth: true,
+    },
   })
 
-  const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+  const openDropdownHandler = (event: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget)
   const closeDropdownHandler = () => setAnchorEl(null)
 
-  const selectOptionHandler = (optionKey: keyof DialogVariants) => {
-    setOpenedDialogs(optionKey, true)
+  const selectOptionHandler = (optionKey: DropdownOption['key']) => {
+    switch (optionKey) {
+      case 'settings':
+        openDialog('userForm')
+        break
+      case 'logout':
+        openDialog('confirm')
+        break
+    }
 
     closeDropdownHandler()
   }
@@ -61,8 +89,8 @@ export const UserWidget: FC = () => {
   return (
     <>
       <Tooltip title={t('tooltips.user_menu')}>
-        <IconButton onClick={openDropdownHandler} sx={{p: 0}}>
-          <Avatar sx={{width: 34, height: 34}} />
+        <IconButton onClick={openDropdownHandler} sx={{ p: 0 }}>
+          <Avatar sx={{ width: 34, height: 34 }} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -79,44 +107,41 @@ export const UserWidget: FC = () => {
         open={Boolean(anchorEl)}
         onClose={closeDropdownHandler}
       >
-        <MenuItem disabled dense sx={{
-          display: 'block',
-          paddingTop: 0,
-          paddingBottom: 0,
-          '&.Mui-disabled': {
-            opacity: 1
-          }
-        }}>
-          <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>{user?.fullName}</Typography>
-          <Typography fontSize={14} fontWeight={300} color="gray">{t(`user.roles.${user?.role}`)}</Typography>
+        <MenuItem
+          disabled
+          dense
+          sx={{
+            display: 'block',
+            paddingTop: 0,
+            paddingBottom: 0,
+            '&.Mui-disabled': {
+              opacity: 1,
+            },
+          }}
+        >
+          <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>
+            {user?.fullName}
+          </Typography>
+          <Typography fontSize={14} fontWeight={300} color="gray">
+            {t(`user.roles.${user?.role}`)}
+          </Typography>
         </MenuItem>
         <Divider />
-        {dropdownOptions.map(option =>
-          <MenuItem key={option.key} dense onClick={() => selectOptionHandler(option.key)}>
+        {dropdownOptions.map((option) => (
+          <MenuItem
+            key={option.key}
+            dense
+            onClick={() => selectOptionHandler(option.key)}
+          >
             <ListItemIcon>
               <option.icon fontSize="small" />
             </ListItemIcon>
             {t(option.key)}
           </MenuItem>
-        )}
+        ))}
       </Menu>
-      <UserFormDialog
-        open={openedDialogs.settings}
-        onClose={() => setOpenedDialogs('settings', false)}
-        title="dialogs.account_settings_title"
-        successMessage="notifications.account_settings.success"
-        user={user}
-      />
-      <Confirm
-        title={t('dialogs.logout_title')}
-        description={t('dialogs.logout_desc')}
-        cancelBtnHandler={() => setOpenedDialogs('logout', false)}
-        confirmBtnLabel={t('buttons.logout')}
-        confirmBtnHandler={logoutHandler}
-        open={openedDialogs.logout}
-        maxWidth="xs"
-        fullWidth
-      />
+      <UserFormDialog {...dialogs.userForm} />
+      <ConfirmDialog {...dialogs.confirm} />
     </>
-  );
+  )
 }

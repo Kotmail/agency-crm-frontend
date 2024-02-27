@@ -85,7 +85,7 @@
     "add_user": {
       "success": "The user has been added"
     },
-    "update_user": {
+    "edit_user": {
       "success": "The user has been updated"
     },
     "delete_user": {
@@ -96,7 +96,7 @@
       "fail": "The order could not be added",
       "success": "The order has been added"
     },
-    "update_order": {
+    "edit_order": {
       "fail": "The order could not be updated",
       "success": "The order has been updated"
     },
@@ -106,16 +106,26 @@
     }
   },
   "dialogs": {
-    "logout_title": "Are you leaving?",
-    "logout_desc": "The current session will be completed.",
-    "account_settings_title": "Account Settings",
-    "add_user_title": "Add user",
-    "update_user_title": "Edit user",
+    "logout": {
+      "title": "Are you leaving?",
+      "desc": "The current session will be completed."
+    },
+    "account_settings": {
+      "title": "Account Settings"
+    },
+    "add_user": {
+      "title": "Add user"
+    },
+    "edit_user": {
+      "title": "Edit user"
+    },
     "delete_user": {
       "title": "Are you sure?",
       "desc": "The user will be permanently deleted from the system!"
     },
-    "add_order_title": "Add order",
+    "add_order": {
+      "title": "Add order"
+    },
     "edit_order": {
       "title": "Edit order"
     },

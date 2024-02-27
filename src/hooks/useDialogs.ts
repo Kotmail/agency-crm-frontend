@@ -1,13 +1,37 @@
 import { useState } from 'react'
 
 export const useDialogs = <T>(initialValue: T) => {
-  const [openedDialogs, setOpenedDialogs] = useState(initialValue)
+  const [dialogs, setDialogs] = useState(initialValue)
 
-  const dialogChangeState = (dialogName: keyof T, isOpened: boolean) =>
-    setOpenedDialogs((openedDialogs) => ({
-      ...openedDialogs,
-      [dialogName]: isOpened,
+  const closeDialog = (dialogName: keyof T) => {
+    setDialogs((dialogs) => ({
+      ...dialogs,
+      [dialogName]: {
+        ...dialogs[dialogName],
+        open: false,
+      },
     }))
+  }
 
-  return [openedDialogs, dialogChangeState] as const
+  const openDialog = (
+    dialogName: keyof T,
+    dialogOptions?: Partial<T[keyof T]>,
+  ) => {
+    if (!dialogOptions) {
+      dialogOptions = initialValue[dialogName]
+    }
+
+    setDialogs((dialogs) => ({
+      ...dialogs,
+      [dialogName]: {
+        ...dialogOptions,
+        onClose: !('onClose' in dialogOptions!)
+          ? () => closeDialog(dialogName)
+          : dialogOptions.onClose,
+        open: true,
+      },
+    }))
+  }
+
+  return [dialogs, openDialog, closeDialog] as const
 }
