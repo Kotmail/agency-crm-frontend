@@ -1,33 +1,54 @@
-import { FC, useState } from "react";
-import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import { UserWidget } from "./UserWidget";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { IUser, UserRole } from "../models/IUser";
-import { useAppSelector } from "../hooks/useAppSelector";
+import { FC, useState } from 'react'
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from '@mui/material'
+import {
+  Menu as MenuIcon,
+  LibraryBooksOutlined,
+  Inventory2Outlined,
+  PeopleAltOutlined,
+} from '@mui/icons-material'
+import { UserWidget } from './UserWidget'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { IUser, UserRole } from '../models/IUser'
+import { useAppSelector } from '../hooks/useAppSelector'
 
 const pages = [
   {
     name: 'orders',
     pathname: '/dashboard/orders',
+    icon: LibraryBooksOutlined,
   },
   {
     name: 'archive',
     pathname: '/dashboard/archive',
+    icon: Inventory2Outlined,
   },
   {
     name: 'users',
     pathname: '/dashboard/users',
+    icon: PeopleAltOutlined,
     allowedRoles: [UserRole.ADMIN],
   },
 ]
 
-const getPagesByUserRole = (user: IUser) => pages
-  .filter(page => !page.allowedRoles || page.allowedRoles.includes(user.role))
+const getPagesByUserRole = (user: IUser) =>
+  pages.filter(
+    (page) => !page.allowedRoles || page.allowedRoles.includes(user.role),
+  )
 
 export const Header: FC = () => {
-  const { user } = useAppSelector(state => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
@@ -48,10 +69,10 @@ export const Header: FC = () => {
 
   return (
     <AppBar position="static">
-      <Container maxWidth='xl'>
-        <Toolbar disableGutters sx={{alignItems: 'stretch'}}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ alignItems: 'stretch' }}>
           <Box display="flex">
-            { user && pages.length > 0 &&
+            {user && pages.length > 0 && (
               <>
                 <IconButton
                   size="large"
@@ -95,12 +116,15 @@ export const Header: FC = () => {
                       selected={location.pathname === page.pathname}
                       onClick={() => selectNavPageHandler(page.pathname)}
                     >
+                      <ListItemIcon>
+                        <page.icon />
+                      </ListItemIcon>
                       {t(`pages.${page.name}`)}
                     </MenuItem>
                   ))}
                 </Menu>
               </>
-            }
+            )}
             <Typography
               variant="h5"
               display="flex"
@@ -109,26 +133,28 @@ export const Header: FC = () => {
             >
               CRM
             </Typography>
-            { user && pages.length > 0 &&
+            {user && pages.length > 0 && (
               <>
                 <Box
                   sx={{
                     display: {
                       xs: 'none',
                       md: 'flex',
-                      gap: '10px'
-                    }
+                      gap: '15px',
+                    },
                   }}
                 >
                   {getPagesByUserRole(user).map((page) => (
                     <Button
                       key={page.pathname}
                       onClick={() => selectNavPageHandler(page.pathname)}
-                      className={location.pathname === page.pathname ? 'current' : ''}
+                      className={
+                        location.pathname === page.pathname ? 'current' : ''
+                      }
+                      startIcon={<page.icon />}
                       sx={{
                         position: 'relative',
                         color: 'white',
-                        display: 'block',
                         borderRadius: '0',
                         lineHeight: 'normal',
                         overflow: 'hidden',
@@ -146,12 +172,15 @@ export const Header: FC = () => {
                         },
                         ':hover, :focus, &.current': {
                           '::after': {
-                            bottom: 0
-                          }
+                            bottom: 0,
+                          },
                         },
                         '&.current': {
                           backgroundColor: 'rgb(0 0 0 / 5%)',
-                        }
+                        },
+                        '.MuiButton-startIcon': {
+                          marginLeft: 0,
+                        },
                       }}
                     >
                       {t(`pages.${page.name}`)}
@@ -159,17 +188,13 @@ export const Header: FC = () => {
                   ))}
                 </Box>
               </>
-            }
+            )}
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            marginLeft="auto"
-          >
+          <Box display="flex" alignItems="center" marginLeft="auto">
             <UserWidget />
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  );
+  )
 }

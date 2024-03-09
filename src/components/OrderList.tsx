@@ -21,13 +21,14 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import {
-  Archive,
-  Delete,
-  Edit,
+  EditOutlined,
+  CopyAllOutlined,
+  ArchiveOutlined,
+  UnarchiveOutlined,
+  DeleteOutlineOutlined,
   KeyboardArrowDown,
   MoreHoriz,
   SvgIconComponent,
-  Unarchive,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import {
@@ -75,26 +76,30 @@ type DialogVariants = {
 }
 
 type DropdownOption = {
-  key: 'edit' | 'archive' | 'unarchive' | 'delete'
+  key: 'edit' | 'copy' | 'archive' | 'unarchive' | 'delete'
   icon: SvgIconComponent
 }
 
 const dropdownOptions: DropdownOption[] = [
   {
     key: 'edit',
-    icon: Edit,
+    icon: EditOutlined,
+  },
+  {
+    key: 'copy',
+    icon: CopyAllOutlined,
   },
   {
     key: 'archive',
-    icon: Archive,
+    icon: ArchiveOutlined,
   },
   {
     key: 'unarchive',
-    icon: Unarchive,
+    icon: UnarchiveOutlined,
   },
   {
     key: 'delete',
-    icon: Delete,
+    icon: DeleteOutlineOutlined,
   },
 ]
 
@@ -153,6 +158,12 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         openDialog('orderForm', {
           ...DIALOG_BASE_OPTIONS.form.editOrder,
           order: selectedOrder,
+        })
+        break
+      case 'copy':
+        openDialog('orderForm', {
+          ...DIALOG_BASE_OPTIONS.form.addOrder,
+          order: { ...selectedOrder!, id: 0 },
         })
         break
       case 'archive':

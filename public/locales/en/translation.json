@@ -175,9 +175,10 @@
     }
   },
   "actions": {
+    "edit": "Edit",
+    "copy": "Copy",
     "archive": "Move to archive",
     "unarchive": "Move from archive",
-    "edit": "Edit",
     "delete": "Delete"
   },
   "pages": {

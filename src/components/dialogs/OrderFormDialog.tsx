@@ -117,7 +117,7 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
 
   const onSubmit: SubmitHandler<OrderFormFields> = async (data) => {
     try {
-      if (!order) {
+      if (!order || (order && !order.id)) {
         await addOrder(data).unwrap()
         reset()
       } else {

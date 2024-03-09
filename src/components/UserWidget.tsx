@@ -1,4 +1,8 @@
-import { SvgIconComponent, Logout, Settings } from '@mui/icons-material'
+import {
+  SvgIconComponent,
+  ExitToAppOutlined,
+  SettingsOutlined,
+} from '@mui/icons-material'
 import {
   Avatar,
   Divider,
@@ -34,11 +38,11 @@ type DropdownOption = {
 const dropdownOptions: DropdownOption[] = [
   {
     key: 'settings',
-    icon: Settings,
+    icon: SettingsOutlined,
   },
   {
     key: 'logout',
-    icon: Logout,
+    icon: ExitToAppOutlined,
   },
 ]
 
