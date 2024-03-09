@@ -1,6 +1,12 @@
-import { FC } from "react";
-import { OrderList } from "../../components/OrderList";
+import { FC } from 'react'
+import { PageHeader } from '../../components/PageHeader'
+import { OrderList } from '../../components/OrderList'
 
 export const ArchivePage: FC = () => {
-  return <OrderList state="closed" />
+  return (
+    <>
+      <PageHeader title="page_header.titles.archive" />
+      <OrderList state="closed" />
+    </>
+  )
 }

@@ -1,7 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import {
-  Box,
-  Button,
   CircularProgress,
   IconButton,
   ListItemIcon,
@@ -130,16 +128,6 @@ export const UserList: FC = () => {
 
   return (
     <>
-      <Box paddingBottom={3}>
-        <Button
-          variant="contained"
-          onClick={() =>
-            openDialog('userForm', DIALOG_BASE_OPTIONS.form.addUser)
-          }
-        >
-          Добавить пользователя
-        </Button>
-      </Box>
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: 992 }}

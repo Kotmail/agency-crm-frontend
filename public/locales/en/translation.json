@@ -23,7 +23,9 @@
     "add": "Add",
     "save": "Save",
     "delete": "Delete",
-    "move": "Move"
+    "move": "Move",
+    "new_order": "New order",
+    "new_user": "New user"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -185,5 +187,12 @@
   },
   "aria_labels": {
     "list_of_pages": "List of pages"
+  },
+  "page_header": {
+    "titles": {
+      "orders": "Orders",
+      "archive": "Archive",
+      "users": "Users"
+    }
   }
 }

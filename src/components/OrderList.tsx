@@ -245,18 +245,6 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
 
   return (
     <>
-      <Hider roles={[UserRole.EXECUTOR]}>
-        <Box paddingBottom={3}>
-          <Button
-            variant="contained"
-            onClick={() =>
-              openDialog('orderForm', DIALOG_BASE_OPTIONS.form.addOrder)
-            }
-          >
-            Добавить заказ
-          </Button>
-        </Box>
-      </Hider>
       <TableContainer component={Paper}>
         <Table
           size="small"
