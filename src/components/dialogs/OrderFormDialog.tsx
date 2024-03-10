@@ -50,6 +50,7 @@ type OrderFormFields = {
   creatorId: number
   executorId: number
   description: string
+  objectAddress: string
   brand: string
   cost: number
   priority: OrderPriority
@@ -59,11 +60,19 @@ const createOrderSchema = Yup.object({
   deadline: Yup.string()
     .transform((value) => dayjs(value).format('YYYY-MM-DD'))
     .required(),
-  description: Yup.string().required('form_errors.description.required'),
-  brand: Yup.string().required('form_errors.brand.required'),
+  description: Yup.string()
+    .required('form_errors.description.required')
+    .min(15, 'form_errors.description.min_length'),
+  objectAddress: Yup.string()
+    .required('form_errors.object_address.required')
+    .min(10, 'form_errors.object_address.min_length'),
+  brand: Yup.string()
+    .required('form_errors.brand.required')
+    .min(5, 'form_errors.brand.min_length'),
   cost: Yup.number()
     .transform((value) => (Number.isNaN(value) ? undefined : value))
-    .required('form_errors.cost.required'),
+    .required('form_errors.cost.required')
+    .positive('form_errors.cost.positive'),
   creatorId: Yup.number().defined(),
   executorId: Yup.number().required(),
   priority: Yup.mixed<OrderPriority>()
@@ -271,6 +280,13 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
             size="small"
             multiline
             rows="4"
+          />
+          <TextField
+            {...register('objectAddress')}
+            error={!!errors.objectAddress}
+            helperText={t(errors.objectAddress?.message || '')}
+            label={t('input_placeholders.object_address')}
+            size="small"
           />
           <TextField
             {...register('brand')}

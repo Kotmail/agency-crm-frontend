@@ -281,6 +281,9 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
               <TableCell>
                 {t('order_list_table.headings.description')}
               </TableCell>
+              <TableCell>
+                {t('order_list_table.headings.object_address')}
+              </TableCell>
               <TableCell>{t('order_list_table.headings.priority')}</TableCell>
               <TableCell>{t('order_list_table.headings.brand')}</TableCell>
               <Hider roles={[UserRole.MANAGER]}>
@@ -351,6 +354,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
                     </TableCell>
                     <TableCell>{deadlineDate.toLocaleDateString()}</TableCell>
                     <TableCell>{order.description}</TableCell>
+                    <TableCell>{order.objectAddress}</TableCell>
                     <TableCell>
                       <Chip
                         variant="outlined"

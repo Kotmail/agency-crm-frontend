@@ -15,6 +15,7 @@ export enum OrderStatus {
 export interface IOrder {
   id: number
   description: string
+  objectAddress: string
   brand: string
   cost: number
   creator: IUser
