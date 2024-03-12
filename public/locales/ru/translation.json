@@ -197,6 +197,8 @@
   },
   "page_header": {
     "titles": {
+      "signin": "Вход в систему",
+      "dashboard": "Панель управления",
       "orders": "Заказы",
       "archive": "Архив",
       "users": "Пользователи"

@@ -197,9 +197,12 @@
   },
   "page_header": {
     "titles": {
+      "signin": "Sign In",
+      "dashboard": "Control panel",
       "orders": "Orders",
       "archive": "Archive",
       "users": "Users"
     }
-  }
+  },
+  "app_name": "Agency CRM"
 }
