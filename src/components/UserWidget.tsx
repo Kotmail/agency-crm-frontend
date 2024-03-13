@@ -87,7 +87,9 @@ export const UserWidget: FC = () => {
   const logoutHandler = () => {
     dispatch(clearAuthData())
     dispatch(apiSlice.util.resetApiState())
-    navigate('/')
+    navigate('/', {
+      replace: true,
+    })
   }
 
   return (

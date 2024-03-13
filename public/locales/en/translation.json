@@ -25,7 +25,8 @@
     "delete": "Delete",
     "move": "Move",
     "new_order": "New order",
-    "new_user": "New user"
+    "new_user": "New user",
+    "return_to_main_page": "Go to home"
   },
   "tooltips": {
     "user_menu": "User menu"
@@ -201,8 +202,13 @@
       "dashboard": "Control panel",
       "orders": "Orders",
       "archive": "Archive",
-      "users": "Users"
+      "users": "Users",
+      "error_404": "Page not found"
     }
+  },
+  "page_404": {
+    "title": "Page not found!",
+    "desc": "There is no page at the specified address. It may have been deleted."
   },
   "app_name": "Agency CRM"
 }

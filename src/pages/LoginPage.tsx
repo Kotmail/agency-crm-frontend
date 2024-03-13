@@ -1,12 +1,27 @@
-import { FC } from 'react'
+import { FC, useLayoutEffect } from 'react'
 import { Avatar, Box, Typography } from '@mui/material'
 import { LoginForm } from '../components/LoginForm'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { blue } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { useAppSelector } from '../hooks/useAppSelector'
+import { useNavigate } from 'react-router-dom'
 
 export const LoginPage: FC = () => {
+  const navigate = useNavigate()
   const { t } = useTranslation()
+  const { user } = useAppSelector((state) => state.auth)
+
+  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.signin`)}`)
+
+  useLayoutEffect(() => {
+    if (user) {
+      navigate('/dashboard', {
+        replace: true,
+      })
+    }
+  }, [])
 
   return (
     <Box
