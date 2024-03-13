@@ -8,6 +8,11 @@ export const DIALOG_BASE_OPTIONS = {
       title: 'dialogs.add_order.title',
       submitBtnLabel: 'buttons.add',
     },
+    copyOrder: {
+      title: 'dialogs.copy_order.title',
+      submitBtnLabel: 'buttons.copy',
+      successMessage: 'notifications.copy_order.success',
+    },
     editOrder: {
       title: 'dialogs.edit_order.title',
       successMessage: 'notifications.edit_order.success',

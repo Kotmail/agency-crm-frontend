@@ -162,7 +162,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
         break
       case 'copy':
         openDialog('orderForm', {
-          ...DIALOG_BASE_OPTIONS.form.addOrder,
+          ...DIALOG_BASE_OPTIONS.form.copyOrder,
           order: { ...selectedOrder!, id: 0 },
         })
         break
