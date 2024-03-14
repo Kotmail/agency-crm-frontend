@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import {
   Alert,
   Box,
@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -105,14 +106,23 @@ const dropdownOptions: DropdownOption[] = [
 
 type OrderListProps = {
   state?: 'opened' | 'closed'
+  itemsPerPage?: number
 }
 
-export const OrderList: FC<OrderListProps> = ({ state }) => {
+export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: itemsPerPage || 8,
+  })
   const {
-    data: orders,
+    data: ordersData,
     isLoading: isOrdersLoading,
     isError: isOrdersLoadingError,
-  } = useOrdersQuery({ state })
+  } = useOrdersQuery({
+    state,
+    take: pagination.limit,
+    page: pagination.page,
+  })
   const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] =
     useUpdateOrderMutation()
   const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
@@ -138,7 +148,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
   const { t } = useTranslation()
 
   const openActionsMenuHandler = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: MouseEvent<HTMLButtonElement>,
     order: IOrder,
   ) => {
     setSelectedOrder(order)
@@ -250,7 +260,7 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
     return <Typography>Error...</Typography>
   }
 
-  if (!orders?.length) {
+  if (ordersData && ordersData[0].length === 0) {
     return <Alert severity="info">Заказы отсутствуют</Alert>
   }
 
@@ -297,8 +307,8 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders &&
-              orders.map((order) => {
+            {ordersData &&
+              ordersData[0].map((order) => {
                 const createdDate = new Date(
                   Date.parse(order.createdAt.toString()),
                 )
@@ -414,6 +424,17 @@ export const OrderList: FC<OrderListProps> = ({ state }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {ordersData && ordersData[1] > pagination.limit && (
+        <Pagination
+          count={Math.ceil(ordersData[1] / pagination.limit)}
+          page={pagination.page}
+          onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
+          variant="outlined"
+          color="primary"
+          shape="rounded"
+          sx={{ marginTop: '25px', '.MuiPagination-ul': { rowGap: '6px' } }}
+        />
+      )}
       <Menu
         id="orderStatusMenu"
         MenuListProps={{

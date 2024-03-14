@@ -27,7 +27,7 @@ export const Dashboard: FC = () => {
     <>
       <Header />
       <Container maxWidth="xl">
-        <Box paddingTop="30px">
+        <Box paddingTop="30px" paddingBottom="40px">
           <Outlet />
         </Box>
       </Container>

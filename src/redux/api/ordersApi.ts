@@ -3,6 +3,8 @@ import { IOrder } from '../../models/IOrder'
 
 type QueryOrdersRequest = {
   state?: 'opened' | 'closed'
+  take?: number
+  page?: number
 }
 
 export interface CreateOrderRequest
@@ -21,7 +23,7 @@ const apiWithTag = apiSlice.enhanceEndpoints({
 
 const ordersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<IOrder[], QueryOrdersRequest>({
+    orders: builder.query<[IOrder[], number], QueryOrdersRequest>({
       query: (params) => ({
         url: '/orders',
         params,
