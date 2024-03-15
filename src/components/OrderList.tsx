@@ -261,6 +261,10 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   }
 
   if (ordersData && ordersData[0].length === 0) {
+    if (pagination.page > 1) {
+      setPagination((data) => ({ ...data, page: --data.page }))
+    }
+
     return <Alert severity="info">Заказы отсутствуют</Alert>
   }
 
