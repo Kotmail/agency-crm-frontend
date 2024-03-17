@@ -28,6 +28,7 @@ import {
   UnarchiveOutlined,
   DeleteOutlineOutlined,
   KeyboardArrowDown,
+  KeyboardArrowUp,
   MoreHoriz,
   SvgIconComponent,
 } from '@mui/icons-material'
@@ -112,12 +113,13 @@ type OrderListProps = {
 export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 8,
+    limit: itemsPerPage || 4,
   })
   const {
     data: ordersData,
     isLoading: isOrdersLoading,
     isError: isOrdersLoadingError,
+    isFetching: isOrdersFetching,
   } = useOrdersQuery({
     state,
     take: pagination.limit,
@@ -257,7 +259,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   }
 
   if (isOrdersLoadingError) {
-    return <Typography>Error...</Typography>
+    return <Alert severity="error">{t('alerts.orders.request_error')}</Alert>
   }
 
   if (ordersData && ordersData[0].length === 0) {
@@ -265,18 +267,51 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
       setPagination((data) => ({ ...data, page: --data.page }))
     }
 
-    return <Alert severity="info">Заказы отсутствуют</Alert>
+    return (
+      <Alert severity="info">
+        {t(
+          `alerts.orders.empty_data${
+            state && state === 'closed' ? '_archive' : ''
+          }`,
+        )}
+      </Alert>
+    )
   }
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ position: 'relative' }}
+      >
+        <Box
+          position="absolute"
+          top="0"
+          width="100%"
+          height="100%"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          zIndex="1"
+          sx={{
+            visibility: isOrdersFetching ? 'visible' : 'hidden',
+            opacity: isOrdersFetching ? 1 : 0,
+            transition: 'opacity .5s',
+            backgroundColor: 'rgb(255 255 255 / 70%)',
+          }}
+        >
+          <CircularProgress />
+        </Box>
         <Table
           size="small"
           aria-label={t('order_list_table.label')}
           sx={{
-            minWidth: 1300,
-            '& .MuiTableCell-head': {
+            tableLayout: 'fixed',
+            width: 1486,
+            'th, td': {
+              paddingTop: '14px',
+              paddingBottom: '14px',
               lineHeight: 'normal',
             },
           }}
@@ -284,30 +319,44 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
           <TableHead>
             <TableRow>
               <Hider roles={[UserRole.EXECUTOR]}>
-                <TableCell>
+                <TableCell width="4%">
                   <Typography component="span" sx={visuallyHidden}>
                     {t('order_list_table.headings.actions')}
                   </Typography>
                 </TableCell>
               </Hider>
-              <TableCell>№</TableCell>
-              <TableCell>{t('order_list_table.headings.deadline')}</TableCell>
-              <TableCell>
+              <TableCell width="7%">№</TableCell>
+              <TableCell width="9%">
+                {t('order_list_table.headings.deadline')}
+              </TableCell>
+              <TableCell width="15%">
                 {t('order_list_table.headings.description')}
               </TableCell>
-              <TableCell>
+              <TableCell width="12%">
                 {t('order_list_table.headings.object_address')}
               </TableCell>
-              <TableCell>{t('order_list_table.headings.priority')}</TableCell>
-              <TableCell>{t('order_list_table.headings.brand')}</TableCell>
+              <TableCell width="9%">
+                {t('order_list_table.headings.priority')}
+              </TableCell>
+              <TableCell width="8%">
+                {t('order_list_table.headings.brand')}
+              </TableCell>
               <Hider roles={[UserRole.MANAGER]}>
-                <TableCell>{t('order_list_table.headings.creator')}</TableCell>
+                <TableCell width="9%">
+                  {t('order_list_table.headings.creator')}
+                </TableCell>
               </Hider>
               <Hider roles={[UserRole.EXECUTOR]}>
-                <TableCell>{t('order_list_table.headings.executor')}</TableCell>
+                <TableCell width="9%">
+                  {t('order_list_table.headings.executor')}
+                </TableCell>
               </Hider>
-              <TableCell>{t('order_list_table.headings.cost')}</TableCell>
-              <TableCell>{t('order_list_table.headings.status')}</TableCell>
+              <TableCell width="7%">
+                {t('order_list_table.headings.cost')}
+              </TableCell>
+              <TableCell width="11%">
+                {t('order_list_table.headings.status')}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -321,7 +370,10 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                 return (
                   <TableRow
                     key={order.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{
+                      '&:last-child td': { border: 0 },
+                      verticalAlign: 'top',
+                    }}
                   >
                     <Hider roles={[UserRole.EXECUTOR]}>
                       <TableCell>
@@ -403,7 +455,15 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         variant="contained"
                         color={statusColors[order.status!]}
                         disableElevation
-                        endIcon={<KeyboardArrowDown />}
+                        endIcon={
+                          isStatusMenuOpened &&
+                          selectedOrder &&
+                          selectedOrder.id === order.id ? (
+                            <KeyboardArrowUp />
+                          ) : (
+                            <KeyboardArrowDown />
+                          )
+                        }
                         onClick={(e) => openStatusMenuHandler(e, order)}
                         aria-haspopup="true"
                         aria-controls={
@@ -413,7 +473,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         size="small"
                         fullWidth
                         sx={{
-                          minWidth: '123px',
+                          width: '123px',
                           whiteSpace: 'nowrap',
                           textTransform: 'none',
                           justifyContent: 'space-between',
@@ -430,6 +490,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
       </TableContainer>
       {ordersData && ordersData[1] > pagination.limit && (
         <Pagination
+          disabled={isOrdersFetching}
           count={Math.ceil(ordersData[1] / pagination.limit)}
           page={pagination.page}
           onChange={(_, page) => setPagination((data) => ({ ...data, page }))}

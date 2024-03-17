@@ -118,6 +118,13 @@
       "success": "Заказ удалён"
     }
   },
+  "alerts": {
+    "orders": {
+      "request_error": "При запросе данных о заказах произошла ошибка",
+      "empty_data": "Список заказов пуст",
+      "empty_data_archive": "Архивных заказов нет"
+    }
+  },
   "dialogs": {
     "logout": {
       "title": "Выйти из системы?",
@@ -169,7 +176,7 @@
     "label": "List of orders",
     "headings": {
       "actions": "Действия",
-      "deadline": "Дата выполнения",
+      "deadline": "Крайний срок",
       "description": "Вид работ",
       "object_address": "Адрес объекта",
       "priority": "Приоритет",
