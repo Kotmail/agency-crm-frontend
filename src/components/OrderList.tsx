@@ -1,13 +1,9 @@
-import { MouseEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Alert,
   Box,
   Chip,
   CircularProgress,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
   Pagination,
   Paper,
   Table,
@@ -27,8 +23,6 @@ import {
   ArchiveOutlined,
   UnarchiveOutlined,
   DeleteOutlineOutlined,
-  MoreHoriz,
-  SvgIconComponent,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import {
@@ -49,6 +43,7 @@ import {
 } from './dialogs/OrderFormDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 import { OrderStatusSwitcher } from './OrderStatusSwitcher'
+import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 
 const priorityColors = {
   low: {
@@ -65,17 +60,7 @@ const priorityColors = {
   },
 }
 
-type DialogVariants = {
-  orderForm: OrderFormDialogProps
-  confirm: ConfirmDialogProps
-}
-
-type DropdownOption = {
-  key: 'edit' | 'copy' | 'archive' | 'unarchive' | 'delete'
-  icon: SvgIconComponent
-}
-
-const dropdownOptions: DropdownOption[] = [
+const actions: ActionItem[] = [
   {
     key: 'edit',
     icon: EditOutlined,
@@ -98,6 +83,11 @@ const dropdownOptions: DropdownOption[] = [
   },
 ]
 
+type DialogVariants = {
+  orderForm: OrderFormDialogProps
+  confirm: ConfirmDialogProps
+}
+
 type OrderListProps = {
   state?: 'opened' | 'closed'
   itemsPerPage?: number
@@ -106,7 +96,7 @@ type OrderListProps = {
 export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 8,
+    limit: itemsPerPage || 6,
   })
   const {
     data: ordersData,
@@ -122,9 +112,6 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     useUpdateOrderMutation()
   const [deleteOrder, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteOrderMutation()
-  const [anchorActionsMenu, setAnchorActionsMenu] =
-    useState<null | HTMLElement>(null)
-  const isActionsMenuOpened = Boolean(anchorActionsMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
   const [dialogs, openDialog, closeDialog] = useDialogs<DialogVariants>({
     orderForm: {
@@ -140,16 +127,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   const matchMdBreakpoint = useMediaQuery(theme.breakpoints.down('md'))
   const { t } = useTranslation()
 
-  const openActionsMenuHandler = (
-    event: MouseEvent<HTMLButtonElement>,
-    order: IOrder,
-  ) => {
-    setSelectedOrder(order)
-    setAnchorActionsMenu(event.currentTarget)
-  }
-  const closeActionsMenuHandler = () => setAnchorActionsMenu(null)
-
-  const selectOptionHandler = (optionKey: DropdownOption['key']) => {
+  const selectActionHandler = (optionKey: ActionItemKeys) => {
     switch (optionKey) {
       case 'edit':
         openDialog('orderForm', {
@@ -179,8 +157,6 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
         openDialog('confirm')
         break
     }
-
-    closeActionsMenuHandler()
   }
 
   const updateStatusHandler = (id: number, status: OrderStatus) =>
@@ -198,6 +174,14 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     }
 
     closeDialog('confirm')
+  }
+
+  const getSpecificActions = () => {
+    return actions.filter((action) =>
+      state && state === 'closed'
+        ? action.key === 'unarchive'
+        : action.key !== 'unarchive',
+    )
   }
 
   const deleteOrderHandler = () => {
@@ -460,21 +444,12 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                   >
                     <Hider roles={[UserRole.EXECUTOR]}>
                       <TableCell className="cell-actions">
-                        <IconButton
-                          id="orderActionsBtn"
-                          aria-label={t('order_list_table.headings.actions')}
-                          size="small"
-                          aria-haspopup="true"
-                          aria-controls={
-                            isActionsMenuOpened ? 'orderActionsMenu' : undefined
-                          }
-                          aria-expanded={
-                            isActionsMenuOpened ? 'true' : undefined
-                          }
-                          onClick={(e) => openActionsMenuHandler(e, order)}
-                        >
-                          <MoreHoriz fontSize="small" />
-                        </IconButton>
+                        <ActionsDropdown
+                          actions={getSpecificActions()}
+                          onSelectHandler={selectActionHandler}
+                          onClick={() => setSelectedOrder(order)}
+                          ariaLabel="order_list_table.headings.actions"
+                        />
                       </TableCell>
                     </Hider>
                     <TableCell className="cell-meta">
@@ -593,37 +568,6 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
           sx={{ marginTop: '25px', '.MuiPagination-ul': { rowGap: '6px' } }}
         />
       )}
-      <Menu
-        id="orderActionsMenu"
-        anchorEl={anchorActionsMenu}
-        open={isActionsMenuOpened}
-        onClose={closeActionsMenuHandler}
-        MenuListProps={{
-          'aria-labelledby': 'orderActionsBtn',
-        }}
-      >
-        {dropdownOptions.map((option) => {
-          if (
-            (state === 'closed' && option.key !== 'unarchive') ||
-            (state !== 'closed' && option.key === 'unarchive')
-          ) {
-            return
-          }
-
-          return (
-            <MenuItem
-              key={option.key}
-              dense
-              onClick={() => selectOptionHandler(option.key)}
-            >
-              <ListItemIcon>
-                <option.icon fontSize="small" />
-              </ListItemIcon>
-              {t(`actions.${option.key}`)}
-            </MenuItem>
-          )
-        })}
-      </Menu>
       <OrderFormDialog {...dialogs.orderForm} />
       <ConfirmDialog {...dialogs.confirm} />
     </>
