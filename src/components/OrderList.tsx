@@ -2,8 +2,6 @@ import { MouseEvent, useEffect, useState } from 'react'
 import {
   Alert,
   Box,
-  Button,
-  ButtonProps,
   Chip,
   CircularProgress,
   IconButton,
@@ -29,8 +27,6 @@ import {
   ArchiveOutlined,
   UnarchiveOutlined,
   DeleteOutlineOutlined,
-  KeyboardArrowDown,
-  KeyboardArrowUp,
   MoreHoriz,
   SvgIconComponent,
 } from '@mui/icons-material'
@@ -52,6 +48,7 @@ import {
   OrderFormDialogProps,
 } from './dialogs/OrderFormDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
+import { OrderStatusSwitcher } from './OrderStatusSwitcher'
 
 const priorityColors = {
   low: {
@@ -66,12 +63,6 @@ const priorityColors = {
     borderColor: orange[800],
     color: orange[900],
   },
-}
-
-const statusColors: { [key in OrderStatus]: ButtonProps['color'] } = {
-  waiting: 'primary',
-  accepted: 'warning',
-  done: 'success',
 }
 
 type DialogVariants = {
@@ -133,11 +124,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     useDeleteOrderMutation()
   const [anchorActionsMenu, setAnchorActionsMenu] =
     useState<null | HTMLElement>(null)
-  const [anchorStatusMenu, setAnchorStatusMenu] = useState<null | HTMLElement>(
-    null,
-  )
   const isActionsMenuOpened = Boolean(anchorActionsMenu)
-  const isStatusMenuOpened = Boolean(anchorStatusMenu)
   const [selectedOrder, setSelectedOrder] = useState<null | IOrder>(null)
   const [dialogs, openDialog, closeDialog] = useDialogs<DialogVariants>({
     orderForm: {
@@ -161,12 +148,6 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     setAnchorActionsMenu(event.currentTarget)
   }
   const closeActionsMenuHandler = () => setAnchorActionsMenu(null)
-
-  const openStatusMenuHandler = (e: MouseEvent<HTMLElement>, order: IOrder) => {
-    setAnchorStatusMenu(e.currentTarget)
-    setSelectedOrder(order)
-  }
-  const closeStatusMenuHandler = () => setAnchorStatusMenu(null)
 
   const selectOptionHandler = (optionKey: DropdownOption['key']) => {
     switch (optionKey) {
@@ -202,16 +183,11 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     closeActionsMenuHandler()
   }
 
-  const updateOrderHandler = (status: OrderStatus) => {
-    if (selectedOrder && selectedOrder.status !== status) {
-      updateOrder({
-        id: selectedOrder.id,
-        status,
-      })
-    }
-
-    closeStatusMenuHandler()
-  }
+  const updateStatusHandler = (id: number, status: OrderStatus) =>
+    updateOrder({
+      id,
+      status,
+    })
 
   const archiveOrderHandler = () => {
     if (selectedOrder) {
@@ -594,37 +570,10 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                       </span>
                     </TableCell>
                     <TableCell className="cell-status">
-                      <Button
-                        id="orderStatusMenuButton"
-                        variant="contained"
-                        color={statusColors[order.status!]}
-                        disableElevation
-                        endIcon={
-                          isStatusMenuOpened &&
-                          selectedOrder &&
-                          selectedOrder.id === order.id ? (
-                            <KeyboardArrowUp />
-                          ) : (
-                            <KeyboardArrowDown />
-                          )
-                        }
-                        onClick={(e) => openStatusMenuHandler(e, order)}
-                        aria-haspopup="true"
-                        aria-controls={
-                          isStatusMenuOpened ? 'orderStatusMenu' : undefined
-                        }
-                        aria-expanded={isStatusMenuOpened ? true : undefined}
-                        size="small"
-                        fullWidth
-                        sx={{
-                          width: '123px',
-                          whiteSpace: 'nowrap',
-                          textTransform: 'none',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        {t(`statuses.${order.status}`)}
-                      </Button>
+                      <OrderStatusSwitcher
+                        order={order}
+                        onChangeHandler={updateStatusHandler}
+                      />
                     </TableCell>
                   </TableRow>
                 )
@@ -644,26 +593,6 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
           sx={{ marginTop: '25px', '.MuiPagination-ul': { rowGap: '6px' } }}
         />
       )}
-      <Menu
-        id="orderStatusMenu"
-        MenuListProps={{
-          'aria-labelledby': 'orderStatusMenuButton',
-        }}
-        anchorEl={anchorStatusMenu}
-        open={isStatusMenuOpened}
-        onClose={closeStatusMenuHandler}
-      >
-        {Object.values(OrderStatus).map((status) => (
-          <MenuItem
-            key={status}
-            dense
-            selected={selectedOrder?.status === status}
-            onClick={() => updateOrderHandler(status)}
-          >
-            {t(`statuses.${status}`)}
-          </MenuItem>
-        ))}
-      </Menu>
       <Menu
         id="orderActionsMenu"
         anchorEl={anchorActionsMenu}
