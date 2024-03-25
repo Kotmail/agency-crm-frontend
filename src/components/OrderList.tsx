@@ -19,6 +19,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import {
@@ -113,7 +115,7 @@ type OrderListProps = {
 export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 4,
+    limit: itemsPerPage || 8,
   })
   const {
     data: ordersData,
@@ -147,6 +149,8 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
       confirmBtnHandler: () => deleteOrderHandler(),
     },
   })
+  const theme = useTheme()
+  const matchMdBreakpoint = useMediaQuery(theme.breakpoints.down('md'))
   const { t } = useTranslation()
 
   const openActionsMenuHandler = (
@@ -283,7 +287,110 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ position: 'relative' }}
+        className={matchMdBreakpoint ? 'cardView' : ''}
+        sx={{
+          position: 'relative',
+          '&.cardView': {
+            border: 'none',
+            '.MuiTable-root': {
+              width: 'auto',
+              border: 'none',
+            },
+            '.MuiTableHead-root': visuallyHidden,
+            '.MuiTableBody-root .MuiTableRow-root': {
+              display: 'flex',
+              flexWrap: 'wrap',
+              border: '1px solid #e0e0e0',
+              borderRadius: '4px',
+              '&:not(:last-child)': { marginBottom: '20px' },
+            },
+            '.MuiTableCell-root': {
+              padding: '8px 10px',
+              display: 'flex',
+              width: '100%',
+              borderBottom: '1px solid #e0e0e0',
+              fontSize: '13px',
+              '&[data-label]::before': {
+                content: 'attr(data-label) ":"',
+                whiteSpace: 'nowrap',
+                fontWeight: 500,
+                marginRight: '5px',
+              },
+            },
+            '.cell-meta': {
+              display: 'flex',
+              alignItems: 'center',
+              order: 1,
+              width: '62%',
+              paddingRight: 0,
+            },
+            '.order-id': {
+              marginRight: '6px',
+              fontSize: '15px',
+              lineHeight: 'normal',
+              letterSpacing: 'normal',
+            },
+            '.create-datetime': {
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: 0,
+              span: {
+                paddingLeft: '4px',
+              },
+              lineHeight: 'normal',
+            },
+            '.cell-priority': {
+              order: 2,
+              width: '38%',
+              '.MuiChip-root': {
+                marginLeft: 'auto',
+              },
+            },
+            '.cell-deadline, .cell-cost': {
+              flexDirection: 'column',
+              width: 'auto',
+              borderBottom: 'none',
+              span: { paddingTop: '2px', fontWeight: 700, fontSize: '15px' },
+            },
+            '.cell-deadline': {
+              order: 3,
+            },
+            '.cell-cost': {
+              order: 4,
+            },
+            '.cell-brand': {
+              order: 5,
+            },
+            '.cell-address': {
+              order: 6,
+            },
+            '.cell-description': {
+              order: 7,
+            },
+            '.cell-creator': {
+              order: 8,
+              borderBottom: 'none',
+            },
+            '.cell-executor': {
+              order: 9,
+              paddingTop: 0,
+              borderBottom: 'none',
+            },
+            '.cell-actions, .cell-status': {
+              width: 'auto',
+              borderTop: '1px solid #e0e0e0',
+              borderBottom: 'none',
+            },
+            '.cell-actions': {
+              order: 10,
+            },
+            '.cell-status': {
+              order: 11,
+              flex: '1 1 auto',
+              '.MuiButtonBase-root': { marginLeft: 'auto' },
+            },
+          },
+        }}
       >
         <Box
           position="absolute"
@@ -376,7 +483,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                     }}
                   >
                     <Hider roles={[UserRole.EXECUTOR]}>
-                      <TableCell>
+                      <TableCell className="cell-actions">
                         <IconButton
                           id="orderActionsBtn"
                           aria-label={t('order_list_table.headings.actions')}
@@ -394,11 +501,12 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         </IconButton>
                       </TableCell>
                     </Hider>
-                    <TableCell>
+                    <TableCell className="cell-meta">
                       <Typography
                         component="span"
                         variant="body2"
                         fontWeight="500"
+                        className="order-id"
                       >
                         {order.id}
                       </Typography>
@@ -407,6 +515,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         display="block"
                         marginTop="6px"
                         lineHeight="1.3"
+                        className="create-datetime"
                       >
                         {createdDate.toLocaleDateString()}
                         <Box
@@ -418,10 +527,25 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         </Box>
                       </Typography>
                     </TableCell>
-                    <TableCell>{deadlineDate.toLocaleDateString()}</TableCell>
-                    <TableCell>{order.description}</TableCell>
-                    <TableCell>{order.objectAddress}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      data-label={t('order_list_table.headings.deadline')}
+                      className="cell-deadline"
+                    >
+                      <span>{deadlineDate.toLocaleDateString()}</span>
+                    </TableCell>
+                    <TableCell
+                      data-label={t('order_list_table.headings.description')}
+                      className="cell-description"
+                    >
+                      {order.description}
+                    </TableCell>
+                    <TableCell
+                      data-label={t('order_list_table.headings.object_address')}
+                      className="cell-address"
+                    >
+                      {order.objectAddress}
+                    </TableCell>
+                    <TableCell className="cell-priority">
                       <Chip
                         variant="outlined"
                         label={t(`priorities.${order.priority}`)}
@@ -434,22 +558,42 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>{order.brand}</TableCell>
+                    <TableCell
+                      data-label={t('order_list_table.headings.brand')}
+                      className="cell-brand"
+                    >
+                      {order.brand}
+                    </TableCell>
                     <Hider roles={[UserRole.MANAGER]}>
-                      <TableCell>{order.creator.fullName}</TableCell>
+                      <TableCell
+                        data-label={t('order_list_table.headings.creator')}
+                        className="cell-creator"
+                      >
+                        {order.creator.fullName}
+                      </TableCell>
                     </Hider>
                     <Hider roles={[UserRole.EXECUTOR]}>
-                      <TableCell>{order.executor.fullName}</TableCell>
+                      <TableCell
+                        data-label={t('order_list_table.headings.executor')}
+                        className="cell-executor"
+                      >
+                        {order.executor.fullName}
+                      </TableCell>
                     </Hider>
-                    <TableCell>
-                      {new Intl.NumberFormat('ru', {
-                        style: 'currency',
-                        currency: 'RUB',
-                        currencyDisplay: 'symbol',
-                        minimumFractionDigits: 0,
-                      }).format(order.cost)}
+                    <TableCell
+                      data-label={t('order_list_table.headings.cost')}
+                      className="cell-cost"
+                    >
+                      <span>
+                        {new Intl.NumberFormat('ru', {
+                          style: 'currency',
+                          currency: 'RUB',
+                          currencyDisplay: 'symbol',
+                          minimumFractionDigits: 0,
+                        }).format(order.cost)}
+                      </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="cell-status">
                       <Button
                         id="orderStatusMenuButton"
                         variant="contained"
