@@ -44,6 +44,7 @@ import {
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 import { OrderStatusSwitcher } from './OrderStatusSwitcher'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
+import { TableBackdropLoader } from './TableBackdropLoader'
 
 const priorityColors = {
   low: {
@@ -352,24 +353,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
           },
         }}
       >
-        <Box
-          position="absolute"
-          top="0"
-          width="100%"
-          height="100%"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          zIndex="1"
-          sx={{
-            visibility: isOrdersFetching ? 'visible' : 'hidden',
-            opacity: isOrdersFetching ? 1 : 0,
-            transition: 'opacity .5s',
-            backgroundColor: 'rgb(255 255 255 / 70%)',
-          }}
-        >
-          <CircularProgress />
-        </Box>
+        <TableBackdropLoader open={isOrdersFetching} />
         <Table
           size="small"
           aria-label={t('order_list_table.label')}

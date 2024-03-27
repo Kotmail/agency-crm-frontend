@@ -1,10 +1,7 @@
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
+  Alert,
   CircularProgress,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -14,7 +11,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { MoreHoriz, Edit, Delete, SvgIconComponent } from '@mui/icons-material'
+import { Edit, Delete } from '@mui/icons-material'
 import { visuallyHidden } from '@mui/utils'
 import { useDeleteUserMutation, useUsersQuery } from '../redux/api/usersApi'
 import { useTranslation } from 'react-i18next'
@@ -25,18 +22,15 @@ import { IUser } from '../models/IUser'
 import { UserFormDialog, UserFormDialogProps } from './dialogs/UserFormDialog'
 import { useDialogs } from '../hooks/useDialogs'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
+import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
+import { TableBackdropLoader } from './TableBackdropLoader'
 
 type DialogVariants = {
   userForm: UserFormDialogProps
   confirm: ConfirmDialogProps
 }
 
-type DropdownOption = {
-  key: 'edit' | 'delete'
-  icon: SvgIconComponent
-}
-
-const dropdownOptions: DropdownOption[] = [
+const actions: ActionItem[] = [
   {
     key: 'edit',
     icon: Edit,
@@ -47,16 +41,16 @@ const dropdownOptions: DropdownOption[] = [
   },
 ]
 
-export const UserList: FC = () => {
+export const UserList = () => {
   const {
     data: users,
     isLoading: isUsersLoading,
     isError: isUsersLoadingError,
+    isFetching: isUsersFetching,
   } = useUsersQuery()
   const { user: authUser } = useAppSelector((state) => state.auth)
   const [deleteUser, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteUserMutation()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedUser, setSelectedUser] = useState<null | IUser>(null)
   const [dialogs, openDialog, closeDialog] = useDialogs<DialogVariants>({
     userForm: {
@@ -68,19 +62,9 @@ export const UserList: FC = () => {
       confirmBtnHandler: () => deleteUserHandler(),
     },
   })
-  const isActionsMenuOpened = Boolean(anchorEl)
   const { t } = useTranslation()
 
-  const openActionsMenuHandler = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    user: IUser,
-  ) => {
-    setSelectedUser(user)
-    setAnchorEl(event.currentTarget)
-  }
-  const closeActionsMenuHandler = () => setAnchorEl(null)
-
-  const selectOptionHandler = (optionKey: DropdownOption['key']) => {
+  const selectActionHandler = (optionKey: ActionItemKeys) => {
     switch (optionKey) {
       case 'edit':
         openDialog('userForm', {
@@ -92,8 +76,6 @@ export const UserList: FC = () => {
         openDialog('confirm')
         break
     }
-
-    closeActionsMenuHandler()
   }
 
   const deleteUserHandler = () => {
@@ -102,6 +84,14 @@ export const UserList: FC = () => {
     }
 
     closeDialog('confirm')
+  }
+
+  const getSpecificActions = () => {
+    return authUser && selectedUser
+      ? actions.filter((action) =>
+          authUser.id === selectedUser.id ? action.key !== 'delete' : action,
+        )
+      : actions
   }
 
   useEffect(() => {
@@ -123,12 +113,17 @@ export const UserList: FC = () => {
   }
 
   if (isUsersLoadingError) {
-    return <Typography>Error...</Typography>
+    return <Alert severity="error">{t('alerts.users.request_error')}</Alert>
   }
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ position: 'relative' }}
+      >
+        <TableBackdropLoader open={isUsersFetching} />
         <Table
           sx={{ minWidth: 992 }}
           size="small"
@@ -162,19 +157,12 @@ export const UserList: FC = () => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell>
-                    <IconButton
-                      id="userActionsBtn"
-                      aria-label={t('user_list_table.headings.actions')}
-                      size="small"
-                      aria-haspopup="true"
-                      aria-controls={
-                        isActionsMenuOpened ? 'userActionsMenu' : undefined
-                      }
-                      aria-expanded={isActionsMenuOpened ? 'true' : undefined}
-                      onClick={(e) => openActionsMenuHandler(e, user)}
-                    >
-                      <MoreHoriz fontSize="small" />
-                    </IconButton>
+                    <ActionsDropdown
+                      actions={getSpecificActions()}
+                      onSelectHandler={selectActionHandler}
+                      onClick={() => setSelectedUser(user)}
+                      ariaLabel="user_list_table.headings.actions"
+                    />
                   </TableCell>
                   <TableCell>{user.id}</TableCell>
                   <TableCell>{user.login}</TableCell>
@@ -186,38 +174,6 @@ export const UserList: FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Menu
-        id="userActionsMenu"
-        anchorEl={anchorEl}
-        open={isActionsMenuOpened}
-        onClose={closeActionsMenuHandler}
-        MenuListProps={{
-          'aria-labelledby': 'userActionsBtn',
-        }}
-      >
-        {dropdownOptions.map((option) => {
-          if (
-            selectedUser &&
-            selectedUser.id === authUser?.id &&
-            option.key === 'delete'
-          ) {
-            return false
-          }
-
-          return (
-            <MenuItem
-              key={option.key}
-              dense
-              onClick={() => selectOptionHandler(option.key)}
-            >
-              <ListItemIcon>
-                <option.icon fontSize="small" />
-              </ListItemIcon>
-              {t(`actions.${option.key}`)}
-            </MenuItem>
-          )
-        })}
-      </Menu>
       <UserFormDialog {...dialogs.userForm} />
       <ConfirmDialog {...dialogs.confirm} />
     </>
