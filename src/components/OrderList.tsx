@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import {
   Alert,
   Box,
-  Chip,
   CircularProgress,
   Pagination,
   Paper,
@@ -30,7 +29,6 @@ import {
   useOrdersQuery,
   useUpdateOrderMutation,
 } from '../redux/api/ordersApi'
-import { lightBlue, orange, teal } from '@mui/material/colors'
 import { IOrder, OrderStatus } from '../models/IOrder'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { enqueueSnackbar } from 'notistack'
@@ -45,21 +43,7 @@ import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 import { OrderStatusSwitcher } from './OrderStatusSwitcher'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 import { TableBackdropLoader } from './TableBackdropLoader'
-
-const priorityColors = {
-  low: {
-    borderColor: teal[300],
-    color: teal[400],
-  },
-  medium: {
-    borderColor: lightBlue[400],
-    color: lightBlue[600],
-  },
-  high: {
-    borderColor: orange[800],
-    color: orange[900],
-  },
-}
+import { OrderPriorityChip } from './OrderPriorityChip'
 
 const actions: ActionItem[] = [
   {
@@ -481,17 +465,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
                       {order.objectAddress}
                     </TableCell>
                     <TableCell className="cell-priority">
-                      <Chip
-                        variant="outlined"
-                        label={t(`priorities.${order.priority}`)}
-                        sx={{
-                          minWidth: '83px',
-                          borderWidth: '2px',
-                          borderRadius: '4px',
-                          fontWeight: 500,
-                          ...priorityColors[order.priority],
-                        }}
-                      />
+                      <OrderPriorityChip priority={order.priority} />
                     </TableCell>
                     <TableCell
                       data-label={t('order_list_table.headings.brand')}
