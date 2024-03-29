@@ -44,6 +44,7 @@ import { OrderStatusSwitcher } from './OrderStatusSwitcher'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 import { TableBackdropLoader } from './TableBackdropLoader'
 import { OrderPriorityChip } from './OrderPriorityChip'
+import { SortData } from './Sorter'
 
 const actions: ActionItem[] = [
   {
@@ -76,12 +77,13 @@ type DialogVariants = {
 type OrderListProps = {
   state?: 'opened' | 'closed'
   itemsPerPage?: number
+  sort?: SortData
 }
 
-export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
+export const OrderList = ({ state, itemsPerPage, sort }: OrderListProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 6,
+    limit: itemsPerPage || 8,
   })
   const {
     data: ordersData,
@@ -92,6 +94,7 @@ export const OrderList = ({ state, itemsPerPage }: OrderListProps) => {
     state,
     take: pagination.limit,
     page: pagination.page,
+    ...sort,
   })
   const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] =
     useUpdateOrderMutation()

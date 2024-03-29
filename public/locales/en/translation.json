@@ -228,5 +228,17 @@
     "title": "Page not found!",
     "desc": "There is no page at the specified address. It may have been deleted."
   },
-  "app_name": "Agency CRM"
+  "app_name": "Agency CRM",
+  "sorter": {
+    "tooltip": "Sorting",
+    "sortby_label": "Sort by:",
+    "orderby_label": "Direction:",
+    "options": {
+      "created_at": "Date of creation",
+      "deadline": "Deadline",
+      "cost": "Price",
+      "asc": "ASC",
+      "desc": "DESC"
+    }
+  }
 }

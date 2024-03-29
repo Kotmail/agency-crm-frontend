@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { useState } from 'react'
 import { OrderList } from '../../components/OrderList'
 import { Hider } from '../../components/Hider'
 import { UserRole } from '../../models/IUser'
@@ -12,17 +12,38 @@ import { PageHeader } from '../../components/PageHeader'
 import { CreateEntityButton } from '../../components/CreateEntityButton'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
+import { SortData, SortOption, Sorter } from '../../components/Sorter'
+import { Box } from '@mui/material'
 
 type DialogVariants = {
   orderForm: OrderFormDialogProps
 }
 
-export const OrdersPage: FC = () => {
+const sortOptions: SortOption[] = [
+  {
+    key: 'createdAt',
+    label: 'sorter.options.created_at',
+  },
+  {
+    key: 'deadline',
+    label: 'sorter.options.deadline',
+  },
+  {
+    key: 'cost',
+    label: 'sorter.options.cost',
+  },
+]
+
+export const OrdersPage = () => {
   const { t } = useTranslation()
   const [dialogs, openDialog] = useDialogs<DialogVariants>({
     orderForm: {
       open: false,
     },
+  })
+  const [sortData, setSortData] = useState<SortData>({
+    sortby: 'createdAt',
+    orderby: 'desc',
   })
 
   useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.orders`)}`)
@@ -38,8 +59,15 @@ export const OrdersPage: FC = () => {
             }
           />
         </Hider>
+        <Box marginLeft="auto">
+          <Sorter
+            sortByOptions={sortOptions}
+            initialData={sortData}
+            onSortHandler={setSortData}
+          />
+        </Box>
       </PageHeader>
-      <OrderList />
+      <OrderList sort={sortData} />
       <OrderFormDialog {...dialogs.orderForm} />
     </>
   )

@@ -1,10 +1,13 @@
 import { apiSlice } from '.'
+import { OrderByFieldValues, SortByFieldValues } from '../../components/Sorter'
 import { IOrder } from '../../models/IOrder'
 
 type QueryOrdersRequest = {
   state?: 'opened' | 'closed'
   take?: number
   page?: number
+  sortby?: SortByFieldValues
+  orderby?: OrderByFieldValues
 }
 
 export interface CreateOrderRequest

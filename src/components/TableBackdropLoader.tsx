@@ -6,7 +6,7 @@ export const TableBackdropLoader = ({ open }: BackdropProps) => {
       sx={{
         position: 'absolute',
         backgroundColor: 'rgb(255 255 255 / 70%)',
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex: 3,
       }}
       open={open}
       transitionDuration={600}
