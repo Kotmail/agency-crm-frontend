@@ -61,7 +61,7 @@ export const OrdersPage = () => {
         </Hider>
         <Box marginLeft="auto">
           <Sorter
-            sortByOptions={sortOptions}
+            options={sortOptions}
             initialData={sortData}
             onSortHandler={setSortData}
           />

@@ -230,7 +230,7 @@
   },
   "app_name": "Agency CRM",
   "sorter": {
-    "tooltip": "Sorting",
+    "button_text": "By {{option_label}}",
     "sortby_label": "Sort by:",
     "orderby_label": "Direction:",
     "options": {

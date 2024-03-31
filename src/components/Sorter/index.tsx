@@ -4,17 +4,14 @@ import {
   ClickAwayListener,
   Divider,
   Grow,
-  IconButton,
-  ListItemIcon,
-  MenuItem,
-  MenuList,
   Paper,
   Popper,
-  Tooltip,
 } from '@mui/material'
-import { FilterList, SvgIconComponent, Sort } from '@mui/icons-material'
+import { FilterList, SvgIconComponent } from '@mui/icons-material'
 import { SorterHeading } from './SorterHeading'
 import { useTranslation } from 'react-i18next'
+import { SorterList } from './SorterList'
+import { SorterButton } from './SorterButton'
 
 export type SortByFieldValues = 'createdAt' | 'deadline' | 'cost'
 export type OrderByFieldValues = 'asc' | 'desc'
@@ -31,7 +28,7 @@ export type SortOption = {
 }
 
 type SorterProps = {
-  sortByOptions: SortOption[]
+  options: SortOption[]
   initialData: SortData
   onSortHandler: (sortData: SortData) => void
 }
@@ -50,7 +47,7 @@ const orderByOptions: SortOption[] = [
 ]
 
 export const Sorter = ({
-  sortByOptions,
+  options,
   initialData,
   onSortHandler,
 }: SorterProps) => {
@@ -58,6 +55,7 @@ export const Sorter = ({
   const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
     null,
   )
+  const isPopperOpened = Boolean(popperAnchor)
   const popperId = useId()
   const { t } = useTranslation()
 
@@ -70,31 +68,24 @@ export const Sorter = ({
 
   const closePopperHandler = () => setAnchorPopper(null)
 
-  const onSelectItemHandler = (option: SortOption, sortField: keyof SortData) =>
-    setSortData((sortData) => ({ ...sortData, [sortField]: option.key }))
+  const getCurrentOptionLabel = () => {
+    const currentOption = options.find(
+      (option) => option.key === sortData['sortby'],
+    )
+
+    return t('sorter.button_text', {
+      option_label: t(currentOption!.label).toLowerCase(),
+    })
+  }
 
   return (
     <>
-      <Tooltip title={t('sorter.tooltip')}>
-        <IconButton
-          aria-describedby={popperId}
-          color="primary"
-          sx={{
-            padding: '5px',
-            border: '1px solid',
-            borderRadius: '4px',
-            '.MuiTouchRipple-root .MuiTouchRipple-child': {
-              borderRadius: '4px',
-            },
-          }}
-          onClick={openPopperHandler}
-        >
-          <Sort />
-        </IconButton>
-      </Tooltip>
+      <SorterButton isOpened={isPopperOpened} onClick={openPopperHandler}>
+        {getCurrentOptionLabel()}
+      </SorterButton>
       <Popper
         id={popperId}
-        open={Boolean(popperAnchor)}
+        open={isPopperOpened}
         anchorEl={popperAnchor}
         placement="top-end"
         transition
@@ -115,52 +106,20 @@ export const Sorter = ({
               <ClickAwayListener onClickAway={closePopperHandler}>
                 <Box>
                   <SorterHeading>{t('sorter.sortby_label')}</SorterHeading>
-                  <MenuList>
-                    {sortByOptions.map((option) => (
-                      <MenuItem
-                        key={option.key}
-                        dense
-                        disabled={option.key === sortData.sortby}
-                        selected={option.key === sortData.sortby}
-                        onClick={() => onSelectItemHandler(option, 'sortby')}
-                        sx={{
-                          '&.Mui-disabled': { opacity: 1 },
-                        }}
-                      >
-                        {t(option.label)}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
+                  <SorterList
+                    options={options}
+                    sortData={sortData}
+                    sortField="sortby"
+                    onChangeItemHandler={setSortData}
+                  />
                   <Divider variant="middle" />
                   <SorterHeading>{t('sorter.orderby_label')}</SorterHeading>
-                  <MenuList>
-                    {orderByOptions.map((option) => (
-                      <MenuItem
-                        key={option.key}
-                        dense
-                        disabled={option.key === sortData.orderby}
-                        selected={option.key === sortData.orderby}
-                        onClick={() => onSelectItemHandler(option, 'orderby')}
-                        sx={{
-                          '&.Mui-disabled': { opacity: 1 },
-                        }}
-                      >
-                        {t(option.label)}
-                        {option.icon && (
-                          <ListItemIcon>
-                            <option.icon
-                              fontSize="small"
-                              sx={{
-                                marginLeft: '6px',
-                                transform:
-                                  option.key === 'asc' ? 'rotate(-180deg)' : '',
-                              }}
-                            />
-                          </ListItemIcon>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
+                  <SorterList
+                    options={orderByOptions}
+                    sortData={sortData}
+                    sortField="orderby"
+                    onChangeItemHandler={setSortData}
+                  />
                 </Box>
               </ClickAwayListener>
             </Paper>
