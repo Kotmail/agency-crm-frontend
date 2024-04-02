@@ -29,7 +29,7 @@ import {
   useOrdersQuery,
   useUpdateOrderMutation,
 } from '../redux/api/ordersApi'
-import { IOrder, OrderStatus } from '../models/IOrder'
+import { IOrder, OrderPriority, OrderStatus } from '../models/IOrder'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { enqueueSnackbar } from 'notistack'
 import { useDialogs } from '../hooks/useDialogs'
@@ -74,13 +74,23 @@ type DialogVariants = {
   confirm: ConfirmDialogProps
 }
 
-type OrderListProps = {
-  state?: 'opened' | 'closed'
-  itemsPerPage?: number
-  sort?: SortData
+type FilterData = {
+  priority?: OrderPriority[]
+  status?: OrderStatus[]
+  isArchived?: boolean
 }
 
-export const OrderList = ({ state, itemsPerPage, sort }: OrderListProps) => {
+type OrderListProps = {
+  itemsPerPage?: number
+  filterData?: FilterData
+  sortData?: SortData
+}
+
+export const OrderList = ({
+  itemsPerPage,
+  filterData,
+  sortData,
+}: OrderListProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: itemsPerPage || 8,
@@ -91,10 +101,10 @@ export const OrderList = ({ state, itemsPerPage, sort }: OrderListProps) => {
     isError: isOrdersLoadingError,
     isFetching: isOrdersFetching,
   } = useOrdersQuery({
-    state,
     take: pagination.limit,
     page: pagination.page,
-    ...sort,
+    ...filterData,
+    ...sortData,
   })
   const [updateOrder, { isSuccess: isUpdateSuccess, isError: isUpdateError }] =
     useUpdateOrderMutation()
@@ -166,7 +176,7 @@ export const OrderList = ({ state, itemsPerPage, sort }: OrderListProps) => {
 
   const getSpecificActions = () => {
     return actions.filter((action) =>
-      state && state === 'closed'
+      filterData && filterData.isArchived
         ? action.key === 'unarchive'
         : action.key !== 'unarchive',
     )
@@ -223,7 +233,7 @@ export const OrderList = ({ state, itemsPerPage, sort }: OrderListProps) => {
       <Alert severity="info">
         {t(
           `alerts.orders.empty_data${
-            state && state === 'closed' ? '_archive' : ''
+            filterData && filterData.isArchived ? '_archive' : ''
           }`,
         )}
       </Alert>

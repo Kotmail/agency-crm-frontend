@@ -1,10 +1,9 @@
-import { FC } from 'react'
 import { PageHeader } from '../../components/PageHeader'
 import { OrderList } from '../../components/OrderList'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
 
-export const ArchivePage: FC = () => {
+export const ArchivePage = () => {
   const { t } = useTranslation()
 
   useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.archive`)}`)
@@ -12,7 +11,7 @@ export const ArchivePage: FC = () => {
   return (
     <>
       <PageHeader title="page_header.titles.archive" />
-      <OrderList state="closed" />
+      <OrderList filterData={{ isArchived: true }} />
     </>
   )
 }

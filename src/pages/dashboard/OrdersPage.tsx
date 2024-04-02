@@ -67,7 +67,7 @@ export const OrdersPage = () => {
           />
         </Box>
       </PageHeader>
-      <OrderList sort={sortData} />
+      <OrderList sortData={sortData} />
       <OrderFormDialog {...dialogs.orderForm} />
     </>
   )

@@ -1,11 +1,13 @@
 import { apiSlice } from '.'
 import { OrderByFieldValues, SortByFieldValues } from '../../components/Sorter'
-import { IOrder } from '../../models/IOrder'
+import { IOrder, OrderPriority, OrderStatus } from '../../models/IOrder'
 
 type QueryOrdersRequest = {
-  state?: 'opened' | 'closed'
   take?: number
   page?: number
+  priority?: OrderPriority[]
+  status?: OrderStatus[]
+  isArchived?: boolean
   sortby?: SortByFieldValues
   orderby?: OrderByFieldValues
 }
