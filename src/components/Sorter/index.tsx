@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useId, useState } from 'react'
+import { MouseEvent, useId, useState } from 'react'
 import {
   Box,
   ClickAwayListener,
@@ -29,8 +29,8 @@ export type SortOption = {
 
 type SorterProps = {
   options: SortOption[]
-  initialData: SortData
-  onSortHandler: (sortData: SortData) => void
+  sortData: SortData
+  onChangeSortHandler: (sortData: SortData) => void
 }
 
 const orderByOptions: SortOption[] = [
@@ -48,20 +48,15 @@ const orderByOptions: SortOption[] = [
 
 export const Sorter = ({
   options,
-  initialData,
-  onSortHandler,
+  sortData,
+  onChangeSortHandler,
 }: SorterProps) => {
-  const [sortData, setSortData] = useState(initialData)
   const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
     null,
   )
   const isPopperOpened = Boolean(popperAnchor)
   const popperId = useId()
   const { t } = useTranslation()
-
-  useEffect(() => {
-    onSortHandler(sortData)
-  }, [sortData, onSortHandler])
 
   const openPopperHandler = (e: MouseEvent<HTMLButtonElement>) =>
     setAnchorPopper(e.currentTarget)
@@ -110,7 +105,7 @@ export const Sorter = ({
                     options={options}
                     sortData={sortData}
                     sortField="sortby"
-                    onChangeItemHandler={setSortData}
+                    onChangeItemHandler={onChangeSortHandler}
                   />
                   <Divider variant="middle" />
                   <SorterHeading>{t('sorter.orderby_label')}</SorterHeading>
@@ -118,7 +113,7 @@ export const Sorter = ({
                     options={orderByOptions}
                     sortData={sortData}
                     sortField="orderby"
-                    onChangeItemHandler={setSortData}
+                    onChangeItemHandler={onChangeSortHandler}
                   />
                 </Box>
               </ClickAwayListener>
