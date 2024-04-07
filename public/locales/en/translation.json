@@ -229,6 +229,9 @@
     "desc": "There is no page at the specified address. It may have been deleted."
   },
   "app_name": "Agency CRM",
+  "filter": {
+    "tooltip": "Filter"
+  },
   "sorter": {
     "button_text": "By {{option_label}}",
     "sortby_label": "Sort by:",

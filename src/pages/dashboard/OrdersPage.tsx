@@ -14,10 +14,32 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
 import { SortData, SortOption, Sorter } from '../../components/Sorter'
 import { Box } from '@mui/material'
+import { OrderPriority, OrderStatus } from '../../models/IOrder'
+import { Filter, FilterGroup } from '../../components/Filter'
+import { OrdersFilterParams } from '../../redux/api/ordersApi'
 
 type DialogVariants = {
   orderForm: OrderFormDialogProps
 }
+
+const filterOptionGroups: FilterGroup[] = [
+  {
+    legend: 'order_list_table.headings.priority',
+    checkboxes: Object.values(OrderPriority).map((priority) => ({
+      label: `priorities.${priority}`,
+      name: 'priority',
+      value: priority,
+    })),
+  },
+  {
+    legend: 'order_list_table.headings.status',
+    checkboxes: Object.values(OrderStatus).map((status) => ({
+      label: `statuses.${status}`,
+      name: 'status',
+      value: status,
+    })),
+  },
+]
 
 const sortOptions: SortOption[] = [
   {
@@ -41,6 +63,7 @@ export const OrdersPage = () => {
       open: false,
     },
   })
+  const [filterData, setFilterData] = useState<OrdersFilterParams>({})
   const [sortData, setSortData] = useState<SortData>({
     sortby: 'createdAt',
     orderby: 'desc',
@@ -59,7 +82,12 @@ export const OrdersPage = () => {
             }
           />
         </Hider>
-        <Box marginLeft="auto">
+        <Box display="flex" gap={2} marginLeft="auto">
+          <Filter
+            optionGroups={filterOptionGroups}
+            filterData={filterData}
+            onApplyChangesHandler={setFilterData}
+          />
           <Sorter
             options={sortOptions}
             sortData={sortData}
@@ -67,7 +95,7 @@ export const OrdersPage = () => {
           />
         </Box>
       </PageHeader>
-      <OrderList sortData={sortData} />
+      <OrderList filterData={filterData} sortData={sortData} />
       <OrderFormDialog {...dialogs.orderForm} />
     </>
   )

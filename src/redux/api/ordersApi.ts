@@ -1,16 +1,19 @@
 import { apiSlice } from '.'
 import { OrderByFieldValues, SortByFieldValues } from '../../components/Sorter'
-import { IOrder, OrderPriority, OrderStatus } from '../../models/IOrder'
+import { IOrder } from '../../models/IOrder'
+
+export type OrdersFilterParams = {
+  priority?: string[]
+  status?: string[]
+  isArchived?: boolean
+}
 
 type QueryOrdersRequest = {
   take?: number
   page?: number
-  priority?: OrderPriority[]
-  status?: OrderStatus[]
-  isArchived?: boolean
   sortby?: SortByFieldValues
   orderby?: OrderByFieldValues
-}
+} & OrdersFilterParams
 
 export interface CreateOrderRequest
   extends Omit<IOrder, 'id' | 'creator' | 'executor' | 'createdAt'> {

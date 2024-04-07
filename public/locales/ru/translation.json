@@ -229,6 +229,9 @@
     "desc": "По указанному адресу страница отсутствует. Возможно, она была удалена."
   },
   "app_name": "Agency CRM",
+  "filter": {
+    "tooltip": "Фильтр"
+  },
   "sorter": {
     "button_text": "По {{option_label}}",
     "sortby_label": "Сортировать по:",

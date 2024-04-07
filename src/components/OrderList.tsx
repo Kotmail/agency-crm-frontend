@@ -25,11 +25,12 @@ import {
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import {
+  OrdersFilterParams,
   useDeleteOrderMutation,
   useOrdersQuery,
   useUpdateOrderMutation,
 } from '../redux/api/ordersApi'
-import { IOrder, OrderPriority, OrderStatus } from '../models/IOrder'
+import { IOrder, OrderStatus } from '../models/IOrder'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { enqueueSnackbar } from 'notistack'
 import { useDialogs } from '../hooks/useDialogs'
@@ -74,15 +75,9 @@ type DialogVariants = {
   confirm: ConfirmDialogProps
 }
 
-type FilterData = {
-  priority?: OrderPriority[]
-  status?: OrderStatus[]
-  isArchived?: boolean
-}
-
 type OrderListProps = {
   itemsPerPage?: number
-  filterData?: FilterData
+  filterData?: OrdersFilterParams
   sortData?: SortData
 }
 
