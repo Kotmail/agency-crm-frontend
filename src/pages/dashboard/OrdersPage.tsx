@@ -25,7 +25,7 @@ type DialogVariants = {
 const filterOptionGroups: FilterGroup[] = [
   {
     legend: 'order_list_table.headings.priority',
-    checkboxes: Object.values(OrderPriority).map((priority) => ({
+    options: Object.values(OrderPriority).map((priority) => ({
       label: `priorities.${priority}`,
       name: 'priority',
       value: priority,
@@ -33,7 +33,7 @@ const filterOptionGroups: FilterGroup[] = [
   },
   {
     legend: 'order_list_table.headings.status',
-    checkboxes: Object.values(OrderStatus).map((status) => ({
+    options: Object.values(OrderStatus).map((status) => ({
       label: `statuses.${status}`,
       name: 'status',
       value: status,
@@ -86,7 +86,7 @@ export const OrdersPage = () => {
           <Filter
             optionGroups={filterOptionGroups}
             filterData={filterData}
-            onApplyChangesHandler={setFilterData}
+            onChangeFilterHandler={setFilterData}
           />
           <Sorter
             options={sortOptions}

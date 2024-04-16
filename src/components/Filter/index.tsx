@@ -1,23 +1,20 @@
 import { MouseEvent, useId, useState } from 'react'
 import {
   Box,
-  Checkbox,
   ClickAwayListener,
   FormControl,
-  FormControlLabel,
   FormGroup,
   FormLabel,
   Grow,
-  IconButton,
   Paper,
   Popper,
-  Tooltip,
 } from '@mui/material'
-import { Tune } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { OrdersFilterParams } from '../../redux/api/ordersApi'
+import { FilterButton } from './FilterButton'
+import { FilterOptionList } from './FilterOptionList'
 
-type FilterCheckbox = {
+export type FilterOption = {
   label: string
   name: keyof OrdersFilterParams
   value: string | boolean
@@ -25,19 +22,19 @@ type FilterCheckbox = {
 
 export type FilterGroup = {
   legend: string
-  checkboxes?: FilterCheckbox[]
+  options?: FilterOption[]
 }
 
 type FilterProps = {
   optionGroups: FilterGroup[]
   filterData: OrdersFilterParams
-  onApplyChangesHandler: (filterData: OrdersFilterParams) => void
+  onChangeFilterHandler: (filterData: OrdersFilterParams) => void
 }
 
 export const Filter = ({
   optionGroups,
   filterData,
-  onApplyChangesHandler,
+  onChangeFilterHandler,
 }: FilterProps) => {
   const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
     null,
@@ -51,81 +48,13 @@ export const Filter = ({
 
   const closePopperHandler = () => setAnchorPopper(null)
 
-  const changeOptionHandler = (option: FilterCheckbox, isChecked: boolean) => {
-    const currentOptions = { ...filterData }
-
-    switch (option.name) {
-      case 'priority':
-      case 'status':
-        if (!currentOptions[option.name]) {
-          currentOptions[option.name] = [option.value as string]
-        } else {
-          const optionsArray = currentOptions[option.name]!.slice()
-          const existsOptionIdx = optionsArray.findIndex(
-            (value) => value === option.value,
-          )
-
-          if (existsOptionIdx !== -1) {
-            optionsArray.splice(existsOptionIdx, 1)
-          } else {
-            optionsArray.push(option.value as string)
-          }
-
-          if (optionsArray.length) {
-            currentOptions[option.name] = optionsArray
-          } else {
-            delete currentOptions[option.name]
-          }
-        }
-        break
-
-      case 'isArchived':
-        currentOptions[option.name] = isChecked
-        break
-    }
-
-    onApplyChangesHandler(currentOptions)
-  }
-
-  const isCheckedOption = (checkbox: FilterCheckbox) => {
-    const currentPropertyData = filterData[checkbox.name]
-
-    if (!currentPropertyData) {
-      return false
-    }
-
-    if (typeof currentPropertyData === 'boolean') {
-      return currentPropertyData
-    }
-
-    return currentPropertyData.includes(checkbox.value as string)
-  }
-
   if (!filterData) {
     return null
   }
 
   return (
     <>
-      <Tooltip title={t('filter.tooltip')}>
-        <IconButton
-          size="small"
-          color="primary"
-          sx={{
-            borderRadius: '4px',
-            backgroundColor: 'rgba(25, 118, 210, 0.04)',
-            ':hover': {
-              backgroundColor: 'rgba(25, 118, 210, 0.08)',
-            },
-            '& .MuiTouchRipple-root .MuiTouchRipple-child': {
-              borderRadius: '4px',
-            },
-          }}
-          onClick={openPopperHandler}
-        >
-          <Tune sx={{ fontSize: '19px' }} />
-        </IconButton>
-      </Tooltip>
+      <FilterButton onClick={openPopperHandler} />
       <Popper
         id={popperId}
         open={isPopperOpened}
@@ -159,33 +88,13 @@ export const Filter = ({
                         {t(group.legend)}
                       </FormLabel>
                       <FormGroup>
-                        {group.checkboxes &&
-                          group.checkboxes.length > 0 &&
-                          group.checkboxes?.map((checkbox, i) => (
-                            <FormControlLabel
-                              key={i}
-                              control={
-                                <Checkbox
-                                  onChange={(e) =>
-                                    changeOptionHandler(
-                                      checkbox,
-                                      e.target.checked,
-                                    )
-                                  }
-                                  name={checkbox.name}
-                                  size="small"
-                                  value={checkbox.value}
-                                  checked={isCheckedOption(checkbox)}
-                                />
-                              }
-                              label={t(checkbox.label)}
-                              sx={{
-                                '.MuiFormControlLabel-label': {
-                                  fontSize: '14px',
-                                },
-                              }}
-                            />
-                          ))}
+                        {group.options && (
+                          <FilterOptionList
+                            options={group.options}
+                            filterData={filterData}
+                            onChangeFilterHandler={onChangeFilterHandler}
+                          />
+                        )}
                       </FormGroup>
                     </FormControl>
                   ))}
