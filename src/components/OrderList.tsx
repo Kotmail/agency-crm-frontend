@@ -224,15 +224,7 @@ export const OrderList = ({
       setPagination((data) => ({ ...data, page: --data.page }))
     }
 
-    return (
-      <Alert severity="info">
-        {t(
-          `alerts.orders.empty_data${
-            filterData && filterData.isArchived ? '_archive' : ''
-          }`,
-        )}
-      </Alert>
-    )
+    return <Alert severity="info">{t('alerts.orders.empty_data')}</Alert>
   }
 
   return (

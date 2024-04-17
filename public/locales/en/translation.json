@@ -121,8 +121,7 @@
   "alerts": {
     "orders": {
       "request_error": "An error occurred when requesting order data",
-      "empty_data": "The list of orders is empty",
-      "empty_data_archive": "There are no archived orders"
+      "empty_data": "No orders found"
     },
     "users": {
       "request_error": "An error occurred when requesting user data"

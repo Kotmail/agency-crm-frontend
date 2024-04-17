@@ -3,7 +3,7 @@ import { FilterOption } from '.'
 import { useTranslation } from 'react-i18next'
 import { OrdersFilterParams } from '../../redux/api/ordersApi'
 
-type FilterOptionsListProps = {
+type FilterOptionListProps = {
   options: FilterOption[]
   filterData: OrdersFilterParams
   onChangeFilterHandler: (filterData: OrdersFilterParams) => void
@@ -13,7 +13,7 @@ export const FilterOptionList = ({
   options,
   filterData,
   onChangeFilterHandler,
-}: FilterOptionsListProps) => {
+}: FilterOptionListProps) => {
   const { t } = useTranslation()
 
   if (!options.length) {
