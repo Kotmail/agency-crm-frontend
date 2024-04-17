@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { useAppDispatch } from '../hooks/useAppDispatch'
@@ -24,6 +24,7 @@ import { apiSlice } from '../redux/api'
 import { UserFormDialog, UserFormDialogProps } from './dialogs/UserFormDialog'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
+import { formatUserFullName } from '../utils/helpers/formatUserFullName'
 
 type DialogVariants = {
   userForm: UserFormDialogProps
@@ -46,7 +47,7 @@ const dropdownOptions: DropdownOption[] = [
   },
 ]
 
-export const UserWidget: FC = () => {
+export const UserWidget = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -125,9 +126,11 @@ export const UserWidget: FC = () => {
             },
           }}
         >
-          <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>
-            {user?.fullName}
-          </Typography>
+          {user && (
+            <Typography fontSize={15} fontWeight={500} lineHeight={1.25}>
+              {formatUserFullName(user.fullName)}
+            </Typography>
+          )}
           <Typography fontSize={14} fontWeight={300} color="gray">
             {t(`user.roles.${user?.role}`)}
           </Typography>
