@@ -3,15 +3,21 @@ import { IUser } from '../../models/IUser'
 import { RootState } from '../store'
 import { updateAuthUser } from '../features/authSlice'
 
+type QueryUsersRequest = {
+  take?: number
+  page?: number
+}
+
 const apiWithTag = apiSlice.enhanceEndpoints({
   addTagTypes: ['Users'],
 })
 
 const usersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
-    users: builder.query<IUser[], void>({
-      query: () => ({
+    users: builder.query<[IUser[], number], QueryUsersRequest>({
+      query: (params) => ({
         url: '/users',
+        params,
       }),
       providesTags: ['Users'],
     }),

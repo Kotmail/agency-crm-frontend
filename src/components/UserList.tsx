@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   Alert,
   CircularProgress,
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -30,6 +31,10 @@ type DialogVariants = {
   confirm: ConfirmDialogProps
 }
 
+type UserListProps = {
+  itemsPerPage?: number
+}
+
 const actions: ActionItem[] = [
   {
     key: 'edit',
@@ -41,13 +46,20 @@ const actions: ActionItem[] = [
   },
 ]
 
-export const UserList = () => {
+export const UserList = ({ itemsPerPage }: UserListProps) => {
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: itemsPerPage || 10,
+  })
   const {
     data: users,
     isLoading: isUsersLoading,
     isError: isUsersLoadingError,
     isFetching: isUsersFetching,
-  } = useUsersQuery()
+  } = useUsersQuery({
+    take: pagination.limit,
+    page: pagination.page,
+  })
   const { user: authUser } = useAppSelector((state) => state.auth)
   const [deleteUser, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteUserMutation()
@@ -99,6 +111,10 @@ export const UserList = () => {
       enqueueSnackbar(t('notifications.delete_user.success'), {
         variant: 'success',
       })
+
+      if (users && users[0].length === 1 && pagination.page > 1) {
+        setPagination((data) => ({ ...data, page: --data.page }))
+      }
     }
 
     if (isDeleteError) {
@@ -151,7 +167,7 @@ export const UserList = () => {
           </TableHead>
           <TableBody>
             {users &&
-              users.map((user) => (
+              users[0].map((user) => (
                 <TableRow
                   key={user.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -174,6 +190,18 @@ export const UserList = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {users && users[1] > pagination.limit && (
+        <Pagination
+          disabled={isUsersFetching}
+          count={Math.ceil(users[1] / pagination.limit)}
+          page={pagination.page}
+          onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
+          variant="outlined"
+          color="primary"
+          shape="rounded"
+          sx={{ marginTop: '25px', '.MuiPagination-ul': { rowGap: '6px' } }}
+        />
+      )}
       <UserFormDialog {...dialogs.userForm} />
       <ConfirmDialog {...dialogs.confirm} />
     </>
