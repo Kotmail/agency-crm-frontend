@@ -111,10 +111,10 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
     defaultValues,
   })
   const { user: authUser } = useAppSelector((state) => state.auth)
-  const { data: users } = useUsersQuery()
+  const { data: users } = useUsersQuery({})
   const { managers, executors } = {
-    managers: users ? users.filter((user) => user.role === 'manager') : [],
-    executors: users ? users.filter((user) => user.role === 'executor') : [],
+    managers: users ? users[0].filter((user) => user.role === 'manager') : [],
+    executors: users ? users[0].filter((user) => user.role === 'executor') : [],
   }
   const [addOrder] = useAddOrderMutation()
   const [updateOrder] = useUpdateOrderMutation()
