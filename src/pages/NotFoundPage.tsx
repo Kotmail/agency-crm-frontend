@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 export const NotFoundPage = () => {
   const { t } = useTranslation()
 
-  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.error_404`)}`)
+  useDocumentTitle(`${t('app_name')} — ${t('pages.error_404.title')}`)
 
   return (
     <Box
@@ -35,14 +35,14 @@ export const NotFoundPage = () => {
           fontSize={{ sm: '26px', md: '30px' }}
           lineHeight="normal"
         >
-          {t('page_404.title')}
+          {t('pages.error_404.title')}
         </Typography>
         <Typography
           marginBottom={{ xs: 2, sm: 2.5 }}
           fontSize={{ xs: '16px', sm: '17px', md: '18px' }}
           lineHeight="normal"
         >
-          {t('page_404.desc')}
+          {t('pages.error_404.desc')}
         </Typography>
         <Button component={Link} to="/" replace variant="contained">
           {t('buttons.return_to_main_page')}

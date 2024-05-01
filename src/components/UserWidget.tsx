@@ -132,7 +132,7 @@ export const UserWidget = () => {
             </Typography>
           )}
           <Typography fontSize={14} fontWeight={300} color="gray">
-            {t(`user.roles.${user?.role}`)}
+            {t(`user_roles.${user?.role}`)}
           </Typography>
         </MenuItem>
         <Divider />
@@ -145,7 +145,7 @@ export const UserWidget = () => {
             <ListItemIcon>
               <option.icon fontSize="small" />
             </ListItemIcon>
-            {t(option.key)}
+            {t(`actions.${option.key}`)}
           </MenuItem>
         ))}
       </Menu>

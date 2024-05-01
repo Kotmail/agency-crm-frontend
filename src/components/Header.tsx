@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import {
   AppBar,
   Box,
@@ -47,7 +47,7 @@ const getPagesByUserRole = (user: IUser) =>
     (page) => !page.allowedRoles || page.allowedRoles.includes(user.role),
   )
 
-export const Header: FC = () => {
+export const Header = () => {
   const { user } = useAppSelector((state) => state.auth)
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const location = useLocation()

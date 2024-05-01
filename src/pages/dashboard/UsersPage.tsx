@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { UserList } from '../../components/UserList'
 import { DIALOG_BASE_OPTIONS } from '../../utils/consts'
 import { useDialogs } from '../../hooks/useDialogs'
@@ -15,7 +14,7 @@ type DialogVariants = {
   userForm: UserFormDialogProps
 }
 
-export const UsersPage: FC = () => {
+export const UsersPage = () => {
   const { t } = useTranslation()
   const [dialogs, openDialog] = useDialogs<DialogVariants>({
     userForm: {
@@ -23,11 +22,11 @@ export const UsersPage: FC = () => {
     },
   })
 
-  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.users`)}`)
+  useDocumentTitle(`${t('app_name')} — ${t('pages.users')}`)
 
   return (
     <>
-      <PageHeader title="page_header.titles.users">
+      <PageHeader title="pages.users">
         <CreateEntityButton
           text="buttons.new_user"
           onClick={() =>

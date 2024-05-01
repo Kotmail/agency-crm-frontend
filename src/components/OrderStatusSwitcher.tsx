@@ -58,7 +58,7 @@ export const OrderStatusSwitcher = ({
           justifyContent: 'space-between',
         }}
       >
-        {t(`statuses.${order.status}`)}
+        {t(`order_statuses.${order.status}`)}
       </Button>
       <Menu
         id={menuId}
@@ -85,7 +85,7 @@ export const OrderStatusSwitcher = ({
                 closeStatusMenuHandler()
               }}
             >
-              {t(`statuses.${status}`)}
+              {t(`order_statuses.${status}`)}
             </MenuItem>
           )
         })}

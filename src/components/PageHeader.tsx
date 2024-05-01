@@ -1,15 +1,13 @@
-import { FC, PropsWithChildren } from 'react'
+import { ReactNode } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 type PageHeaderProps = {
   title: string
+  children?: ReactNode
 }
 
-export const PageHeader: FC<PropsWithChildren<PageHeaderProps>> = ({
-  title,
-  children,
-}) => {
+export const PageHeader = ({ title, children }: PageHeaderProps) => {
   const { t } = useTranslation()
 
   return (

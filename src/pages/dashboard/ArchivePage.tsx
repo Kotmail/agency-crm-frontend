@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next'
 export const ArchivePage = () => {
   const { t } = useTranslation()
 
-  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.archive`)}`)
+  useDocumentTitle(`${t('app_name')} — ${t('pages.archive')}`)
 
   return (
     <>
-      <PageHeader title="page_header.titles.archive" />
+      <PageHeader title="pages.archive" />
       <OrderList filterData={{ isArchived: true }} />
     </>
   )

@@ -1,4 +1,4 @@
-import { FC, useId } from 'react'
+import { useId } from 'react'
 import {
   Button,
   Dialog,
@@ -18,7 +18,7 @@ export type ConfirmDialogProps = {
   confirmBtnHandler: () => void
 } & DialogProps
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({
+export const ConfirmDialog = ({
   title,
   description,
   cancelBtnLabel,
@@ -26,7 +26,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   confirmBtnHandler,
   onClose,
   ...props
-}) => {
+}: ConfirmDialogProps) => {
   const { t } = useTranslation()
   const confirmTitleId = useId()
   const confirmDescId = useId()

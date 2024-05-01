@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { IUser, UserRole } from '../../models/IUser'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -88,13 +88,13 @@ const defaultValues: DefaultValues<UserFormFields> = {
   role: UserRole.ADMIN,
 }
 
-export const UserFormDialog: FC<UserFormDialogProps> = ({
+export const UserFormDialog = ({
   user,
   title,
   successMessage,
   onClose,
   ...props
-}) => {
+}: UserFormDialogProps) => {
   const {
     register,
     handleSubmit,
@@ -223,7 +223,7 @@ export const UserFormDialog: FC<UserFormDialogProps> = ({
                       <FormControlLabel
                         control={<Radio size="small" />}
                         value={role}
-                        label={t(`user.roles.${role}`)}
+                        label={t(`user_roles.${role}`)}
                         key={role}
                       />
                     ))}

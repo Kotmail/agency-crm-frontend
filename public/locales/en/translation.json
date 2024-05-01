@@ -1,17 +1,15 @@
 {
-  "user": {
-    "roles": {
-      "admin": "Administrator",
-      "manager": "Manager",
-      "executor": "Executor"
-    }
+  "user_roles": {
+    "admin": "Administrator",
+    "manager": "Manager",
+    "executor": "Executor"
   },
-  "priorities": {
+  "order_priorities": {
     "low": "Low",
     "medium": "Medium",
     "high": "High"
   },
-  "statuses": {
+  "order_statuses": {
     "waiting": "Waiting",
     "accepted": "Accepted",
     "done": "Done"
@@ -171,9 +169,6 @@
       "desc": "The order will disappear from the archive and appear in the general list."
     }
   },
-  "signin": "Sign In",
-  "settings": "Settings",
-  "logout": "Logout",
   "order_list_table": {
     "label": "List of orders",
     "headings": {
@@ -199,6 +194,8 @@
     }
   },
   "actions": {
+    "settings": "Settings",
+    "logout": "Logout",
     "edit": "Edit",
     "copy": "Copy",
     "archive": "Move to archive",
@@ -206,26 +203,18 @@
     "delete": "Delete"
   },
   "pages": {
+    "signin": "Sign In",
+    "dashboard": "Control panel",
     "orders": "Orders",
     "users": "Users",
-    "archive": "Archive"
+    "archive": "Archive",
+    "error_404": {
+      "title": "Page not found!",
+      "desc": "There is no page at the specified address. It may have been deleted."
+    }
   },
   "aria_labels": {
     "list_of_pages": "List of pages"
-  },
-  "page_header": {
-    "titles": {
-      "signin": "Sign In",
-      "dashboard": "Control panel",
-      "orders": "Orders",
-      "archive": "Archive",
-      "users": "Users",
-      "error_404": "Page not found"
-    }
-  },
-  "page_404": {
-    "title": "Page not found!",
-    "desc": "There is no page at the specified address. It may have been deleted."
   },
   "app_name": "Agency CRM",
   "filter": {

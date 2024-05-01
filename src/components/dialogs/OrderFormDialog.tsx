@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { IOrder, OrderPriority } from '../../models/IOrder'
 import { UserRole } from '../../models/IUser'
 import * as Yup from 'yup'
@@ -92,14 +92,14 @@ const defaultValues: DefaultValues<OrderFormFields> = {
   priority: OrderPriority.LOW,
 }
 
-export const OrderFormDialog: FC<OrderFormDialogProps> = ({
+export const OrderFormDialog = ({
   order,
   title,
   successMessage,
   submitBtnLabel,
   onClose,
   ...props
-}) => {
+}: OrderFormDialogProps) => {
   const {
     register,
     handleSubmit,
@@ -314,7 +314,7 @@ export const OrderFormDialog: FC<OrderFormDialogProps> = ({
                     <FormControlLabel
                       control={<Radio size="small" />}
                       value={priority}
-                      label={t(`priorities.${priority}`)}
+                      label={t(`order_priorities.${priority}`)}
                       key={priority}
                     />
                   ))}

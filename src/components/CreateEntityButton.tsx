@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Box, Button, useMediaQuery, useTheme } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { useTranslation } from 'react-i18next'
@@ -8,10 +7,10 @@ type CreateEntityButtonProps = {
   onClick: () => void
 }
 
-export const CreateEntityButton: FC<CreateEntityButtonProps> = ({
+export const CreateEntityButton = ({
   text,
   ...props
-}) => {
+}: CreateEntityButtonProps) => {
   const theme = useTheme()
   const matchSmBreakpoint = useMediaQuery(theme.breakpoints.up('sm'))
   const { t } = useTranslation()

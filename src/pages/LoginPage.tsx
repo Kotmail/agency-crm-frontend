@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { Avatar, Box, Typography } from '@mui/material'
 import { LoginForm } from '../components/LoginForm'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -8,12 +8,12 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { useNavigate } from 'react-router-dom'
 
-export const LoginPage: FC = () => {
+export const LoginPage = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { user } = useAppSelector((state) => state.auth)
 
-  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.signin`)}`)
+  useDocumentTitle(`${t('app_name')} — ${t('pages.signin')}`)
 
   useLayoutEffect(() => {
     if (user) {
@@ -45,7 +45,7 @@ export const LoginPage: FC = () => {
           marginBottom={3}
           textAlign="center"
         >
-          {t('signin')}
+          {t('pages.signin')}
         </Typography>
         <LoginForm />
       </Box>

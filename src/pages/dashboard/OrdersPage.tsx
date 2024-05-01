@@ -26,7 +26,7 @@ const filterOptionGroups: FilterGroup[] = [
   {
     legend: 'order_list_table.headings.priority',
     options: Object.values(OrderPriority).map((priority) => ({
-      label: `priorities.${priority}`,
+      label: `order_priorities.${priority}`,
       name: 'priority',
       value: priority,
     })),
@@ -34,7 +34,7 @@ const filterOptionGroups: FilterGroup[] = [
   {
     legend: 'order_list_table.headings.status',
     options: Object.values(OrderStatus).map((status) => ({
-      label: `statuses.${status}`,
+      label: `order_statuses.${status}`,
       name: 'status',
       value: status,
     })),
@@ -69,11 +69,11 @@ export const OrdersPage = () => {
     orderby: 'desc',
   })
 
-  useDocumentTitle(`${t('app_name')} — ${t(`page_header.titles.orders`)}`)
+  useDocumentTitle(`${t('app_name')} — ${t('pages.orders')}`)
 
   return (
     <>
-      <PageHeader title="page_header.titles.orders">
+      <PageHeader title="pages.orders">
         <Hider roles={[UserRole.EXECUTOR]}>
           <CreateEntityButton
             text="buttons.new_order"

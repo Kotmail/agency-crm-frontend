@@ -28,7 +28,7 @@ export const OrderPriorityChip = ({ priority }: PriorityChipProps) => {
   return (
     <Chip
       variant="outlined"
-      label={t(`priorities.${priority}`)}
+      label={t(`order_priorities.${priority}`)}
       sx={{
         minWidth: '83px',
         borderWidth: '2px',

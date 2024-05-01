@@ -184,7 +184,7 @@ export const UserList = ({ itemsPerPage }: UserListProps) => {
                   <TableCell>{user.login}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.fullName}</TableCell>
-                  <TableCell>{t(`user.roles.${user?.role}`)}</TableCell>
+                  <TableCell>{t(`user_roles.${user?.role}`)}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

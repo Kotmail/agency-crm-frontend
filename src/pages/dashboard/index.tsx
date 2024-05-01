@@ -1,11 +1,11 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Header } from '../../components/Header'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Box, Container } from '@mui/material'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
 
-export const Dashboard: FC = () => {
+export const Dashboard = () => {
   const { t } = useTranslation()
   const location = useLocation()
   const [, setDocumentTitle] = useDocumentTitle()
@@ -17,9 +17,7 @@ export const Dashboard: FC = () => {
     const currentPathname = locationPathsArray.pop()
 
     if (currentPathname === 'dashboard') {
-      setDocumentTitle(
-        `${t('app_name')} — ${t(`page_header.titles.dashboard`)}`,
-      )
+      setDocumentTitle(`${t('app_name')} — ${t('pages.dashboard')}`)
     }
   }, [location])
 

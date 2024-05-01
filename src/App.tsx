@@ -4,7 +4,7 @@ import { CircularProgress, ScopedCssBaseline } from '@mui/material'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Dashboard } from './pages/dashboard'
 import { useVerifyUserQuery } from './redux/api/authApi'
-import { FC, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { UsersPage } from './pages/dashboard/UsersPage'
 import { OrdersPage } from './pages/dashboard/OrdersPage'
 import { AuthGuard } from './components/AuthGuard'
@@ -12,7 +12,7 @@ import { UserRole } from './models/IUser'
 import { ArchivePage } from './pages/dashboard/ArchivePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
-const App: FC = () => {
+const App = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { isLoading, isSuccess } = useVerifyUserQuery()
