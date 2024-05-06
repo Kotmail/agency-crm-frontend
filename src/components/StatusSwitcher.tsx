@@ -1,7 +1,7 @@
 import { MouseEvent, useId, useState } from 'react'
 import { Button, ButtonProps, Menu, MenuItem } from '@mui/material'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import { IOrder, OrderStatus } from '../models/IOrder'
+import { OrderStatus } from '../models/IOrder'
 import { useTranslation } from 'react-i18next'
 
 type StatusColors = {
@@ -14,15 +14,17 @@ const statusColors: StatusColors = {
   done: 'success',
 }
 
-type OrderStatusSwitcherProps = {
-  order: IOrder
+type StatusSwitcherProps = {
+  entityId: number
+  currentStatus: OrderStatus
   onChangeHandler: (id: number, status: OrderStatus) => void
 }
 
-export const OrderStatusSwitcher = ({
-  order,
+export const StatusSwitcher = ({
+  entityId,
+  currentStatus,
   onChangeHandler,
-}: OrderStatusSwitcherProps) => {
+}: StatusSwitcherProps) => {
   const [anchorStatusMenu, setAnchorStatusMenu] = useState<null | HTMLElement>(
     null,
   )
@@ -40,7 +42,7 @@ export const OrderStatusSwitcher = ({
       <Button
         id={buttonId}
         variant="contained"
-        color={statusColors[order.status!]}
+        color={statusColors[currentStatus]}
         disableElevation
         endIcon={
           isStatusMenuOpened ? <KeyboardArrowUp /> : <KeyboardArrowDown />
@@ -58,7 +60,7 @@ export const OrderStatusSwitcher = ({
           justifyContent: 'space-between',
         }}
       >
-        {t(`order_statuses.${order.status}`)}
+        {t(`order_statuses.${currentStatus}`)}
       </Button>
       <Menu
         id={menuId}
@@ -70,7 +72,7 @@ export const OrderStatusSwitcher = ({
         onClose={closeStatusMenuHandler}
       >
         {Object.values(OrderStatus).map((status) => {
-          const isSelectedItem = order.status === status
+          const isSelectedItem = currentStatus === status
 
           return (
             <MenuItem
@@ -79,7 +81,7 @@ export const OrderStatusSwitcher = ({
               selected={isSelectedItem}
               onClick={() => {
                 if (!isSelectedItem) {
-                  onChangeHandler(order.id, status)
+                  onChangeHandler(entityId, status)
                 }
 
                 closeStatusMenuHandler()

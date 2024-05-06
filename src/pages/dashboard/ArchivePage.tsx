@@ -1,5 +1,5 @@
 import { PageHeader } from '../../components/PageHeader'
-import { OrderList } from '../../components/OrderList'
+import { OrderTable } from '../../components/OrderTable'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
 
@@ -11,7 +11,7 @@ export const ArchivePage = () => {
   return (
     <>
       <PageHeader title="pages.archive" />
-      <OrderList filterData={{ isArchived: true }} />
+      <OrderTable filterData={{ isArchived: true }} />
     </>
   )
 }

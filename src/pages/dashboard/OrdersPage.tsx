@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { OrderList } from '../../components/OrderList'
+import { OrderTable } from '../../components/OrderTable'
 import { Hider } from '../../components/Hider'
 import { UserRole } from '../../models/IUser'
 import { useDialogs } from '../../hooks/useDialogs'
@@ -95,7 +95,7 @@ export const OrdersPage = () => {
           />
         </Box>
       </PageHeader>
-      <OrderList filterData={filterData} sortData={sortData} />
+      <OrderTable filterData={filterData} sortData={sortData} />
       <OrderFormDialog {...dialogs.orderForm} />
     </>
   )

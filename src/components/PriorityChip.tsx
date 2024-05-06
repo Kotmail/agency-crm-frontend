@@ -22,7 +22,7 @@ type PriorityChipProps = {
   priority: OrderPriority
 }
 
-export const OrderPriorityChip = ({ priority }: PriorityChipProps) => {
+export const PriorityChip = ({ priority }: PriorityChipProps) => {
   const { t } = useTranslation()
 
   return (
