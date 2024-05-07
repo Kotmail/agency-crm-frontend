@@ -1,6 +1,11 @@
 import { SnackbarProvider } from 'notistack'
 import { LoginPage } from './pages/LoginPage'
-import { CircularProgress, ScopedCssBaseline } from '@mui/material'
+import {
+  CircularProgress,
+  ScopedCssBaseline,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Dashboard } from './pages/dashboard'
 import { useVerifyUserQuery } from './redux/api/authApi'
@@ -11,6 +16,23 @@ import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
 import { ArchivePage } from './pages/dashboard/ArchivePage'
 import { NotFoundPage } from './pages/NotFoundPage'
+
+const theme = createTheme({
+  components: {
+    MuiPagination: {
+      defaultProps: {
+        variant: 'outlined',
+        shape: 'rounded',
+        color: 'primary',
+      },
+      styleOverrides: {
+        ul: {
+          rowGap: '6px',
+        },
+      },
+    },
+  },
+})
 
 const App = () => {
   const location = useLocation()
@@ -28,29 +50,31 @@ const App = () => {
   }
 
   return (
-    <ScopedCssBaseline>
-      <SnackbarProvider>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route
-            element={
-              <AuthGuard
-                allowedRoles={{
-                  users: [UserRole.ADMIN],
-                }}
-              />
-            }
-          >
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route path="orders" element={<OrdersPage />} />
-              <Route path="users" element={<UsersPage />} />
-              <Route path="archive" element={<ArchivePage />} />
+    <ThemeProvider theme={theme}>
+      <ScopedCssBaseline>
+        <SnackbarProvider>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route
+              element={
+                <AuthGuard
+                  allowedRoles={{
+                    users: [UserRole.ADMIN],
+                  }}
+                />
+              }
+            >
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="orders" element={<OrdersPage />} />
+                <Route path="users" element={<UsersPage />} />
+                <Route path="archive" element={<ArchivePage />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </SnackbarProvider>
-    </ScopedCssBaseline>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </SnackbarProvider>
+      </ScopedCssBaseline>
+    </ThemeProvider>
   )
 }
 

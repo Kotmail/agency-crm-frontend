@@ -1,4 +1,4 @@
-import { DOMAttributes, MouseEvent, useId, useState } from 'react'
+import { MouseEvent, useId, useState } from 'react'
 import { Box, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material'
 import { MoreHoriz, SvgIconComponent } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +15,7 @@ export type ActionItem = {
   icon: SvgIconComponent
 }
 
-interface ActionsDropdownProps extends DOMAttributes<HTMLDivElement> {
+interface ActionsDropdownProps {
   actions: ActionItem[]
   onSelectHandler: (action: ActionItemKeys) => void
   ariaLabel?: string

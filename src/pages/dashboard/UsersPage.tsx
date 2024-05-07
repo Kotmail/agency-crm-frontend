@@ -1,4 +1,4 @@
-import { UserList } from '../../components/UserList'
+import { UserTable } from '../../components/UserTable'
 import { DIALOG_BASE_OPTIONS } from '../../utils/consts'
 import { useDialogs } from '../../hooks/useDialogs'
 import {
@@ -34,7 +34,7 @@ export const UsersPage = () => {
           }
         />
       </PageHeader>
-      <UserList />
+      <UserTable />
       <UserFormDialog {...dialogs.userForm} />
     </>
   )

@@ -252,10 +252,7 @@ export const OrderTable = ({
           count={Math.ceil(ordersData[1] / pagination.limit)}
           page={pagination.page}
           onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
-          variant="outlined"
-          color="primary"
-          shape="rounded"
-          sx={{ marginTop: '25px', '.MuiPagination-ul': { rowGap: '6px' } }}
+          sx={{ marginTop: '25px' }}
         />
       )}
       <OrderFormDialog {...dialogs.orderForm} />
