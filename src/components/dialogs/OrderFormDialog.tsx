@@ -111,7 +111,10 @@ export const OrderFormDialog = ({
     defaultValues,
   })
   const { user: authUser } = useAppSelector((state) => state.auth)
-  const { data: users } = useUsersQuery({})
+  const { data: users } = useUsersQuery({
+    take: 200,
+    role: [UserRole.MANAGER, UserRole.EXECUTOR],
+  })
   const { managers, executors } = {
     managers: users ? users[0].filter((user) => user.role === 'manager') : [],
     executors: users ? users[0].filter((user) => user.role === 'executor') : [],

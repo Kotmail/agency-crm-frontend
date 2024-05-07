@@ -1,12 +1,16 @@
 import { apiSlice } from '.'
-import { IUser } from '../../models/IUser'
+import { IUser, UserRole } from '../../models/IUser'
 import { RootState } from '../store'
 import { updateAuthUser } from '../features/authSlice'
+
+export type UsersFilterParams = {
+  role?: UserRole[]
+}
 
 type QueryUsersRequest = {
   take?: number
   page?: number
-}
+} & UsersFilterParams
 
 const apiWithTag = apiSlice.enhanceEndpoints({
   addTagTypes: ['Users'],
