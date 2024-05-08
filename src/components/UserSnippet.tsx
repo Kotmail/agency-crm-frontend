@@ -18,7 +18,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { MouseEvent, useId, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { useAppDispatch } from '../hooks/useAppDispatch'
@@ -30,6 +29,7 @@ import { UserFormDialog, UserFormDialogProps } from './dialogs/UserFormDialog'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 import { formatUserFullName } from '../utils/helpers/formatUserFullName'
+import { usePopper } from '../hooks/usePopper'
 
 type DialogVariants = {
   userForm: UserFormDialogProps
@@ -56,6 +56,7 @@ export const UserSnippet = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state) => state.auth)
+  const [popperState, openPopper, closePopper] = usePopper()
   const [dialogs, openDialog] = useDialogs<DialogVariants>({
     userForm: {
       open: false,
@@ -71,16 +72,6 @@ export const UserSnippet = () => {
     },
   })
   const { t } = useTranslation()
-  const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
-    null,
-  )
-  const isPopperOpened = Boolean(popperAnchor)
-  const popperId = useId()
-
-  const openPopperHandler = (e: MouseEvent<HTMLButtonElement>) =>
-    setAnchorPopper(e.currentTarget)
-
-  const closePopperHandler = () => setAnchorPopper(null)
 
   const selectOptionHandler = (optionKey: DropdownOption['key']) => {
     switch (optionKey) {
@@ -92,7 +83,7 @@ export const UserSnippet = () => {
         break
     }
 
-    closePopperHandler()
+    closePopper()
   }
 
   const logoutHandler = () => {
@@ -106,14 +97,16 @@ export const UserSnippet = () => {
   return (
     <>
       <Tooltip title={t('tooltips.user_menu')}>
-        <IconButton onClick={openPopperHandler} sx={{ p: 0 }}>
+        <IconButton
+          aria-describedby={popperState.id}
+          onClick={openPopper}
+          sx={{ p: 0 }}
+        >
           <Avatar sx={{ width: 34, height: 34 }} />
         </IconButton>
       </Tooltip>
       <Popper
-        id={popperId}
-        open={isPopperOpened}
-        anchorEl={popperAnchor}
+        {...popperState}
         placement="top-end"
         transition
         sx={{
@@ -130,7 +123,7 @@ export const UserSnippet = () => {
             }}
           >
             <Paper elevation={6}>
-              <ClickAwayListener onClickAway={closePopperHandler}>
+              <ClickAwayListener onClickAway={closePopper}>
                 <Box>
                   {user && (
                     <>

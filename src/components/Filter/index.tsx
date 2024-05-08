@@ -1,4 +1,3 @@
-import { MouseEvent, useId, useState } from 'react'
 import {
   Box,
   ClickAwayListener,
@@ -13,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { OrdersFilterParams } from '../../redux/api/ordersApi'
 import { FilterButton } from './FilterButton'
 import { FilterOptionList } from './FilterOptionList'
+import { usePopper } from '../../hooks/usePopper'
 
 export type FilterOption = {
   label: string
@@ -36,17 +36,8 @@ export const Filter = ({
   filterData,
   onChangeFilterHandler,
 }: FilterProps) => {
-  const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
-    null,
-  )
-  const isPopperOpened = Boolean(popperAnchor)
-  const popperId = useId()
+  const [popperState, openPopper, closePopper] = usePopper()
   const { t } = useTranslation()
-
-  const openPopperHandler = (e: MouseEvent<HTMLButtonElement>) =>
-    setAnchorPopper(e.currentTarget)
-
-  const closePopperHandler = () => setAnchorPopper(null)
 
   if (!filterData) {
     return null
@@ -54,11 +45,9 @@ export const Filter = ({
 
   return (
     <>
-      <FilterButton onClick={openPopperHandler} />
+      <FilterButton aria-describedby={popperState.id} onClick={openPopper} />
       <Popper
-        id={popperId}
-        open={isPopperOpened}
-        anchorEl={popperAnchor}
+        {...popperState}
         placement="bottom-end"
         transition
         sx={{
@@ -75,7 +64,7 @@ export const Filter = ({
             }}
           >
             <Paper elevation={6}>
-              <ClickAwayListener onClickAway={closePopperHandler}>
+              <ClickAwayListener onClickAway={closePopper}>
                 <Box padding="8px 16px">
                   {optionGroups.map((group) => (
                     <FormControl

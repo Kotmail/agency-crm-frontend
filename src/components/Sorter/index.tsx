@@ -1,4 +1,3 @@
-import { MouseEvent, useId, useState } from 'react'
 import {
   Box,
   ClickAwayListener,
@@ -12,6 +11,7 @@ import { SorterHeading } from './SorterHeading'
 import { useTranslation } from 'react-i18next'
 import { SorterList } from './SorterList'
 import { SorterButton } from './SorterButton'
+import { usePopper } from '../../hooks/usePopper'
 
 export type SortByFieldValues = 'createdAt' | 'deadline' | 'cost'
 export type OrderByFieldValues = 'asc' | 'desc'
@@ -51,17 +51,8 @@ export const Sorter = ({
   sortData,
   onChangeSortHandler,
 }: SorterProps) => {
-  const [popperAnchor, setAnchorPopper] = useState<null | HTMLButtonElement>(
-    null,
-  )
-  const isPopperOpened = Boolean(popperAnchor)
-  const popperId = useId()
+  const [popperState, openPopper, closePopper] = usePopper()
   const { t } = useTranslation()
-
-  const openPopperHandler = (e: MouseEvent<HTMLButtonElement>) =>
-    setAnchorPopper(e.currentTarget)
-
-  const closePopperHandler = () => setAnchorPopper(null)
 
   const getCurrentOptionLabel = () => {
     const currentOption = options.find(
@@ -75,13 +66,15 @@ export const Sorter = ({
 
   return (
     <>
-      <SorterButton isOpened={isPopperOpened} onClick={openPopperHandler}>
+      <SorterButton
+        aria-describedby={popperState.id}
+        isOpened={popperState.open}
+        onClick={openPopper}
+      >
         {getCurrentOptionLabel()}
       </SorterButton>
       <Popper
-        id={popperId}
-        open={isPopperOpened}
-        anchorEl={popperAnchor}
+        {...popperState}
         placement="top-end"
         transition
         sx={{
@@ -98,7 +91,7 @@ export const Sorter = ({
             }}
           >
             <Paper elevation={6}>
-              <ClickAwayListener onClickAway={closePopperHandler}>
+              <ClickAwayListener onClickAway={closePopper}>
                 <Box>
                   <SorterHeading>{t('sorter.sortby_label')}</SorterHeading>
                   <SorterList
