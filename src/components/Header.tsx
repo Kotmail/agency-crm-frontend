@@ -17,7 +17,7 @@ import {
   Inventory2Outlined,
   PeopleAltOutlined,
 } from '@mui/icons-material'
-import { UserWidget } from './UserWidget'
+import { UserSnippet } from './UserSnippet'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { IUser, UserRole } from '../models/IUser'
@@ -191,7 +191,7 @@ export const Header = () => {
             )}
           </Box>
           <Box display="flex" alignItems="center" marginLeft="auto">
-            <UserWidget />
+            <UserSnippet />
           </Box>
         </Toolbar>
       </Container>
