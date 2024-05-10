@@ -141,7 +141,7 @@
     },
     "delete_user": {
       "title": "Are you sure?",
-      "desc": "The user will be permanently deleted from the system!"
+      "desc": "All orders belonging to the user will also be deleted!"
     },
     "add_order": {
       "title": "Add order"

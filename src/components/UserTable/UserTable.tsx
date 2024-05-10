@@ -46,7 +46,7 @@ const actions: ActionItem[] = [
 export const UserTable = ({ itemsPerPage }: UserTableProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 10,
+    limit: itemsPerPage || 3,
   })
   const {
     data: users,
@@ -108,10 +108,6 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
       enqueueSnackbar(t('notifications.delete_user.success'), {
         variant: 'success',
       })
-
-      if (users && users[0].length === 1 && pagination.page > 1) {
-        setPagination((data) => ({ ...data, page: --data.page }))
-      }
     }
 
     if (isDeleteError) {
@@ -127,6 +123,10 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
 
   if (isUsersLoadingError) {
     return <Alert severity="error">{t('alerts.users.request_error')}</Alert>
+  }
+
+  if (users && !users[0].length && pagination.page > 1) {
+    setPagination((data) => ({ ...data, page: --data.page }))
   }
 
   return (
