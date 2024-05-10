@@ -17,7 +17,7 @@ export const LoginPage = () => {
 
   useLayoutEffect(() => {
     if (user) {
-      navigate('/dashboard', {
+      navigate('orders', {
         replace: true,
       })
     }

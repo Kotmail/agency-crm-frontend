@@ -50,7 +50,7 @@ export const LoginForm = () => {
         variant: 'success',
       })
 
-      navigate('dashboard')
+      navigate('orders')
     }
   }, [isLoginSuccess, isLoginError])
 

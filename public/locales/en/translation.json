@@ -204,7 +204,6 @@
   },
   "pages": {
     "signin": "Sign In",
-    "dashboard": "Control panel",
     "orders": "Orders",
     "users": "Users",
     "archive": "Archive",

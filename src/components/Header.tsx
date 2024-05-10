@@ -26,17 +26,17 @@ import { useAppSelector } from '../hooks/useAppSelector'
 const pages = [
   {
     name: 'orders',
-    pathname: '/dashboard/orders',
+    pathname: '/orders',
     icon: LibraryBooksOutlined,
   },
   {
     name: 'archive',
-    pathname: '/dashboard/archive',
+    pathname: '/archive',
     icon: Inventory2Outlined,
   },
   {
     name: 'users',
-    pathname: '/dashboard/users',
+    pathname: '/users',
     icon: PeopleAltOutlined,
     allowedRoles: [UserRole.ADMIN],
   },

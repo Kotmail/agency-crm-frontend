@@ -7,14 +7,13 @@ import {
   createTheme,
 } from '@mui/material'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { Dashboard } from './pages/dashboard'
 import { useVerifyUserQuery } from './redux/api/authApi'
 import { useLayoutEffect } from 'react'
-import { UsersPage } from './pages/dashboard/UsersPage'
-import { OrdersPage } from './pages/dashboard/OrdersPage'
+import { OrdersPage } from './pages/OrdersPage'
+import { UsersPage } from './pages/UsersPage'
+import { ArchivePage } from './pages/ArchivePage'
 import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
-import { ArchivePage } from './pages/dashboard/ArchivePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 const theme = createTheme({
@@ -41,7 +40,7 @@ const App = () => {
 
   useLayoutEffect(() => {
     if (isSuccess && location.pathname === '/') {
-      navigate('/dashboard')
+      navigate('orders')
     }
   }, [isSuccess])
 
@@ -64,11 +63,9 @@ const App = () => {
                 />
               }
             >
-              <Route path="/dashboard" element={<Dashboard />}>
-                <Route path="orders" element={<OrdersPage />} />
-                <Route path="users" element={<UsersPage />} />
-                <Route path="archive" element={<ArchivePage />} />
-              </Route>
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/archive" element={<ArchivePage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
