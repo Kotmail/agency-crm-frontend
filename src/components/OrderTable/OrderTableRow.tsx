@@ -80,7 +80,7 @@ export const OrderTableRow = ({
         data-label={t('order_list_table.headings.object_address')}
         className="cell-address"
       >
-        {order.objectAddress}
+        {order.objectAddress || '—'}
       </TableCell>
       <TableCell className="cell-priority">
         <PriorityChip priority={order.priority} />

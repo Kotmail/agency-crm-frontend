@@ -50,7 +50,7 @@ type OrderFormFields = {
   creatorId: number
   executorId: number
   description: string
-  objectAddress: string
+  objectAddress: string | null
   brand: string
   cost: number
   priority: OrderPriority
@@ -63,9 +63,17 @@ const createOrderSchema = Yup.object({
   description: Yup.string()
     .required('form_errors.description.required')
     .min(15, 'form_errors.description.min_length'),
-  objectAddress: Yup.string()
-    .required('form_errors.object_address.required')
-    .min(10, 'form_errors.object_address.min_length'),
+  objectAddress: Yup.lazy((value) => {
+    if (value) {
+      return Yup.string()
+        .trim()
+        .defined()
+        .nullable()
+        .min(10, 'form_errors.object_address.min_length')
+    }
+
+    return Yup.string().trim().defined().nullable()
+  }),
   brand: Yup.string()
     .required('form_errors.brand.required')
     .min(5, 'form_errors.brand.min_length'),

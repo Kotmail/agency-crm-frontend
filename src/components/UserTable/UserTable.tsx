@@ -46,7 +46,7 @@ const actions: ActionItem[] = [
 export const UserTable = ({ itemsPerPage }: UserTableProps) => {
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: itemsPerPage || 3,
+    limit: itemsPerPage || 10,
   })
   const {
     data: users,

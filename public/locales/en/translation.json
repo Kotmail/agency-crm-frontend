@@ -54,7 +54,6 @@
       "min_length": "The description must contain at least 15 characters"
     },
     "object_address": {
-      "required": "Address of object is a required field",
       "min_length": "The address of object must contain at least 10 characters"
     },
     "brand": {
@@ -174,7 +173,7 @@
     "headings": {
       "actions": "Actions",
       "deadline": "Date of completion",
-      "description": "Type of work",
+      "description": "Description",
       "object_address": "Address of object",
       "priority": "Priority",
       "brand": "Brand",
