@@ -115,7 +115,7 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
         variant: 'error',
       })
     }
-  }, [isDeleteSuccess, isDeleteError])
+  }, [isDeleteSuccess, isDeleteError, t])
 
   if (isUsersLoading) {
     return <CircularProgress />

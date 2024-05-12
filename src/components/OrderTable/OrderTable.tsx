@@ -182,15 +182,17 @@ export const OrderTable = ({
       })
     }
 
-    if (isDeleteSuccess) {
-      enqueueSnackbar(t('notifications.delete_order.success'), {
-        variant: 'success',
-      })
-    }
-
     if (isUpdateError) {
       enqueueSnackbar(t('notifications.edit_order.fail'), {
         variant: 'error',
+      })
+    }
+  }, [isUpdateSuccess, isUpdateError, t])
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      enqueueSnackbar(t('notifications.delete_order.success'), {
+        variant: 'success',
       })
     }
 
@@ -199,7 +201,7 @@ export const OrderTable = ({
         variant: 'error',
       })
     }
-  }, [isUpdateSuccess, isUpdateError, isDeleteSuccess, isDeleteError])
+  }, [isDeleteSuccess, isDeleteError, t])
 
   if (isOrdersLoading) {
     return <CircularProgress />
