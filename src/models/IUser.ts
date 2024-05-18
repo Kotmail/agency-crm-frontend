@@ -7,7 +7,7 @@ export enum UserRole {
 export interface IUser {
   id: number
   email: string
-  login: string
+  login: string | null
   fullName: string
   role: UserRole
 }

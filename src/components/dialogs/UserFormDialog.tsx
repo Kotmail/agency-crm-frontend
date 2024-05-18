@@ -35,7 +35,7 @@ import { enqueueSnackbar } from 'notistack'
 
 type UserFormFields = {
   email: string
-  login: string
+  login: string | null
   fullName: string
   password: string
   passwordConfirm: string
@@ -62,7 +62,7 @@ const yupPasswordFieldHandler = (value: unknown, isRequired = true) => {
 }
 
 const createUserSchema = Yup.object({
-  login: Yup.string().defined(),
+  login: Yup.string().defined().nullable(),
   email: Yup.string()
     .email('form_errors.email.invalid')
     .required('form_errors.email.required'),

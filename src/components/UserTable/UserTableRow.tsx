@@ -29,7 +29,7 @@ export const UserTableRow = ({
         />
       </TableCell>
       <TableCell>{user.id}</TableCell>
-      <TableCell>{user.login}</TableCell>
+      <TableCell>{user.login || '—'}</TableCell>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.fullName}</TableCell>
       <TableCell>{t(`user_roles.${user?.role}`)}</TableCell>
