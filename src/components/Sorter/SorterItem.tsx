@@ -18,7 +18,7 @@ export const SorterItem = ({ option, ...props }: SorterItemProps) => {
             fontSize="small"
             sx={{
               marginLeft: '6px',
-              transform: option.key === 'asc' ? 'rotate(-180deg)' : '',
+              transform: option.key === 'ASC' ? 'rotate(-180deg)' : '',
             }}
           />
         </ListItemIcon>

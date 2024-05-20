@@ -66,8 +66,8 @@ export const OrdersPage = () => {
   })
   const [filterData, setFilterData] = useState<OrdersFilterParams>({})
   const [sortData, setSortData] = useState<SortData>({
-    sortby: 'createdAt',
-    orderby: 'desc',
+    sortBy: 'createdAt',
+    orderBy: 'DESC',
   })
 
   useDocumentTitle(`${t('app_name')} — ${t('pages.orders')}`)

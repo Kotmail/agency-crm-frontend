@@ -49,7 +49,7 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
     limit: itemsPerPage || 10,
   })
   const {
-    data: users,
+    data: usersData,
     isLoading: isUsersLoading,
     isError: isUsersLoadingError,
     isFetching: isUsersFetching,
@@ -125,7 +125,7 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
     return <Alert severity="error">{t('alerts.users.request_error')}</Alert>
   }
 
-  if (users && !users[0].length && pagination.page > 1) {
+  if (usersData && !usersData.items.length && pagination.page > 1) {
     setPagination((data) => ({ ...data, page: --data.page }))
   }
 
@@ -144,8 +144,8 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
         >
           <UserTableHead />
           <TableBody>
-            {users &&
-              users[0].map((user) => (
+            {usersData &&
+              usersData.items.map((user) => (
                 <UserTableRow
                   key={user.id}
                   user={user}
@@ -156,10 +156,10 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {users && users[1] > pagination.limit && (
+      {usersData && usersData.totalCount > pagination.limit && (
         <Pagination
           disabled={isUsersFetching}
-          count={Math.ceil(users[1] / pagination.limit)}
+          count={Math.ceil(usersData.totalCount / pagination.limit)}
           page={pagination.page}
           onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
           sx={{ marginTop: '25px' }}

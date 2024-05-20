@@ -14,11 +14,11 @@ import { SorterButton } from './SorterButton'
 import { usePopper } from '../../hooks/usePopper'
 
 export type SortByFieldValues = 'createdAt' | 'deadline' | 'cost'
-export type OrderByFieldValues = 'asc' | 'desc'
+export type OrderByFieldValues = 'ASC' | 'DESC'
 
 export type SortData = {
-  sortby: SortByFieldValues
-  orderby: OrderByFieldValues
+  sortBy: SortByFieldValues
+  orderBy: OrderByFieldValues
 }
 
 export type SortOption = {
@@ -35,12 +35,12 @@ type SorterProps = {
 
 const orderByOptions: SortOption[] = [
   {
-    key: 'asc',
+    key: 'ASC',
     label: 'sorter.options.asc',
     icon: FilterList,
   },
   {
-    key: 'desc',
+    key: 'DESC',
     label: 'sorter.options.desc',
     icon: FilterList,
   },
@@ -56,7 +56,7 @@ export const Sorter = ({
 
   const getCurrentOptionLabel = () => {
     const currentOption = options.find(
-      (option) => option.key === sortData['sortby'],
+      (option) => option.key === sortData['sortBy'],
     )
 
     return t('sorter.button_text', {
@@ -97,7 +97,7 @@ export const Sorter = ({
                   <SorterList
                     options={options}
                     sortData={sortData}
-                    sortField="sortby"
+                    sortField="sortBy"
                     onChangeItemHandler={onChangeSortHandler}
                   />
                   <Divider variant="middle" />
@@ -105,7 +105,7 @@ export const Sorter = ({
                   <SorterList
                     options={orderByOptions}
                     sortData={sortData}
-                    sortField="orderby"
+                    sortField="orderBy"
                     onChangeItemHandler={onChangeSortHandler}
                   />
                 </Box>

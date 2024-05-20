@@ -211,7 +211,7 @@ export const OrderTable = ({
     return <Alert severity="error">{t('alerts.orders.request_error')}</Alert>
   }
 
-  if (ordersData && ordersData[0].length === 0) {
+  if (ordersData && ordersData.items.length === 0) {
     if (pagination.page > 1) {
       setPagination((data) => ({ ...data, page: --data.page }))
     }
@@ -236,7 +236,7 @@ export const OrderTable = ({
           <OrderTableHead />
           <TableBody>
             {ordersData &&
-              ordersData[0].map((order) => (
+              ordersData.items.map((order) => (
                 <OrderTableRow
                   key={order.id}
                   order={order}
@@ -248,10 +248,10 @@ export const OrderTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {ordersData && ordersData[1] > pagination.limit && (
+      {ordersData && ordersData.totalCount > pagination.limit && (
         <Pagination
           disabled={isOrdersFetching}
-          count={Math.ceil(ordersData[1] / pagination.limit)}
+          count={Math.ceil(ordersData.totalCount / pagination.limit)}
           page={pagination.page}
           onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
           sx={{ marginTop: '25px' }}

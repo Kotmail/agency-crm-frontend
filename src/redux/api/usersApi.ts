@@ -18,7 +18,10 @@ const apiWithTag = apiSlice.enhanceEndpoints({
 
 const usersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
-    users: builder.query<[IUser[], number], QueryUsersRequest>({
+    users: builder.query<
+      { items: IUser[]; totalCount: number },
+      QueryUsersRequest
+    >({
       query: (params) => ({
         url: '/users',
         params,

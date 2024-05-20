@@ -31,7 +31,10 @@ const apiWithTag = apiSlice.enhanceEndpoints({
 
 const ordersApi = apiWithTag.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<[IOrder[], number], QueryOrdersRequest>({
+    orders: builder.query<
+      { items: IOrder[]; totalCount: number },
+      QueryOrdersRequest
+    >({
       query: (params) => ({
         url: '/orders',
         params,
