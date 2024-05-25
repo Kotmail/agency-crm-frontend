@@ -68,10 +68,17 @@ export const Header = () => {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: '#fff',
+        boxShadow: 'unset',
+        borderBottom: '1px solid #e3e3e3',
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ alignItems: 'stretch' }}>
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             {user && pages.length > 0 && (
               <>
                 <IconButton
@@ -80,10 +87,10 @@ export const Header = () => {
                   aria-controls="appBarNavigation"
                   aria-haspopup="true"
                   onClick={handleOpenNavMenu}
-                  color="inherit"
                   sx={{
                     display: { md: 'none' },
                     marginLeft: '-12px',
+                    color: '#383838',
                   }}
                 >
                   <MenuIcon />
@@ -127,9 +134,11 @@ export const Header = () => {
             )}
             <Typography
               variant="h5"
+              fontWeight="600"
               display="flex"
               alignItems="center"
-              marginRight={3}
+              marginRight={4}
+              color="black"
             >
               CRM
             </Typography>
@@ -142,11 +151,13 @@ export const Header = () => {
                       md: 'flex',
                       gap: '15px',
                     },
+                    alignItems: 'center',
                   }}
                 >
                   {getPagesByUserRole(user).map((page) => (
                     <Button
                       key={page.pathname}
+                      disableFocusRipple
                       onClick={() => selectNavPageHandler(page.pathname)}
                       className={
                         location.pathname === page.pathname ? 'current' : ''
@@ -154,29 +165,18 @@ export const Header = () => {
                       startIcon={<page.icon />}
                       sx={{
                         position: 'relative',
-                        color: 'white',
-                        borderRadius: '0',
-                        lineHeight: 'normal',
+                        color: '#383838',
                         overflow: 'hidden',
+                        lineHeight: '1.6',
                         textTransform: 'none',
                         fontSize: '15px',
-                        '::after': {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: '-3px',
-                          left: 0,
-                          width: '100%',
-                          height: '3px',
-                          transition: 'bottom .2s',
-                          backgroundColor: '#fff',
-                        },
                         ':hover, :focus, &.current': {
-                          '::after': {
-                            bottom: 0,
-                          },
+                          backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                          color: '#000',
                         },
                         '&.current': {
-                          backgroundColor: 'rgb(0 0 0 / 5%)',
+                          backgroundColor: '#1976d2',
+                          color: '#fff',
                         },
                         '.MuiButton-startIcon': {
                           marginLeft: 0,

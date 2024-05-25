@@ -18,6 +18,18 @@ import { NotFoundPage } from './pages/NotFoundPage'
 
 const theme = createTheme({
   components: {
+    MuiScopedCssBaseline: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
     MuiPagination: {
       defaultProps: {
         variant: 'outlined',
