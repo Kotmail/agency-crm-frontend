@@ -1,5 +1,10 @@
+html,
 body {
+  height: 100%;
+	min-height: 100%;
   margin: 0;
-  min-height: 100vh;
-  background-color: #f3f5f7;
+}
+
+#root {
+  height: inherit;
 }

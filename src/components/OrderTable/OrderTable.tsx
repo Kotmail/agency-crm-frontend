@@ -216,7 +216,11 @@ export const OrderTable = ({
       setPagination((data) => ({ ...data, page: --data.page }))
     }
 
-    return <Alert severity="info">{t('alerts.orders.empty_data')}</Alert>
+    return (
+      <Alert severity="info" sx={{ border: '1px solid #5ec7f2' }}>
+        {t('alerts.orders.empty_data')}
+      </Alert>
+    )
   }
 
   return (

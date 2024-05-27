@@ -76,7 +76,7 @@ export const Header = () => {
         borderBottom: '1px solid #e3e3e3',
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ alignItems: 'stretch' }}>
           <Box display="flex" alignItems="center">
             {user && pages.length > 0 && (

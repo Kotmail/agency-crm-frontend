@@ -13,11 +13,10 @@ import { CreateEntityButton } from '../components/CreateEntityButton'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useTranslation } from 'react-i18next'
 import { SortData, SortOption, Sorter } from '../components/Sorter'
-import { Box, Container } from '@mui/material'
+import { Box } from '@mui/material'
 import { OrderPriority, OrderStatus } from '../models/IOrder'
 import { Filter, FilterGroup } from '../components/Filter'
 import { OrdersFilterParams } from '../redux/api/ordersApi'
-import { Header } from '../components/Header'
 
 type DialogVariants = {
   orderForm: OrderFormDialogProps
@@ -74,35 +73,30 @@ export const OrdersPage = () => {
 
   return (
     <>
-      <Header />
-      <Container maxWidth="xl">
-        <Box paddingTop="30px" paddingBottom="40px">
-          <PageHeader title="pages.orders">
-            <Hider roles={[UserRole.EXECUTOR]}>
-              <CreateEntityButton
-                text="buttons.new_order"
-                onClick={() =>
-                  openDialog('orderForm', DIALOG_BASE_OPTIONS.form.addOrder)
-                }
-              />
-            </Hider>
-            <Box display="flex" gap={2} marginLeft="auto">
-              <Filter
-                optionGroups={filterOptionGroups}
-                filterData={filterData}
-                onChangeFilterHandler={setFilterData}
-              />
-              <Sorter
-                options={sortOptions}
-                sortData={sortData}
-                onChangeSortHandler={setSortData}
-              />
-            </Box>
-          </PageHeader>
-          <OrderTable filterData={filterData} sortData={sortData} />
-          <OrderFormDialog {...dialogs.orderForm} />
+      <PageHeader title="pages.orders">
+        <Hider roles={[UserRole.EXECUTOR]}>
+          <CreateEntityButton
+            text="buttons.new_order"
+            onClick={() =>
+              openDialog('orderForm', DIALOG_BASE_OPTIONS.form.addOrder)
+            }
+          />
+        </Hider>
+        <Box display="flex" gap={2} marginLeft="auto">
+          <Filter
+            optionGroups={filterOptionGroups}
+            filterData={filterData}
+            onChangeFilterHandler={setFilterData}
+          />
+          <Sorter
+            options={sortOptions}
+            sortData={sortData}
+            onChangeSortHandler={setSortData}
+          />
         </Box>
-      </Container>
+      </PageHeader>
+      <OrderTable filterData={filterData} sortData={sortData} />
+      <OrderFormDialog {...dialogs.orderForm} />
     </>
   )
 }

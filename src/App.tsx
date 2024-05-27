@@ -15,12 +15,14 @@ import { ArchivePage } from './pages/ArchivePage'
 import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { DashboardLayout } from './layouts/DashboardLayout'
 
 const theme = createTheme({
   components: {
     MuiScopedCssBaseline: {
       styleOverrides: {
         root: {
+          height: 'inherit',
           backgroundColor: 'transparent',
         },
       },
@@ -36,9 +38,11 @@ const theme = createTheme({
         shape: 'rounded',
         color: 'primary',
       },
+    },
+    MuiPaginationItem: {
       styleOverrides: {
-        ul: {
-          rowGap: '6px',
+        root: {
+          backgroundColor: '#fff',
         },
       },
     },
@@ -75,9 +79,11 @@ const App = () => {
                 />
               }
             >
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/archive" element={<ArchivePage />} />
+              <Route element={<DashboardLayout />}>
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/users" element={<UsersPage />} />
+                <Route path="/archive" element={<ArchivePage />} />
+              </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

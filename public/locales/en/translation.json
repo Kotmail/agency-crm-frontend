@@ -53,13 +53,6 @@
       "required": "Description is a required field",
       "min_length": "The description must contain at least 15 characters"
     },
-    "object_address": {
-      "min_length": "The address of object must contain at least 10 characters"
-    },
-    "brand": {
-      "required": "Brand is a required field",
-      "min_length": "The brand must contain at least 5 characters"
-    },
     "cost": {
       "required": "Cost is a required field",
       "positive": "The cost must contain a positive number"
@@ -75,8 +68,6 @@
     "manager": "Manager",
     "executor": "Executor",
     "description": "Description",
-    "object_address": "Address of object",
-    "brand": "Brand",
     "cost": "Cost",
     "priority": "Priority"
   },
@@ -174,9 +165,7 @@
       "actions": "Actions",
       "deadline": "Date of completion",
       "description": "Description",
-      "object_address": "Address of object",
       "priority": "Priority",
-      "brand": "Brand",
       "creator": "Manager",
       "executor": "Executor",
       "cost": "Cost",

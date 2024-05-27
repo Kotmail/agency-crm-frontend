@@ -4,10 +4,14 @@ export default {
   tableContainer: {
     position: 'relative',
     '&.cardView': {
+      backgroundColor: 'transparent',
       border: 'none',
       '.MuiTable-root': {
         width: 'auto',
         border: 'none',
+      },
+      '.MuiTableRow-root': {
+        backgroundColor: '#fff',
       },
       '.MuiTableHead-root': visuallyHidden,
       '.MuiTableBody-root .MuiTableRow-root': {
@@ -106,7 +110,7 @@ export default {
   },
   table: {
     tableLayout: 'fixed',
-    width: 1486,
+    width: 1150,
     'th, td': {
       paddingTop: '14px',
       paddingBottom: '14px',

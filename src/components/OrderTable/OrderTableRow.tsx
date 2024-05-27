@@ -76,20 +76,8 @@ export const OrderTableRow = ({
       >
         {order.description}
       </TableCell>
-      <TableCell
-        data-label={t('order_list_table.headings.object_address')}
-        className="cell-address"
-      >
-        {order.objectAddress || '—'}
-      </TableCell>
       <TableCell className="cell-priority">
         <PriorityChip priority={order.priority} />
-      </TableCell>
-      <TableCell
-        data-label={t('order_list_table.headings.brand')}
-        className="cell-brand"
-      >
-        {order.brand}
       </TableCell>
       <Hider roles={[UserRole.MANAGER]}>
         <TableCell

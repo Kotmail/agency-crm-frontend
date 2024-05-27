@@ -24,13 +24,9 @@ export const OrderTableHead = () => {
         <TableCell width="15%">
           {t('order_list_table.headings.description')}
         </TableCell>
-        <TableCell width="12%">
-          {t('order_list_table.headings.object_address')}
-        </TableCell>
         <TableCell width="9%">
           {t('order_list_table.headings.priority')}
         </TableCell>
-        <TableCell width="8%">{t('order_list_table.headings.brand')}</TableCell>
         <Hider roles={[UserRole.MANAGER]}>
           <TableCell width="9%">
             {t('order_list_table.headings.creator')}

@@ -50,8 +50,6 @@ type OrderFormFields = {
   creatorId: number
   executorId: number
   description: string
-  objectAddress: string | null
-  brand: string
   cost: number
   priority: OrderPriority
 }
@@ -63,20 +61,6 @@ const createOrderSchema = Yup.object({
   description: Yup.string()
     .required('form_errors.description.required')
     .min(15, 'form_errors.description.min_length'),
-  objectAddress: Yup.lazy((value) => {
-    if (value) {
-      return Yup.string()
-        .trim()
-        .defined()
-        .nullable()
-        .min(10, 'form_errors.object_address.min_length')
-    }
-
-    return Yup.string().trim().defined().nullable()
-  }),
-  brand: Yup.string()
-    .required('form_errors.brand.required')
-    .min(5, 'form_errors.brand.min_length'),
   cost: Yup.number()
     .transform((value) => (Number.isNaN(value) ? undefined : value))
     .required('form_errors.cost.required')
@@ -295,20 +279,6 @@ export const OrderFormDialog = ({
             size="small"
             multiline
             rows="4"
-          />
-          <TextField
-            {...register('objectAddress')}
-            error={!!errors.objectAddress}
-            helperText={t(errors.objectAddress?.message || '')}
-            label={t('input_placeholders.object_address')}
-            size="small"
-          />
-          <TextField
-            {...register('brand')}
-            error={!!errors.brand}
-            helperText={t(errors.brand?.message || '')}
-            label={t('input_placeholders.brand')}
-            size="small"
           />
           <TextField
             type="number"
