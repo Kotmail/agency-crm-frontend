@@ -69,7 +69,8 @@
     "executor": "Executor",
     "description": "Description",
     "cost": "Cost",
-    "priority": "Priority"
+    "priority": "Priority",
+    "deadline": "Deadline"
   },
   "notifications": {
     "login": {
@@ -163,7 +164,7 @@
     "label": "List of orders",
     "headings": {
       "actions": "Actions",
-      "deadline": "Date of completion",
+      "deadline": "Deadline",
       "description": "Description",
       "priority": "Priority",
       "creator": "Manager",

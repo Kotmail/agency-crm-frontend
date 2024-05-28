@@ -69,7 +69,8 @@
     "executor": "Исполнитель",
     "description": "Описание",
     "cost": "Стоимость",
-    "priority": "Приоритет"
+    "priority": "Приоритет",
+    "deadline": "Крайний срок"
   },
   "notifications": {
     "login": {

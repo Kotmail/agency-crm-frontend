@@ -213,7 +213,7 @@ export const OrderFormDialog = ({
                       helperText: t(errors.deadline?.message || ''),
                     },
                   }}
-                  label="Дата выполнения"
+                  label={t('input_placeholders.deadline')}
                   value={dayjs.utc(field.value)}
                 />
               </LocalizationProvider>
