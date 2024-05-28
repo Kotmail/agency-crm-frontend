@@ -4,6 +4,18 @@ AgencyCRM is a management system for a company that allows you to create orders 
 
 This is an AgencyCRM client application.
 
+## Demo
+
+[Here](https://acrm.v-grudin.ru) you can see a demo version of the project.
+
+Authorization is available under one of 3 user roles:
+
+| Role     | Email / Password                            |
+| -------- | ------------------------------------------- |
+| admin    | admin@example.com / adminDemoPassword       |
+| manager  | manager@example.com / managerDemoPassword   |
+| executor | executor@example.com / executorDemoPassword |
+
 ## Tools used
 
 - [React](https://react.dev) — library for creating user interfaces.
