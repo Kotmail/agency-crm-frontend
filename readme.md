@@ -45,3 +45,7 @@ npm i
 # Starting the server in development mode
 npm run dev
 ```
+
+## LICENSE
+
+[MIT](https://github.com/Kotmail/agency-crm-frontend/blob/master/LICENSE)

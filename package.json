@@ -1,7 +1,20 @@
 {
   "name": "front-end",
+  "version": "1.0.0",
+  "description": "AgencyCRM is a management system for a company that allows you to create orders and monitor their implementation.",
+  "keywords": [
+    "react",
+    "redux",
+    "i18n",
+    "jwt",
+    "typescript",
+    "material-ui",
+    "react-hook-form",
+    "rtk-query"
+  ],
+  "author": "Vladislav Grudin",
+  "license": "MIT",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
