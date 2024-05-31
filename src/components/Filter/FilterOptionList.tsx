@@ -2,6 +2,7 @@ import { Checkbox, FormControlLabel } from '@mui/material'
 import { FilterOption } from '.'
 import { useTranslation } from 'react-i18next'
 import { OrdersFilterParams } from '../../redux/api/ordersApi'
+import { useSearchParams } from 'react-router-dom'
 
 type FilterOptionListProps = {
   options: FilterOption[]
@@ -14,6 +15,7 @@ export const FilterOptionList = ({
   filterData,
   onChangeFilterHandler,
 }: FilterOptionListProps) => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const { t } = useTranslation()
 
   if (!options.length) {
@@ -50,6 +52,11 @@ export const FilterOptionList = ({
       case 'isArchived':
         currentOptions[option.name] = isChecked
         break
+    }
+
+    if (searchParams.get('page')) {
+      searchParams.delete('page')
+      setSearchParams(searchParams)
     }
 
     onChangeFilterHandler(currentOptions)

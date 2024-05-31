@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   Alert,
   CircularProgress,
@@ -39,6 +39,7 @@ import { SortData } from '../Sorter'
 import styles from './OrderTable.styles'
 import { OrderTableHead } from './OrderTableHead'
 import { OrderTableRow } from './OrderTableRow'
+import { usePagination } from '../../hooks/usePagination'
 
 const actions: ActionItem[] = [
   {
@@ -79,18 +80,14 @@ export const OrderTable = ({
   filterData,
   sortData,
 }: OrderTableProps) => {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: itemsPerPage || 8,
-  })
+  const [paginationData, setPage] = usePagination({ take: itemsPerPage })
   const {
     data: ordersData,
     isLoading: isOrdersLoading,
     isError: isOrdersLoadingError,
     isFetching: isOrdersFetching,
   } = useOrdersQuery({
-    take: pagination.limit,
-    page: pagination.page,
+    ...paginationData,
     ...filterData,
     ...sortData,
   })
@@ -212,10 +209,6 @@ export const OrderTable = ({
   }
 
   if (ordersData && ordersData.items.length === 0) {
-    if (pagination.page > 1) {
-      setPagination((data) => ({ ...data, page: --data.page }))
-    }
-
     return (
       <Alert severity="info" sx={{ border: '1px solid #5ec7f2' }}>
         {t('alerts.orders.empty_data')}
@@ -252,12 +245,12 @@ export const OrderTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {ordersData && ordersData.totalCount > pagination.limit && (
+      {ordersData && ordersData.totalCount > paginationData.take && (
         <Pagination
           disabled={isOrdersFetching}
-          count={Math.ceil(ordersData.totalCount / pagination.limit)}
-          page={pagination.page}
-          onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
+          count={Math.ceil(ordersData.totalCount / paginationData.take)}
+          page={paginationData.page}
+          onChange={(_, page) => setPage(page)}
           sx={{ marginTop: '25px' }}
         />
       )}

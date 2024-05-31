@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   Alert,
   CircularProgress,
@@ -22,6 +22,7 @@ import { ActionItem, ActionItemKeys } from '../ActionsDropdown'
 import { TableBackdropLoader } from '../TableBackdropLoader'
 import { UserTableRow } from './UserTableRow'
 import { UserTableHead } from './UserTableHead'
+import { usePagination } from '../../hooks/usePagination'
 
 type DialogVariants = {
   userForm: UserFormDialogProps
@@ -44,19 +45,13 @@ const actions: ActionItem[] = [
 ]
 
 export const UserTable = ({ itemsPerPage }: UserTableProps) => {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: itemsPerPage || 10,
-  })
+  const [paginationData, setPage] = usePagination({ take: itemsPerPage || 10 })
   const {
     data: usersData,
     isLoading: isUsersLoading,
     isError: isUsersLoadingError,
     isFetching: isUsersFetching,
-  } = useUsersQuery({
-    take: pagination.limit,
-    page: pagination.page,
-  })
+  } = useUsersQuery(paginationData)
   const { user: authUser } = useAppSelector((state) => state.auth)
   const [deleteUser, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteUserMutation()
@@ -125,10 +120,6 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
     return <Alert severity="error">{t('alerts.users.request_error')}</Alert>
   }
 
-  if (usersData && !usersData.items.length && pagination.page > 1) {
-    setPagination((data) => ({ ...data, page: --data.page }))
-  }
-
   return (
     <>
       <TableContainer
@@ -156,12 +147,12 @@ export const UserTable = ({ itemsPerPage }: UserTableProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {usersData && usersData.totalCount > pagination.limit && (
+      {usersData && usersData.totalCount > paginationData.take && (
         <Pagination
           disabled={isUsersFetching}
-          count={Math.ceil(usersData.totalCount / pagination.limit)}
-          page={pagination.page}
-          onChange={(_, page) => setPagination((data) => ({ ...data, page }))}
+          count={Math.ceil(usersData.totalCount / paginationData.take)}
+          page={paginationData.page}
+          onChange={(_, page) => setPage(page)}
           sx={{ marginTop: '25px' }}
         />
       )}
