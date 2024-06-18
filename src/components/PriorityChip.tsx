@@ -1,41 +1,21 @@
-import { Chip } from '@mui/material'
-import { lightBlue, orange, teal } from '@mui/material/colors'
-import { OrderPriority } from '../models/IOrder'
+import { Chip, ChipProps } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { Priority } from '../models/IProject'
 
-const priorityColors = {
-  low: {
-    borderColor: teal[300],
-    color: teal[400],
-  },
-  medium: {
-    borderColor: lightBlue[400],
-    color: lightBlue[600],
-  },
-  high: {
-    borderColor: orange[800],
-    color: orange[900],
-  },
+type ChipColorsType = {
+  [key in Priority]: ChipProps['color']
 }
 
-type PriorityChipProps = {
-  priority: OrderPriority
+const chipColors: ChipColorsType = {
+  [Priority.LOW]: 'primary',
+  [Priority.MEDIUM]: 'warning',
+  [Priority.HIGH]: 'error',
 }
 
-export const PriorityChip = ({ priority }: PriorityChipProps) => {
+export const PriorityChip = ({ priority }: { priority: Priority }) => {
   const { t } = useTranslation()
 
   return (
-    <Chip
-      variant="outlined"
-      label={t(`order_priorities.${priority}`)}
-      sx={{
-        minWidth: '83px',
-        borderWidth: '2px',
-        borderRadius: '4px',
-        fontWeight: 500,
-        ...priorityColors[priority],
-      }}
-    />
+    <Chip color={chipColors[priority]} label={t(`priorities.${priority}`)} />
   )
 }

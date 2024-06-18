@@ -11,7 +11,7 @@ export const DashboardLayout = () => {
       }}
     >
       <Header />
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Box paddingTop="30px" paddingBottom="40px">
           <Outlet />
         </Box>

@@ -4,7 +4,7 @@
     "manager": "Manager",
     "executor": "Executor"
   },
-  "order_priorities": {
+  "priorities": {
     "low": "Low",
     "medium": "Medium",
     "high": "High"
@@ -23,6 +23,7 @@
     "delete": "Delete",
     "move": "Move",
     "copy": "Copy",
+    "view_details": "View details",
     "new_order": "New order",
     "new_user": "New user",
     "return_to_main_page": "Go to home"
@@ -113,7 +114,10 @@
       "empty_data": "No orders found"
     },
     "users": {
-      "request_error": "An error occurred when requesting user data"
+      "request_error": "An error occurred when requesting user data..."
+    },
+    "projects": {
+      "request_error": "An error occurred when requesting project data..."
     }
   },
   "dialogs": {
@@ -196,10 +200,20 @@
     "orders": "Orders",
     "users": "Users",
     "archive": "Archive",
+    "projects": "Projects",
     "error_404": {
       "title": "Page not found!",
       "desc": "There is no page at the specified address. It may have been deleted."
     }
+  },
+  "project": {
+    "labels": {
+      "members": "Members:",
+      "manager": "Manager:",
+      "due_date": "Due Date:",
+      "progress": "Progress"
+    },
+    "no_due_date": "Not specified"
   },
   "aria_labels": {
     "list_of_pages": "List of pages"

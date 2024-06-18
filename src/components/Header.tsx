@@ -16,6 +16,7 @@ import {
   LibraryBooksOutlined,
   Inventory2Outlined,
   PeopleAltOutlined,
+  GridViewOutlined,
 } from '@mui/icons-material'
 import { UserSnippet } from './UserSnippet'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -33,6 +34,11 @@ const pages = [
     name: 'archive',
     pathname: '/archive',
     icon: Inventory2Outlined,
+  },
+  {
+    name: 'projects',
+    pathname: '/projects',
+    icon: GridViewOutlined,
   },
   {
     name: 'users',
@@ -76,7 +82,7 @@ export const Header = () => {
         borderBottom: '1px solid #e3e3e3',
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ alignItems: 'stretch' }}>
           <Box display="flex" alignItems="center">
             {user && pages.length > 0 && (
