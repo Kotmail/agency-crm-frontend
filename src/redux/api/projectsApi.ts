@@ -1,16 +1,16 @@
 import { apiSlice } from '.'
-import { IProject } from '../../models/IProject'
+import { IProject, Priority } from '../../models/IProject'
 
 type QueryProjectsRequest = {
   take?: number
   page?: number
 }
 
-interface CreateProjectRequest {
+export interface CreateProjectRequest {
   name: string
-  description?: string
-  creator?: number
-  members?: number[]
+  description: string | null
+  dueDate: Date | null
+  priority: Priority | null
 }
 
 interface UpdateProjectRequest

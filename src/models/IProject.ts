@@ -9,11 +9,11 @@ export enum Priority {
 export interface IProject {
   id: number
   name: string
-  priority: Priority | null
   description: string | null
+  dueDate: Date | null
+  priority: Priority | null
   creator: IUser
   members: IUser[]
-  dueDate: Date | null
   createdAt: Date
   taskTotal?: number
   taskCompleted?: number

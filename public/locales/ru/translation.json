@@ -25,6 +25,7 @@
     "copy": "Копировать",
     "view_details": "Подробнее",
     "new_order": "Новый заказ",
+    "new_project": "Новый проект",
     "new_user": "Новый пользователь",
     "return_to_main_page": "Перейти на главную"
   },
@@ -32,6 +33,9 @@
     "user_menu": "Меню пользователя"
   },
   "form_errors": {
+    "name": {
+      "required": "Необходимо ввести имя"
+    },
     "email": {
       "required": "Необходимо ввести e-mail",
       "invalid": "Некорректный e-mail"
@@ -60,6 +64,7 @@
     }
   },
   "input_placeholders": {
+    "name": "Название",
     "email": "E-mail",
     "password": "Пароль",
     "password_confirm": "Повторите пароль",
@@ -71,7 +76,7 @@
     "description": "Описание",
     "cost": "Стоимость",
     "priority": "Приоритет",
-    "deadline": "Крайний срок"
+    "due_date": "Крайний срок"
   },
   "notifications": {
     "login": {
@@ -98,6 +103,14 @@
     "edit_order": {
       "fail": "Не удалось обновить заказ",
       "success": "Заказ обновлён"
+    },
+    "add_project": {
+      "fail": "Не удалось добавить проект",
+      "success": "Проект добавлен"
+    },
+    "edit_project": {
+      "fail": "Не удалось обновить проект",
+      "success": "Проект обновлён"
     },
     "copy_order": {
       "fail": "Не удалось скопировать заказ",
@@ -141,8 +154,14 @@
     "add_order": {
       "title": "Добавить заказ"
     },
+    "add_project": {
+      "title": "Добавить проект"
+    },
     "edit_order": {
       "title": "Редактировать заказ"
+    },
+    "edit_project": {
+      "title": "Редактировать проект"
     },
     "copy_order": {
       "title": "Копировать заказ"

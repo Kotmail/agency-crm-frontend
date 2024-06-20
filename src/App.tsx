@@ -53,6 +53,7 @@ const theme = createTheme({
     MuiButton: {
       defaultProps: {
         disableElevation: true,
+        variant: 'contained',
       },
       styleOverrides: {
         root: {

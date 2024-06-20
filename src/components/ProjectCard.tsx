@@ -76,7 +76,7 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
           marginTop="auto"
           marginBottom={1}
         >
-          {item.members.length && (
+          {item.members.length > 0 && (
             <Box display="flex" flexDirection="column" alignItems="flex-start">
               <Typography
                 display="flex"

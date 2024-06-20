@@ -25,6 +25,7 @@
     "copy": "Copy",
     "view_details": "View details",
     "new_order": "New order",
+    "new_project": "New project",
     "new_user": "New user",
     "return_to_main_page": "Go to home"
   },
@@ -32,6 +33,9 @@
     "user_menu": "User menu"
   },
   "form_errors": {
+    "name": {
+      "required": "Name is a required field"
+    },
     "email": {
       "required": "E-mail is a required field",
       "invalid": "Value must be a valid e-mail"
@@ -60,6 +64,7 @@
     }
   },
   "input_placeholders": {
+    "name": "Name",
     "email": "E-mail",
     "password": "Password",
     "password_confirm": "Confirm password",
@@ -71,7 +76,7 @@
     "description": "Description",
     "cost": "Cost",
     "priority": "Priority",
-    "deadline": "Deadline"
+    "due_date": "Due Date"
   },
   "notifications": {
     "login": {

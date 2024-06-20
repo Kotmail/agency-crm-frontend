@@ -169,6 +169,7 @@ export const Header = () => {
                         location.pathname === page.pathname ? 'current' : ''
                       }
                       startIcon={<page.icon />}
+                      variant="text"
                       sx={{
                         position: 'relative',
                         color: '#383838',
