@@ -17,6 +17,10 @@ export const DIALOG_BASE_OPTIONS = {
       title: 'dialogs.edit_order.title',
       successMessage: 'notifications.edit_order.success',
     },
+    editProject: {
+      title: 'dialogs.edit_project.title',
+      successMessage: 'notifications.edit_project.success',
+    },
     addUser: {
       title: 'dialogs.add_user.title',
     },
@@ -44,6 +48,11 @@ export const DIALOG_BASE_OPTIONS = {
     deleteOrder: {
       title: 'dialogs.delete_order.title',
       description: 'dialogs.delete_order.desc',
+      confirmBtnLabel: 'buttons.delete',
+    },
+    deleteProject: {
+      title: 'dialogs.delete_project.title',
+      description: 'dialogs.delete_project.desc',
       confirmBtnLabel: 'buttons.delete',
     },
     deleteUser: {

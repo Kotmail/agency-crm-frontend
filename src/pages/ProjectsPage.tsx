@@ -12,12 +12,12 @@ import { Button } from '@mui/material'
 import { UserRole } from '../models/IUser'
 
 type DialogVariants = {
-  orderForm: ProjectFormDialogProps
+  projectForm: ProjectFormDialogProps
 }
 
 export const ProjectsPage = () => {
   const [dialogs, openDialog] = useDialogs<DialogVariants>({
-    orderForm: {
+    projectForm: {
       open: false,
     },
   })
@@ -29,13 +29,13 @@ export const ProjectsPage = () => {
     <>
       <PageHeader title="pages.projects">
         <Hider roles={[UserRole.EXECUTOR]}>
-          <Button onClick={() => openDialog('orderForm')}>
+          <Button onClick={() => openDialog('projectForm')}>
             {t('buttons.new_project')}
           </Button>
         </Hider>
       </PageHeader>
       <ProjectsGrid />
-      <ProjectFormDialog {...dialogs.orderForm} />
+      <ProjectFormDialog {...dialogs.projectForm} />
     </>
   )
 }

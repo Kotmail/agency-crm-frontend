@@ -100,9 +100,17 @@
       "fail": "The order could not be added",
       "success": "The order has been added"
     },
+    "add_project": {
+      "fail": "The project could not be added",
+      "success": "The project has been added"
+    },
     "edit_order": {
       "fail": "The order could not be updated",
       "success": "The order has been updated"
+    },
+    "edit_project": {
+      "fail": "The project could not be updated",
+      "success": "The project has been updated"
     },
     "copy_order": {
       "fail": "The order could not be copied",
@@ -111,6 +119,10 @@
     "delete_order": {
       "fail": "The order could not be deleted",
       "success": "The order has been deleted"
+    },
+    "delete_project": {
+      "fail": "The project could not be deleted",
+      "success": "The project has been deleted"
     }
   },
   "alerts": {
@@ -146,8 +158,14 @@
     "add_order": {
       "title": "Add order"
     },
+    "add_project": {
+      "title": "Add project"
+    },
     "edit_order": {
       "title": "Edit order"
+    },
+    "edit_project": {
+      "title": "Edit project"
     },
     "copy_order": {
       "title": "Copy an order"
@@ -155,6 +173,10 @@
     "delete_order": {
       "title": "Are you sure?",
       "desc": "The order will be permanently deleted from the system!"
+    },
+    "delete_project": {
+      "title": "Are you sure?",
+      "desc": "The project will be permanently deleted from the system!"
     },
     "not_authorized": {
       "title": "Access error!",

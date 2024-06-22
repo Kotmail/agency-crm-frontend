@@ -16,12 +16,19 @@ import { Link as Routerlink } from 'react-router-dom'
 import { PriorityChip } from './PriorityChip'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '../utils/helpers/formatDate'
+import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 
 type ProjectCardProps = {
   item: IProject
+  actionsList: ActionItem[]
+  onSelectActionHandler: (project: IProject, action: ActionItemKeys) => void
 }
 
-export const ProjectCard = ({ item }: ProjectCardProps) => {
+export const ProjectCard = ({
+  item,
+  actionsList,
+  onSelectActionHandler,
+}: ProjectCardProps) => {
   const theme = useTheme()
   const matchXlBreakpoint = useMediaQuery(theme.breakpoints.up('xl'))
   const progressPercentage =
@@ -64,6 +71,10 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
             </Link>
             {item.priority && <PriorityChip priority={item.priority} />}
           </Typography>
+          <ActionsDropdown
+            actions={actionsList}
+            onSelectHandler={(action) => onSelectActionHandler(item, action)}
+          />
         </Box>
         {item.description && (
           <Typography variant="body2" color="text.secondary" mb={2}>
