@@ -243,7 +243,8 @@
     "no_due_date": "Not specified"
   },
   "aria_labels": {
-    "list_of_pages": "List of pages"
+    "list_of_pages": "List of pages",
+    "actions": "Actions"
   },
   "app_name": "Agency CRM",
   "filter": {

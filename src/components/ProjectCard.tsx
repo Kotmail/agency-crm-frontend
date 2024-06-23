@@ -74,6 +74,9 @@ export const ProjectCard = ({
           <ActionsDropdown
             actions={actionsList}
             onSelectHandler={(action) => onSelectActionHandler(item, action)}
+            ariaLabel="aria_labels.actions"
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           />
         </Box>
         {item.description && (

@@ -1,5 +1,12 @@
 import { MouseEvent, useId, useState } from 'react'
-import { Box, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  PopoverOrigin,
+} from '@mui/material'
 import { MoreHoriz, SvgIconComponent } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
@@ -19,12 +26,16 @@ interface ActionsDropdownProps {
   actions: ActionItem[]
   onSelectHandler: (action: ActionItemKeys) => void
   ariaLabel?: string
+  transformOrigin?: PopoverOrigin
+  anchorOrigin?: PopoverOrigin
 }
 
 export const ActionsDropdown = ({
   actions,
   onSelectHandler,
   ariaLabel,
+  transformOrigin,
+  anchorOrigin,
   ...props
 }: ActionsDropdownProps) => {
   const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null)
@@ -59,6 +70,8 @@ export const ActionsDropdown = ({
         MenuListProps={{
           'aria-labelledby': buttonId,
         }}
+        transformOrigin={transformOrigin}
+        anchorOrigin={anchorOrigin}
       >
         {actions.map((action) => {
           return (

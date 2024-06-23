@@ -46,7 +46,16 @@ const createProjectSchema = Yup.object({
     .trim()
     .transform((value) => value || null)
     .nullable(),
-  dueDate: Yup.date().defined().nullable(),
+  dueDate: Yup.date()
+    .defined()
+    .transform((value: Date) => {
+      const date = new Date(value)
+
+      date.setHours(0, 0, 0, 0)
+
+      return date
+    })
+    .nullable(),
   priority: Yup.mixed<Priority>()
     .defined()
     .transform((value) => value || null)
@@ -177,7 +186,6 @@ export const ProjectFormDialog = ({
             multiline
             rows="4"
           />
-
           <Controller
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -193,14 +201,13 @@ export const ProjectFormDialog = ({
                     },
                   }}
                   label={t('input_placeholders.due_date')}
-                  value={(field.value && dayjs.utc(field.value)) || null}
+                  value={(field.value && dayjs(field.value)) || null}
                 />
               </LocalizationProvider>
             )}
             control={control}
             name="dueDate"
           />
-
           <FormControl size="small">
             <InputLabel id="projectPrioritySelectLabel">
               {t('input_placeholders.priority')}

@@ -243,7 +243,8 @@
     "no_due_date": "Не указан"
   },
   "aria_labels": {
-    "list_of_pages": "Список страниц"
+    "list_of_pages": "Список страниц",
+    "actions": "Действия"
   },
   "app_name": "Agency CRM",
   "filter": {
