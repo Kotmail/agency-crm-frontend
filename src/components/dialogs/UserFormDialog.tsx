@@ -36,7 +36,8 @@ import { enqueueSnackbar } from 'notistack'
 type UserFormFields = {
   email: string
   login: string | null
-  fullName: string
+  firstName: string
+  lastName: string
   password: string
   passwordConfirm: string
   role: UserRole
@@ -66,7 +67,8 @@ const createUserSchema = Yup.object({
   email: Yup.string()
     .email('form_errors.email.invalid')
     .required('form_errors.email.required'),
-  fullName: Yup.string().required('form_errors.full_name.required'),
+  firstName: Yup.string().required('form_errors.first_name.required'),
+  lastName: Yup.string().required('form_errors.last_name.required'),
   password: Yup.lazy((value) => yupPasswordFieldHandler(value)),
   passwordConfirm: Yup.string()
     .defined()
@@ -189,10 +191,17 @@ export const UserFormDialog = ({
             size="small"
           />
           <TextField
-            {...register('fullName')}
-            error={!!errors.fullName}
-            helperText={t(errors.fullName?.message || '')}
-            label={t('input_placeholders.full_name')}
+            {...register('firstName')}
+            error={!!errors.firstName}
+            helperText={t(errors.firstName?.message || '')}
+            label={t('input_placeholders.first_name')}
+            size="small"
+          />
+          <TextField
+            {...register('lastName')}
+            error={!!errors.lastName}
+            helperText={t(errors.lastName?.message || '')}
+            label={t('input_placeholders.last_name')}
             size="small"
           />
           <TextField

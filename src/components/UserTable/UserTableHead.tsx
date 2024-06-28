@@ -19,7 +19,10 @@ export const UserTableHead = () => {
         </TableCell>
         <TableCell width="23.75%">E-mail</TableCell>
         <TableCell width="23.75%">
-          {t('user_list_table.headings.full_name')}
+          {t('user_list_table.headings.first_name')}
+        </TableCell>
+        <TableCell width="23.75%">
+          {t('user_list_table.headings.last_name')}
         </TableCell>
         <TableCell width="23.75%">
           {t('user_list_table.headings.position')}

@@ -51,8 +51,11 @@
     "password_confirm": {
       "match": "Пароли должны совпадать"
     },
-    "full_name": {
-      "required": "Необходимо ввести ФИО"
+    "first_name": {
+      "required": "Необходимо ввести имя"
+    },
+    "last_name": {
+      "required": "Необходимо ввести фамилию"
     },
     "description": {
       "required": "Необходимо ввести описание",
@@ -69,7 +72,8 @@
     "password": "Пароль",
     "password_confirm": "Повторите пароль",
     "login": "Логин",
-    "full_name": "ФИО",
+    "first_name": "Имя",
+    "last_name": "Фамилия",
     "role": "Роль",
     "manager": "Менеджер",
     "executor": "Исполнитель",
@@ -209,7 +213,8 @@
     "headings": {
       "actions": "Действия",
       "login": "Логин",
-      "full_name": "ФИО",
+      "first_name": "Имя",
+      "last_name": "Фамилия",
       "position": "Должность"
     }
   },

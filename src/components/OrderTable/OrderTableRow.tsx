@@ -6,6 +6,7 @@ import { IOrder, OrderStatus } from '../../models/IOrder'
 import { useTranslation } from 'react-i18next'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from '../ActionsDropdown'
 import { UserRole } from '../../models/IUser'
+import { getUserFullName } from '../../utils/helpers/getUserFullName'
 
 type OrderTableRowProps = {
   order: IOrder
@@ -84,7 +85,7 @@ export const OrderTableRow = ({
           data-label={t('order_list_table.headings.creator')}
           className="cell-creator"
         >
-          {order.creator.fullName}
+          {getUserFullName(order.creator)}
         </TableCell>
       </Hider>
       <Hider roles={[UserRole.EXECUTOR]}>
@@ -92,7 +93,7 @@ export const OrderTableRow = ({
           data-label={t('order_list_table.headings.executor')}
           className="cell-executor"
         >
-          {order.executor.fullName}
+          {getUserFullName(order.executor)}
         </TableCell>
       </Hider>
       <TableCell

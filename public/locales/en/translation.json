@@ -51,8 +51,11 @@
     "password_confirm": {
       "match": "Passwords must match"
     },
-    "full_name": {
-      "required": "You must enter your full name"
+    "first_name": {
+      "required": "You must enter first name"
+    },
+    "last_name": {
+      "required": "You must enter last name"
     },
     "description": {
       "required": "Description is a required field",
@@ -69,7 +72,8 @@
     "password": "Password",
     "password_confirm": "Confirm password",
     "login": "Login",
-    "full_name": "Full name",
+    "first_name": "First name",
+    "last_name": "Last name",
     "role": "Role",
     "manager": "Manager",
     "executor": "Executor",
@@ -209,7 +213,8 @@
     "headings": {
       "actions": "Actions",
       "login": "Login",
-      "full_name": "Full name",
+      "first_name": "First name",
+      "last_name": "Last name",
       "position": "Position"
     }
   },

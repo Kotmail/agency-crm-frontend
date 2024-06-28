@@ -28,7 +28,7 @@ import { apiSlice } from '../redux/api'
 import { UserFormDialog, UserFormDialogProps } from './dialogs/UserFormDialog'
 import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
-import { formatUserFullName } from '../utils/helpers/formatUserFullName'
+import { getUserFullName } from '../utils/helpers/getUserFullName'
 import { usePopper } from '../hooks/usePopper'
 
 type DialogVariants = {
@@ -133,7 +133,7 @@ export const UserSnippet = () => {
                           fontWeight={500}
                           lineHeight={1.25}
                         >
-                          {formatUserFullName(user.fullName)}
+                          {getUserFullName(user)}
                         </Typography>
                         <Typography fontSize={14} fontWeight={300} color="gray">
                           {t(`user_roles.${user.role}`)}

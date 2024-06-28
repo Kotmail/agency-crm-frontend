@@ -42,6 +42,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { getUserFullName } from '../../utils/helpers/getUserFullName'
 
 dayjs.extend(utc)
 
@@ -235,7 +236,7 @@ export const OrderFormDialog = ({
                   >
                     {managers.map((manager) => (
                       <MenuItem key={manager.id} value={manager.id}>
-                        {manager.fullName}
+                        {getUserFullName(manager)}
                       </MenuItem>
                     ))}
                   </Select>
@@ -260,7 +261,7 @@ export const OrderFormDialog = ({
                   >
                     {executors.map((executor) => (
                       <MenuItem key={executor.id} value={executor.id}>
-                        {executor.fullName}
+                        {getUserFullName(executor)}
                       </MenuItem>
                     ))}
                   </Select>
