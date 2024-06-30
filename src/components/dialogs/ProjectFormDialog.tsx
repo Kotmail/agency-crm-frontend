@@ -49,6 +49,10 @@ const createProjectSchema = Yup.object({
   dueDate: Yup.date()
     .defined()
     .transform((value: Date) => {
+      if (!value) {
+        return null
+      }
+
       const date = new Date(value)
 
       date.setHours(0, 0, 0, 0)
