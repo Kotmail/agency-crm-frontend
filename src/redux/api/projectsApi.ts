@@ -1,5 +1,6 @@
 import { apiSlice } from '.'
 import { IProject, Priority } from '../../models/IProject'
+import { IUser } from '../../models/IUser'
 
 type QueryProjectsRequest = {
   take?: number
@@ -11,6 +12,7 @@ export interface CreateProjectRequest {
   description: string | null
   dueDate: Date | null
   priority: Priority | null
+  creator: IUser
 }
 
 interface UpdateProjectRequest

@@ -64,6 +64,9 @@
     "cost": {
       "required": "Необходимо ввести стоимость",
       "positive": "Стоимость должна содержать позитивное число"
+    },
+    "creator": {
+      "required": "Менеджер должен быть выбран"
     }
   },
   "input_placeholders": {
@@ -80,7 +83,11 @@
     "description": "Описание",
     "cost": "Стоимость",
     "priority": "Приоритет",
-    "due_date": "Крайний срок"
+    "due_date": "Крайний срок",
+    "creator": {
+      "label": "Менеджер",
+      "placeholder": "Введите данные для фильтрации"
+    }
   },
   "notifications": {
     "login": {

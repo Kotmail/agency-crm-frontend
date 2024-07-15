@@ -4,6 +4,7 @@ import { RootState } from '../store'
 import { updateAuthUser } from '../features/authSlice'
 
 export type UsersFilterParams = {
+  q?: string
   role?: UserRole[]
 }
 

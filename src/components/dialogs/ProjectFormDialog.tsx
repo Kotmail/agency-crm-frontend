@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import * as Yup from 'yup'
+import { string, number, object, mixed, date, ObjectSchema } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Controller,
@@ -36,17 +36,30 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
+import { IUser, UserRole } from '../../models/IUser'
+import { useUsersQuery } from '../../redux/api/usersApi'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { RHFUserAutocompleteField } from '../RHFUserAutocompleteField'
 
 interface ProjectFormFields extends CreateProjectRequest {}
 
-const createProjectSchema = Yup.object({
-  name: Yup.string().required('form_errors.name.required'),
-  description: Yup.string()
+const userObjectSchema: ObjectSchema<IUser> = object({
+  id: number().defined(),
+  email: string().defined(),
+  login: string().nullable().defined(),
+  firstName: string().defined(),
+  lastName: string().defined(),
+  role: mixed<UserRole>().oneOf(Object.values(UserRole)).defined(),
+})
+
+const createProjectSchema = object({
+  name: string().required('form_errors.name.required'),
+  description: string()
     .defined()
     .trim()
     .transform((value) => value || null)
     .nullable(),
-  dueDate: Yup.date()
+  dueDate: date()
     .defined()
     .transform((value: Date) => {
       if (!value) {
@@ -60,11 +73,22 @@ const createProjectSchema = Yup.object({
       return date
     })
     .nullable(),
-  priority: Yup.mixed<Priority>()
+  priority: mixed<Priority>()
     .defined()
     .transform((value) => value || null)
     .oneOf([...Object.values(Priority), '' as Priority])
     .nullable(),
+  creator: object()
+    .concat(userObjectSchema)
+    .defined()
+    .transform((value) => {
+      if (value && Object.keys(value).length === 0) {
+        return null
+      }
+
+      return value
+    })
+    .required('form_errors.creator.required'),
 })
 
 export type ProjectFormDialogProps = {
@@ -77,6 +101,11 @@ export type ProjectFormDialogProps = {
 const defaultValues: DefaultValues<ProjectFormFields> = {
   dueDate: null,
   priority: '' as Priority,
+  creator: {},
+}
+
+const getUsersByRole = (users: IUser[], role: UserRole) => {
+  return users.filter((user) => user.role === role)
 }
 
 export const ProjectFormDialog = ({
@@ -96,9 +125,19 @@ export const ProjectFormDialog = ({
   } = useForm<ProjectFormFields>({
     resolver: yupResolver(createProjectSchema),
   })
+  const { data: userData } = useUsersQuery(
+    {
+      take: -1,
+      role: [UserRole.MANAGER, UserRole.EXECUTOR],
+    },
+    {
+      skip: !props.open,
+    },
+  )
   const [addProject] = useAddProjectMutation()
   const [updateProject] = useUpdateProjectMutation()
   const { t } = useTranslation()
+  const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     if (project) {
@@ -107,9 +146,13 @@ export const ProjectFormDialog = ({
         priority: project.priority || defaultValues.priority,
       })
     } else {
-      reset(defaultValues)
+      reset({
+        ...defaultValues,
+        creator:
+          user && user.role === UserRole.MANAGER ? user : defaultValues.creator,
+      })
     }
-  }, [project, reset])
+  }, [project, user, reset])
 
   const onSubmit: SubmitHandler<ProjectFormFields> = async (data) => {
     try {
@@ -235,6 +278,13 @@ export const ProjectFormDialog = ({
               name="priority"
             />
           </FormControl>
+          <RHFUserAutocompleteField
+            control={control}
+            name="creator"
+            options={
+              userData ? getUsersByRole(userData.items, UserRole.MANAGER) : []
+            }
+          />
         </Stack>
       </DialogContent>
       <DialogActions sx={{ padding: '8px 24px 16px' }}>

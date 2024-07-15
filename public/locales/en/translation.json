@@ -64,6 +64,9 @@
     "cost": {
       "required": "Cost is a required field",
       "positive": "The cost must contain a positive number"
+    },
+    "creator": {
+      "required": "The manager must be selected"
     }
   },
   "input_placeholders": {
@@ -80,7 +83,11 @@
     "description": "Description",
     "cost": "Cost",
     "priority": "Priority",
-    "due_date": "Due Date"
+    "due_date": "Due Date",
+    "creator": {
+      "label": "Manager",
+      "placeholder": "Enter filtering information"
+    }
   },
   "notifications": {
     "login": {
