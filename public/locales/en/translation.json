@@ -87,6 +87,10 @@
     "creator": {
       "label": "Manager",
       "placeholder": "Enter filtering information"
+    },
+    "members": {
+      "label": "Members",
+      "placeholder": "Enter filtering information"
     }
   },
   "notifications": {

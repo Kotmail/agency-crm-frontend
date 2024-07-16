@@ -12,6 +12,7 @@ type RHFUserAutocompleteFieldProps<
   control: Control<TField>
   name: Path<TField>
   options: O[]
+  multiple?: boolean
 }
 
 export const RHFUserAutocompleteField = <
@@ -21,6 +22,7 @@ export const RHFUserAutocompleteField = <
   control,
   name,
   options,
+  multiple,
 }: RHFUserAutocompleteFieldProps<O, TField>) => {
   const { t } = useTranslation()
 
@@ -34,8 +36,9 @@ export const RHFUserAutocompleteField = <
       }) => (
         <Autocomplete
           {...field}
-          value={value && value?.id ? value : null}
+          value={multiple ? value : value && value?.id ? value : null}
           options={options}
+          multiple={multiple}
           isOptionEqualToValue={(user, value) =>
             getUserFullName(user) === getUserFullName(value)
           }

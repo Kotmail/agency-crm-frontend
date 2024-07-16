@@ -87,6 +87,10 @@
     "creator": {
       "label": "Менеджер",
       "placeholder": "Введите данные для фильтрации"
+    },
+    "members": {
+      "label": "Участники",
+      "placeholder": "Введите данные для фильтрации"
     }
   },
   "notifications": {

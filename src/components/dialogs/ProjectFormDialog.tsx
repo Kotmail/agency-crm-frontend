@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { string, number, object, mixed, date, ObjectSchema } from 'yup'
+import { string, number, object, array, mixed, date, ObjectSchema } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Controller,
@@ -89,6 +89,7 @@ const createProjectSchema = object({
       return value
     })
     .required('form_errors.creator.required'),
+  members: array().defined(),
 })
 
 export type ProjectFormDialogProps = {
@@ -102,10 +103,7 @@ const defaultValues: DefaultValues<ProjectFormFields> = {
   dueDate: null,
   priority: '' as Priority,
   creator: {},
-}
-
-const getUsersByRole = (users: IUser[], role: UserRole) => {
-  return users.filter((user) => user.role === role)
+  members: [],
 }
 
 export const ProjectFormDialog = ({
@@ -191,6 +189,10 @@ export const ProjectFormDialog = ({
 
   const closeDialogHandler = () => {
     onClose && onClose({}, 'escapeKeyDown')
+  }
+
+  const filterUsersByRole = (role: UserRole) => {
+    return userData ? userData.items.filter((user) => user.role === role) : []
   }
 
   return (
@@ -281,9 +283,13 @@ export const ProjectFormDialog = ({
           <RHFUserAutocompleteField
             control={control}
             name="creator"
-            options={
-              userData ? getUsersByRole(userData.items, UserRole.MANAGER) : []
-            }
+            options={filterUsersByRole(UserRole.MANAGER)}
+          />
+          <RHFUserAutocompleteField
+            control={control}
+            name="members"
+            options={filterUsersByRole(UserRole.EXECUTOR)}
+            multiple
           />
         </Stack>
       </DialogContent>

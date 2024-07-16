@@ -13,6 +13,7 @@ export interface CreateProjectRequest {
   dueDate: Date | null
   priority: Priority | null
   creator: IUser
+  members: IUser[]
 }
 
 interface UpdateProjectRequest
