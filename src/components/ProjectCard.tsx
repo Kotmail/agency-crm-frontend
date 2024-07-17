@@ -17,6 +17,8 @@ import { PriorityChip } from './PriorityChip'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '../utils/helpers/formatDate'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
+import { Hider } from './Hider'
+import { UserRole } from '../models/IUser'
 
 type ProjectCardProps = {
   item: IProject
@@ -71,13 +73,15 @@ export const ProjectCard = ({
             </Link>
             {item.priority && <PriorityChip priority={item.priority} />}
           </Typography>
-          <ActionsDropdown
-            actions={actionsList}
-            onSelectHandler={(action) => onSelectActionHandler(item, action)}
-            ariaLabel="aria_labels.actions"
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          />
+          <Hider roles={[UserRole.EXECUTOR]}>
+            <ActionsDropdown
+              actions={actionsList}
+              onSelectHandler={(action) => onSelectActionHandler(item, action)}
+              ariaLabel="aria_labels.actions"
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            />
+          </Hider>
         </Box>
         {item.description && (
           <Typography variant="body2" color="text.secondary" mb={2}>
@@ -140,7 +144,7 @@ export const ProjectCard = ({
               sx={{
                 span: {
                   display: 'block',
-                  marginTop: 1.05,
+                  marginTop: 0.6,
                   fontWeight: 400,
                   fontSize: '13px',
                 },

@@ -108,6 +108,14 @@ export const ProjectsGrid = ({ itemsPerPage }: ProjectsGridProps) => {
     return <Alert severity="error">{t('alerts.projects.request_error')}</Alert>
   }
 
+  if (projectsData && projectsData.items.length === 0) {
+    return (
+      <Alert severity="info" sx={{ border: '1px solid #5ec7f2' }}>
+        {t('alerts.projects.empty_data')}
+      </Alert>
+    )
+  }
+
   return (
     <>
       <Box

@@ -149,7 +149,8 @@
       "request_error": "An error occurred when requesting user data..."
     },
     "projects": {
-      "request_error": "An error occurred when requesting project data..."
+      "request_error": "An error occurred when requesting project data...",
+      "empty_data": "No projects found"
     }
   },
   "dialogs": {
