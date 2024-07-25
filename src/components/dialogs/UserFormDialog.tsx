@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IUser, UserRole } from '../../models/IUser'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -32,6 +32,7 @@ import {
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { isQueryError } from '../../redux/api/helpers'
 import { enqueueSnackbar } from 'notistack'
+import { AvatarUploader } from '../AvatarUploader'
 
 type UserFormFields = {
   email: string
@@ -41,6 +42,7 @@ type UserFormFields = {
   password: string
   passwordConfirm: string
   role: UserRole
+  avatar: FileList | null
 }
 
 const yupPasswordFieldHandler = (value: unknown, isRequired = true) => {
@@ -62,6 +64,9 @@ const yupPasswordFieldHandler = (value: unknown, isRequired = true) => {
     .matches(/^(?=.*[!@#%&$*~)(?])/, 'form_errors.password.has_special_char')
 }
 
+const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_FILE_SIZE = 524288 // 0.5MB
+
 const createUserSchema = Yup.object({
   login: Yup.string().defined().nullable(),
   email: Yup.string()
@@ -74,6 +79,25 @@ const createUserSchema = Yup.object({
     .defined()
     .oneOf([Yup.ref('password')], 'form_errors.password_confirm.match'),
   role: Yup.mixed<UserRole>().oneOf(Object.values(UserRole)).defined(),
+  avatar: Yup.mixed<FileList>()
+    .defined()
+    .test(
+      'fileFormat',
+      'form_errors.avatar.file_type',
+      (files) =>
+        !(files instanceof FileList) ||
+        !files.length ||
+        ALLOWED_FORMATS.includes(files[0].type),
+    )
+    .test(
+      'fileSize',
+      'form_errors.avatar.file_size',
+      (files) =>
+        !(files instanceof FileList) ||
+        !files.length ||
+        files[0].size <= MAX_FILE_SIZE,
+    )
+    .nullable(),
 })
 
 const updateUserSchema = createUserSchema.shape({
@@ -102,28 +126,48 @@ export const UserFormDialog = ({
     handleSubmit,
     reset,
     control,
+    setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<UserFormFields>({
     resolver: yupResolver(user ? updateUserSchema : createUserSchema),
     defaultValues,
   })
+  const formRef = useRef<HTMLFormElement | null>(null)
   const { user: authUser } = useAppSelector((state) => state.auth)
   const [addUser] = useAddUserMutation()
   const [updateUser] = useUpdateUserMutation()
   const { t } = useTranslation()
   const isUserSameAuth = authUser?.id == user?.id
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const avatarPreview =
+    user && user.avatar ? import.meta.env.VITE_AVATARS_PATH + user.avatar : null
 
   useEffect(() => {
-    reset(user || defaultValues)
+    if (user) {
+      reset({ ...user, avatar: undefined })
+    } else {
+      reset(defaultValues)
+    }
   }, [user, reset])
 
   const onSubmit: SubmitHandler<UserFormFields> = async (data) => {
+    const formData = new FormData(formRef.current || undefined)
+
+    if (avatarFile) {
+      formData.set('avatar', avatarFile)
+    }
+
+    if (data.avatar === null) {
+      formData.set('avatar', 'null')
+    }
+
     try {
       if (!user) {
-        await addUser(data).unwrap()
+        await addUser(formData).unwrap()
         reset()
       } else {
-        await updateUser({ id: user.id, ...data }).unwrap()
+        await updateUser({ id: user.id, formData }).unwrap()
       }
 
       closeDialogHandler()
@@ -149,6 +193,17 @@ export const UserFormDialog = ({
     }
   }
 
+  const onChangeAvatar = (value: File | null) => {
+    if (value) {
+      setAvatarFile(value)
+      return
+    }
+
+    setValue('avatar', value)
+    setAvatarFile(null)
+    clearErrors('avatar')
+  }
+
   const closeDialogHandler = () => {
     onClose && onClose({}, 'escapeKeyDown')
   }
@@ -160,6 +215,7 @@ export const UserFormDialog = ({
       onClose={onClose}
       PaperProps={{
         component: 'form',
+        ref: formRef,
         onSubmit: handleSubmit(onSubmit),
       }}
       {...props}
@@ -219,6 +275,13 @@ export const UserFormDialog = ({
             helperText={t(errors.passwordConfirm?.message || '')}
             label={t('input_placeholders.password_confirm')}
             size="small"
+          />
+          <AvatarUploader
+            preview={avatarPreview}
+            label={t('input_placeholders.avatar')}
+            onChangeHandler={onChangeAvatar}
+            error={errors.avatar}
+            {...register('avatar')}
           />
           {!isUserSameAuth && (
             <FormControl>

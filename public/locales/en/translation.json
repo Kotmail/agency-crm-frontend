@@ -23,6 +23,8 @@
     "delete": "Delete",
     "move": "Move",
     "copy": "Copy",
+    "upload": "Upload",
+    "change": "Change",
     "view_details": "View details",
     "new_order": "New order",
     "new_project": "New project",
@@ -67,6 +69,10 @@
     },
     "creator": {
       "required": "The manager must be selected"
+    },
+    "avatar": {
+      "file_type": "Incorrect file format",
+      "file_size": "The maximum file size has been exceeded"
     }
   },
   "input_placeholders": {
@@ -78,6 +84,7 @@
     "first_name": "First name",
     "last_name": "Last name",
     "role": "Role",
+    "avatar": "Avatar",
     "manager": "Manager",
     "executor": "Executor",
     "description": "Description",
@@ -278,5 +285,8 @@
       "asc": "ASC",
       "desc": "DESC"
     }
+  },
+  "avatar_uploader": {
+    "note": "Allowed formats: JPG, PNG, WEBP.<br />Max file size: 500KB."
   }
 }

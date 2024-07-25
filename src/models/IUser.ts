@@ -11,4 +11,5 @@ export interface IUser {
   firstName: string
   lastName: string
   role: UserRole
+  avatar: string | null
 }

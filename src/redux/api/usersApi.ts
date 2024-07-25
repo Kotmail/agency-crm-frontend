@@ -13,6 +13,11 @@ type QueryUsersRequest = {
   page?: number
 } & UsersFilterParams
 
+type UpdateUserRequest = {
+  id: number
+  formData: FormData
+}
+
 const apiWithTag = apiSlice.enhanceEndpoints({
   addTagTypes: ['Users'],
 })
@@ -29,7 +34,7 @@ const usersApi = apiWithTag.injectEndpoints({
       }),
       providesTags: ['Users'],
     }),
-    addUser: builder.mutation<IUser, Omit<IUser, 'id'>>({
+    addUser: builder.mutation<IUser, FormData>({
       query: (body) => ({
         url: '/users',
         method: 'POST',
@@ -37,11 +42,11 @@ const usersApi = apiWithTag.injectEndpoints({
       }),
       invalidatesTags: ['Users'],
     }),
-    updateUser: builder.mutation<IUser, Partial<IUser> & Pick<IUser, 'id'>>({
-      query: ({ id, ...body }) => ({
+    updateUser: builder.mutation<IUser, UpdateUserRequest>({
+      query: ({ id, formData }) => ({
         url: `/users/${id}`,
         method: 'PUT',
-        body,
+        body: formData,
       }),
       invalidatesTags: ['Users'],
       async onQueryStarted(_, { dispatch, getState, queryFulfilled }) {
