@@ -1,7 +1,8 @@
 import { HTMLAttributes } from 'react'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { IUser } from '../models/IUser'
 import { getUserFullName } from '../utils/helpers/getUserFullName'
+import { UserAvatar } from './UserAvatar'
 
 type AutocompleteUserOptionProps = {
   user: IUser
@@ -24,7 +25,7 @@ export const AutocompleteUserOption = ({
         },
       }}
     >
-      <Avatar alt={getUserFullName(user)} sx={{ width: 36, height: 36 }} />
+      <UserAvatar user={user} sx={{ width: 36, height: 36 }} />
       <Box>
         <Typography display="block" variant="subtitle2" marginBottom=".15em">
           {getUserFullName(user)}

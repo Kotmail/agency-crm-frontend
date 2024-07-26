@@ -4,7 +4,6 @@ import {
   SettingsOutlined,
 } from '@mui/icons-material'
 import {
-  Avatar,
   Box,
   ClickAwayListener,
   Divider,
@@ -30,6 +29,7 @@ import { ConfirmDialog, ConfirmDialogProps } from './dialogs/ConfirmDialog'
 import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 import { getUserFullName } from '../utils/helpers/getUserFullName'
 import { usePopper } from '../hooks/usePopper'
+import { UserAvatar } from './UserAvatar'
 
 type DialogVariants = {
   userForm: UserFormDialogProps
@@ -102,7 +102,7 @@ export const UserSnippet = () => {
           onClick={openPopper}
           sx={{ p: 0 }}
         >
-          <Avatar sx={{ width: 34, height: 34 }} />
+          {user && <UserAvatar user={user} sx={{ width: 36, height: 36 }} />}
         </IconButton>
       </Tooltip>
       <Popper

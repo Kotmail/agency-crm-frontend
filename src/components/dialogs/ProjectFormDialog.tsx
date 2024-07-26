@@ -50,6 +50,7 @@ const userObjectSchema: ObjectSchema<IUser> = object({
   firstName: string().defined(),
   lastName: string().defined(),
   role: mixed<UserRole>().oneOf(Object.values(UserRole)).defined(),
+  avatar: string().nullable().defined(),
 })
 
 const createProjectSchema = object({

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   AvatarGroup,
   Box,
   Button,
@@ -19,6 +18,7 @@ import { formatDate } from '../utils/helpers/formatDate'
 import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 import { Hider } from './Hider'
 import { UserRole } from '../models/IUser'
+import { UserAvatar } from './UserAvatar'
 
 type ProjectCardProps = {
   item: IProject
@@ -114,7 +114,7 @@ export const ProjectCard = ({
                 }}
               >
                 {item.members.map((member) => (
-                  <Avatar key={member.id} />
+                  <UserAvatar user={member} key={member.id} />
                 ))}
               </AvatarGroup>
             </Box>
@@ -130,7 +130,8 @@ export const ProjectCard = ({
             >
               {t('project.labels.manager')}
             </Typography>
-            <Avatar
+            <UserAvatar
+              user={item.creator}
               sx={{
                 marginTop: '2px',
               }}
