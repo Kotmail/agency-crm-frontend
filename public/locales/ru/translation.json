@@ -288,5 +288,13 @@
   },
   "avatar_uploader": {
     "note": "Разрешенные форматы: JPG, PNG, WEBP.<br />Максимальный размер файла: 500КБ."
+  },
+  "task_board": {
+    "group_labels": {
+      "unsorted": "Неразобранное",
+      "in_review": "На проверке",
+      "in_progress": "В работе",
+      "completed": "Выполнено"
+    }
   }
 }

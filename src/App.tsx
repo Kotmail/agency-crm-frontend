@@ -13,6 +13,7 @@ import { OrdersPage } from './pages/OrdersPage'
 import { UsersPage } from './pages/UsersPage'
 import { ArchivePage } from './pages/ArchivePage'
 import { ProjectsPage } from './pages/ProjectsPage'
+import { SingleProjectPage } from './pages/SingleProjectPage'
 import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -119,15 +120,6 @@ const theme = createTheme({
         }),
       },
     },
-    MuiAvatar: {
-      styleOverrides: {
-        root: {
-          width: 28,
-          height: 28,
-          fontSize: 13,
-        },
-      },
-    },
     MuiLinearProgress: {
       defaultProps: {
         variant: 'determinate',
@@ -182,6 +174,7 @@ const App = () => {
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/archive" element={<ArchivePage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:id" element={<SingleProjectPage />} />
               </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />

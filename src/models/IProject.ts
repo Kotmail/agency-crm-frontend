@@ -1,3 +1,4 @@
+import { ITask } from './ITask'
 import { IUser } from './IUser'
 
 export enum Priority {
@@ -14,6 +15,7 @@ export interface IProject {
   priority: Priority | null
   creator: IUser
   members: IUser[]
+  tasks?: ITask[]
   createdAt: Date
   taskTotal?: number
   taskCompleted?: number

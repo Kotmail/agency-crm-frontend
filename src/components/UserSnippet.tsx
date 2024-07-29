@@ -102,7 +102,7 @@ export const UserSnippet = () => {
           onClick={openPopper}
           sx={{ p: 0 }}
         >
-          {user && <UserAvatar user={user} sx={{ width: 36, height: 36 }} />}
+          {user && <UserAvatar user={user} sx={{ width: 33, height: 33 }} />}
         </IconButton>
       </Tooltip>
       <Popper

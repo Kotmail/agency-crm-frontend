@@ -1,5 +1,4 @@
 import {
-  AvatarGroup,
   Box,
   Button,
   Card,
@@ -19,6 +18,7 @@ import { ActionItem, ActionItemKeys, ActionsDropdown } from './ActionsDropdown'
 import { Hider } from './Hider'
 import { UserRole } from '../models/IUser'
 import { UserAvatar } from './UserAvatar'
+import { AvatarGroup } from './AvatarGroup'
 
 type ProjectCardProps = {
   item: IProject
@@ -107,16 +107,15 @@ export const ProjectCard = ({
                 {t('project.labels.members')}
               </Typography>
               <AvatarGroup
-                total={item.members.length}
+                users={item.members}
                 max={matchXlBreakpoint ? 4 : 3}
                 sx={{
-                  marginLeft: '-2px',
+                  '.MuiAvatar-root': {
+                    width: 28,
+                    height: 28,
+                  },
                 }}
-              >
-                {item.members.map((member) => (
-                  <UserAvatar user={member} key={member.id} />
-                ))}
-              </AvatarGroup>
+              />
             </Box>
           )}
           <Box display="flex" flexDirection="column" alignItems="flex-start">

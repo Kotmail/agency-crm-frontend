@@ -36,6 +36,11 @@ const projectsApi = apiWithTag.injectEndpoints({
       }),
       providesTags: ['Projects'],
     }),
+    oneProject: builder.query<IProject, number>({
+      query: (id) => ({
+        url: `/projects/${id}`,
+      }),
+    }),
     addProject: builder.mutation<IProject, CreateProjectRequest>({
       query: (body) => ({
         url: '/projects',
@@ -67,6 +72,7 @@ const projectsApi = apiWithTag.injectEndpoints({
 
 export const {
   useProjectsQuery,
+  useOneProjectQuery,
   useAddProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,

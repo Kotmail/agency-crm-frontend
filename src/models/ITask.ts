@@ -3,8 +3,8 @@ import { IUser } from './IUser'
 
 export enum TaskStatus {
   UNSORTED = 'unsorted',
-  IN_PROGRESS = 'in-progress',
-  IN_REVIEW = 'in-review',
+  IN_PROGRESS = 'in_progress',
+  IN_REVIEW = 'in_review',
   COMPLETED = 'completed',
 }
 

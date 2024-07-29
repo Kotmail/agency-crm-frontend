@@ -288,5 +288,13 @@
   },
   "avatar_uploader": {
     "note": "Allowed formats: JPG, PNG, WEBP.<br />Max file size: 500KB."
+  },
+  "task_board": {
+    "group_labels": {
+      "unsorted": "Unsorted",
+      "in_review": "In Review",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    }
   }
 }
