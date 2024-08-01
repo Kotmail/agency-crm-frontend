@@ -12,7 +12,12 @@ const chipColors: ChipColorsType = {
   [Priority.HIGH]: 'error',
 }
 
-export const PriorityChip = ({ priority }: { priority: Priority | null }) => {
+export const PriorityChip = ({
+  priority,
+  ...props
+}: {
+  priority: Priority | null
+}) => {
   const { t } = useTranslation()
 
   if (!priority) {
@@ -20,6 +25,10 @@ export const PriorityChip = ({ priority }: { priority: Priority | null }) => {
   }
 
   return (
-    <Chip color={chipColors[priority]} label={t(`priorities.${priority}`)} />
+    <Chip
+      color={chipColors[priority]}
+      label={t(`priorities.${priority}`)}
+      {...props}
+    />
   )
 }

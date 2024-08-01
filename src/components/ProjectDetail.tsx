@@ -18,7 +18,7 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
           {project.name}
         </Typography>
       </ProjectHeader>
-      <TaskBoard tasks={project.tasks!} />
+      <TaskBoard tasks={project.tasks!} view="kanban" />
     </>
   )
 }

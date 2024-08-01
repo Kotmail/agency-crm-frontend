@@ -1,12 +1,12 @@
-import { Dictionary } from 'lodash'
-import { ITask } from '../models/ITask'
-import { Box, styled } from '@mui/material'
+import { styled } from '@mui/material'
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { TaskRow } from './TaskRow'
 import { useTranslation } from 'react-i18next'
+import { TaskBoardData } from './TaskBoard'
+import { CounterBadge } from './CounterBadge'
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters defaultExpanded square {...props} />
@@ -28,17 +28,8 @@ const AccordionSummary = styled(MuiAccordionSummary)({
   },
 })
 
-const CounterBadge = styled(Box)({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 24,
-  height: 24,
-  marginLeft: '10px',
-  borderRadius: '50%',
-  backgroundColor: '#dee3e9',
-  fontWeight: 600,
-  fontSize: 12,
+const Counter = styled(CounterBadge)({
+  marginLeft: 10,
 })
 
 const AccordionDetails = styled(MuiAccordionDetails)({
@@ -49,23 +40,24 @@ const AccordionDetails = styled(MuiAccordionDetails)({
   },
 })
 
-export const TasksAccordion = ({ tasks }: { tasks: Dictionary<ITask[]> }) => {
+export const ListBoard = ({ groups, groupedTasks }: TaskBoardData) => {
   const { t } = useTranslation()
 
-  return Object.entries(tasks).map(([status, tasks]) => (
-    <Accordion key={status}>
+  return groups.map((group) => (
+    <Accordion key={group}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls={`${status}-content`}
-        id={`${status}-header`}
+        aria-controls={`${group}-content`}
+        id={`${group}-header`}
       >
-        {t(`task_board.group_labels.${status}`)}
-        <CounterBadge>{tasks.length}</CounterBadge>
+        {t(`task_board.group_labels.${group}`)}
+        <Counter value={groupedTasks[group]?.length} />
       </AccordionSummary>
       <AccordionDetails>
-        {tasks.map((task) => (
-          <TaskRow key={task.id} task={task} />
-        ))}
+        {groupedTasks[group]?.length > 0 &&
+          groupedTasks[group].map((task) => (
+            <TaskRow key={task.id} task={task} />
+          ))}
       </AccordionDetails>
     </Accordion>
   ))

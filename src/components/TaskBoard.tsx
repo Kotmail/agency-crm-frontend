@@ -1,9 +1,42 @@
-import { groupBy } from 'lodash'
-import { ITask } from '../models/ITask'
-import { TasksAccordion } from './TasksAccordion'
+import { Dictionary, groupBy } from 'lodash'
+import { ITask, TaskStatus } from '../models/ITask'
+import { ListBoard } from './ListBoard'
+import { useEffect, useState } from 'react'
+import { KanbanBoard } from './KanbanBoard'
 
-export const TaskBoard = ({ tasks }: { tasks: ITask[] }) => {
-  const groupedTasksByStatus = groupBy(tasks, ({ status }) => status)
+export type TaskBoardData = {
+  groups: TaskStatus[]
+  groupedTasks: Dictionary<ITask[]>
+}
 
-  return <TasksAccordion tasks={groupedTasksByStatus} />
+export type TaskBoardView = 'kanban' | 'list'
+
+type TaskBoardProps = {
+  tasks: ITask[]
+  view: TaskBoardView
+}
+
+export const TaskBoard = ({ tasks, view }: TaskBoardProps) => {
+  const [boardData, setBoardData] = useState<TaskBoardData>({
+    groups: [
+      TaskStatus.UNSORTED,
+      TaskStatus.IN_PROGRESS,
+      TaskStatus.IN_REVIEW,
+      TaskStatus.COMPLETED,
+    ],
+    groupedTasks: {},
+  })
+
+  useEffect(() => {
+    setBoardData((data) => ({
+      ...data,
+      groupedTasks: groupBy(tasks, ({ status }) => status),
+    }))
+  }, [tasks])
+
+  return view === 'kanban' ? (
+    <KanbanBoard {...boardData} />
+  ) : (
+    <ListBoard {...boardData} />
+  )
 }
