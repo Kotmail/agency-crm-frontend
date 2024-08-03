@@ -268,7 +268,10 @@
   },
   "aria_labels": {
     "list_of_pages": "Список страниц",
-    "actions": "Действия"
+    "actions": "Действия",
+    "project_tablist": "Список вкладок проекта",
+    "kanban_view": "Канбан",
+    "list_view": "Список"
   },
   "app_name": "Agency CRM",
   "filter": {
@@ -296,5 +299,9 @@
       "in_progress": "В работе",
       "completed": "Выполнено"
     }
+  },
+  "tabs": {
+    "about_project": "О проекте",
+    "tasks": "Задачи"
   }
 }

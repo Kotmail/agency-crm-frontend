@@ -13,10 +13,11 @@ import { OrdersPage } from './pages/OrdersPage'
 import { UsersPage } from './pages/UsersPage'
 import { ArchivePage } from './pages/ArchivePage'
 import { ProjectsPage } from './pages/ProjectsPage'
-import { SingleProjectPage } from './pages/SingleProjectPage'
+import { ProjectPage } from './pages/ProjectPage'
 import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { TaskBoard } from './components/TaskBoard'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import {
   red,
@@ -174,7 +175,10 @@ const App = () => {
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/archive" element={<ArchivePage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/projects/:id" element={<SingleProjectPage />} />
+                <Route path="/projects/:id" element={<ProjectPage />}>
+                  <Route index element={<>About project...</>} />
+                  <Route path="tasks" element={<TaskBoard />} />
+                </Route>
               </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />

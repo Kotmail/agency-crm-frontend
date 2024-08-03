@@ -65,7 +65,7 @@ export const ProjectCard = ({
           >
             <Link
               component={Routerlink}
-              to={`/projects/${item.id}`}
+              to={`/projects/${item.id}/tasks`}
               underline="none"
               color="inherit"
             >

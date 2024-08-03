@@ -3,6 +3,9 @@ import { ITask, TaskStatus } from '../models/ITask'
 import { ListBoard } from './ListBoard'
 import { useEffect, useState } from 'react'
 import { KanbanBoard } from './KanbanBoard'
+import { useTasksQuery } from '../redux/api/tasksApi'
+import { CircularProgress } from '@mui/material'
+import { useProjectTabsContext } from '../hooks/useProjectTabsContext'
 
 export type TaskBoardData = {
   groups: TaskStatus[]
@@ -11,12 +14,12 @@ export type TaskBoardData = {
 
 export type TaskBoardView = 'kanban' | 'list'
 
-type TaskBoardProps = {
-  tasks: ITask[]
-  view: TaskBoardView
-}
-
-export const TaskBoard = ({ tasks, view }: TaskBoardProps) => {
+export const TaskBoard = () => {
+  const { project, view } = useProjectTabsContext()
+  const { data: tasks, isLoading: isTasksLoading } = useTasksQuery({
+    take: -1,
+    projectId: project.id,
+  })
   const [boardData, setBoardData] = useState<TaskBoardData>({
     groups: [
       TaskStatus.UNSORTED,
@@ -30,9 +33,13 @@ export const TaskBoard = ({ tasks, view }: TaskBoardProps) => {
   useEffect(() => {
     setBoardData((data) => ({
       ...data,
-      groupedTasks: groupBy(tasks, ({ status }) => status),
+      groupedTasks: groupBy(tasks?.items, ({ status }) => status),
     }))
   }, [tasks])
+
+  if (isTasksLoading) {
+    return <CircularProgress />
+  }
 
   return view === 'kanban' ? (
     <KanbanBoard {...boardData} />

@@ -268,7 +268,10 @@
   },
   "aria_labels": {
     "list_of_pages": "List of pages",
-    "actions": "Actions"
+    "actions": "Actions",
+    "project_tablist": "List of project tabs",
+    "kanban_view": "Kanban view",
+    "list_view": "List view"
   },
   "app_name": "Agency CRM",
   "filter": {
@@ -296,5 +299,9 @@
       "in_progress": "In Progress",
       "completed": "Completed"
     }
+  },
+  "tabs": {
+    "about_project": "About project",
+    "tasks": "Tasks"
   }
 }

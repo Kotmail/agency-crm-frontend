@@ -16,10 +16,15 @@ const Accordion = styled((props: AccordionProps) => (
   '&::before': {
     display: 'none',
   },
+  '&:first-of-type .MuiAccordionSummary-root': {
+    paddingTop: 0,
+    borderTop: 'none',
+  },
 })
 
 const AccordionSummary = styled(MuiAccordionSummary)({
-  padding: '0 15px',
+  minHeight: 'auto',
+  padding: '12px 15px',
   borderTop: '1px solid rgba(0, 0, 0, 0.12)',
   backgroundColor: '#f3f5f7',
   '& .MuiAccordionSummary-content': {

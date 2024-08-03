@@ -35,7 +35,7 @@ const Header = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   '&:not(:last-child)': {
-    marginBottom: 20,
+    marginBottom: 10,
   },
 })
 

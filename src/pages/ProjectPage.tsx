@@ -6,7 +6,7 @@ import { Alert, CircularProgress } from '@mui/material'
 import { ProjectDetail } from '../components/ProjectDetail'
 import { useEffect } from 'react'
 
-export const SingleProjectPage = () => {
+export const ProjectPage = () => {
   const { id } = useParams()
   const {
     data: project,

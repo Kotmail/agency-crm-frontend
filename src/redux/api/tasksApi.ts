@@ -5,6 +5,7 @@ import { ITask, TaskStatus } from '../../models/ITask'
 type QueryTasksRequest = {
   take?: number
   page?: number
+  projectId?: number
 }
 
 export interface CreateTaskRequest {
