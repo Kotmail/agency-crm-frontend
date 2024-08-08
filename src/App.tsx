@@ -20,14 +20,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { AboutProject } from './components/AboutProject'
 import { TaskBoard } from './components/TaskBoard'
 import { DashboardLayout } from './layouts/DashboardLayout'
-import {
-  red,
-  blue,
-  lightBlue,
-  purple,
-  green,
-  orange,
-} from '@mui/material/colors'
+import { green } from '@mui/material/colors'
 
 const theme = createTheme({
   breakpoints: {
@@ -81,45 +74,6 @@ const theme = createTheme({
     MuiCard: {
       defaultProps: {
         variant: 'outlined',
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          height: 26,
-          borderRadius: 4,
-          fontWeight: 600,
-          fontSize: 12,
-        },
-        label: {
-          padding: '0 8px',
-        },
-        filled: ({ ownerState }) => ({
-          ...(ownerState.color === 'error' && {
-            backgroundColor: red[100],
-            color: red[400],
-          }),
-          ...(ownerState.color === 'primary' && {
-            backgroundColor: blue[100],
-            color: blue[800],
-          }),
-          ...(ownerState.color === 'info' && {
-            backgroundColor: lightBlue[100],
-            color: lightBlue[800],
-          }),
-          ...(ownerState.color === 'secondary' && {
-            backgroundColor: purple[100],
-            color: purple[500],
-          }),
-          ...(ownerState.color === 'success' && {
-            backgroundColor: green[100],
-            color: green[800],
-          }),
-          ...(ownerState.color === 'warning' && {
-            backgroundColor: orange[100],
-            color: orange[800],
-          }),
-        }),
       },
     },
     MuiLinearProgress: {
