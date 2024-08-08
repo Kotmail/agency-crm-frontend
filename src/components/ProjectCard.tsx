@@ -180,7 +180,7 @@ export const ProjectCard = ({
           </Box>
           <Button
             component={Routerlink}
-            to={`/projects/${item.id}`}
+            to={`/projects/${item.id}/tasks`}
             size="small"
             variant="outlined"
           >

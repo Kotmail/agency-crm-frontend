@@ -17,6 +17,7 @@ import { ProjectPage } from './pages/ProjectPage'
 import { AuthGuard } from './components/AuthGuard'
 import { UserRole } from './models/IUser'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { AboutProject } from './components/AboutProject'
 import { TaskBoard } from './components/TaskBoard'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import {
@@ -137,6 +138,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      defaultProps: {
+        variant: 'outlined',
+      },
+    },
   },
 })
 
@@ -176,7 +182,7 @@ const App = () => {
                 <Route path="/archive" element={<ArchivePage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/projects/:id" element={<ProjectPage />}>
-                  <Route index element={<>About project...</>} />
+                  <Route index element={<AboutProject />} />
                   <Route path="tasks" element={<TaskBoard />} />
                 </Route>
               </Route>

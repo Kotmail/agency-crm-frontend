@@ -28,6 +28,7 @@
     "view_details": "Подробнее",
     "new_order": "Новый заказ",
     "new_project": "Новый проект",
+    "new_task": "Новая задача",
     "new_user": "Новый пользователь",
     "return_to_main_page": "Перейти на главную"
   },
@@ -259,6 +260,7 @@
   },
   "project": {
     "labels": {
+      "created_at": "Создан:",
       "members": "Участники:",
       "manager": "Менеджер:",
       "due_date": "Крайний срок:",
@@ -271,7 +273,8 @@
     "actions": "Действия",
     "project_tablist": "Список вкладок проекта",
     "kanban_view": "Канбан",
-    "list_view": "Список"
+    "list_view": "Список",
+    "edit": "Редактировать"
   },
   "app_name": "Agency CRM",
   "filter": {

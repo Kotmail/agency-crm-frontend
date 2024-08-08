@@ -28,6 +28,7 @@
     "view_details": "View details",
     "new_order": "New order",
     "new_project": "New project",
+    "new_task": "New task",
     "new_user": "New user",
     "return_to_main_page": "Go to home"
   },
@@ -259,6 +260,7 @@
   },
   "project": {
     "labels": {
+      "created_at": "Created At:",
       "members": "Members:",
       "manager": "Manager:",
       "due_date": "Due Date:",
@@ -271,7 +273,8 @@
     "actions": "Actions",
     "project_tablist": "List of project tabs",
     "kanban_view": "Kanban view",
-    "list_view": "List view"
+    "list_view": "List view",
+    "edit": "Edit"
   },
   "app_name": "Agency CRM",
   "filter": {

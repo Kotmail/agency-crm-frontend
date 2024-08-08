@@ -1,5 +1,16 @@
 import { MouseEvent, useState } from 'react'
-import { Box, styled, Tab, ToggleButtonGroup, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  IconButtonProps,
+  Paper,
+  styled,
+  Tab,
+  ToggleButtonGroup,
+  Typography,
+  TypographyProps,
+} from '@mui/material'
 import MuiToggleButton from '@mui/material/ToggleButton'
 import { TabContext, TabList } from '@mui/lab'
 import MuiTabPanel from '@mui/lab/TabPanel'
@@ -9,30 +20,106 @@ import { IProject } from '../models/IProject'
 import { Link, matchRoutes, Outlet, useLocation } from 'react-router-dom'
 import { TaskBoardView } from './TaskBoard'
 import { useTranslation } from 'react-i18next'
+import { AvatarGroup } from './AvatarGroup'
+import { formatDate } from '../utils/helpers/formatDate'
+import { PriorityChip } from './PriorityChip'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import AddIcon from '@mui/icons-material/Add'
 
-const ProjectHeader = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: 2,
-  marginBottom: 30,
+const Header = styled(Paper)({
+  position: 'relative',
+  padding: '15px 15px 0',
 })
 
-const TabsHeading = styled(Box)({
+const HeadingLine = styled(Box)({
   display: 'flex',
-  justifyContent: 'space-between',
+  flexWrap: 'wrap',
   alignItems: 'center',
-  paddingRight: 16,
-  borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-  backgroundColor: '#fff',
+  gap: '10px',
+  marginBottom: '12px',
+  '@media (width < 576px)': {
+    gap: '6px',
+    paddingRight: '35px',
+  },
+})
+
+const Title = styled((props: TypographyProps) => (
+  <Typography component="h1" variant="h5" {...props} />
+))({
+  fontWeight: 600,
+  '@media (width < 768px)': {
+    fontSize: '1.375rem',
+  },
+  '@media (width < 576px)': {
+    fontSize: '1.125rem',
+  },
+})
+
+const EditBtn = styled((props: IconButtonProps) => (
+  <IconButton size="small" children={<EditOutlinedIcon />} {...props} />
+))({
+  '.MuiSvgIcon-root': {
+    fontSize: '1.33rem',
+  },
+  '@media (width < 576px)': {
+    position: 'absolute',
+    top: 11,
+    right: 10,
+    '.MuiSvgIcon-root': {
+      fontSize: '1.25rem',
+    },
+  },
+})
+
+const MetaLine = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 10,
+  '@media (width >= 576px)': {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
+
+const Properties = styled(Box)({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '3px 10px',
+})
+
+const TabsLine = styled(Box)({
+  margin: '15px -15px 0',
+  borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+  '@media (width >= 768px)': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
+
+const ButtonGroup = styled(Box)({
+  display: 'flex',
+  paddingLeft: 15,
+  paddingRight: 15,
+  gap: 12,
+  '@media (width < 768px)': {
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+  },
+})
+
+const Avatars = styled(AvatarGroup)({
+  width: 'max-content',
+  '.MuiAvatar-root': {
+    width: 28,
+    height: 28,
+  },
 })
 
 const ToggleButton = styled(MuiToggleButton)({
-  padding: 4,
-  '.MuiSvgIcon-root': {
-    width: 19,
-    height: 19,
-  },
+  padding: '1px 2px',
 })
 
 const TabPanel = styled(MuiTabPanel)({
@@ -71,14 +158,42 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
     setView(view)
 
   return (
-    <>
-      <ProjectHeader>
-        <Typography component="h1" variant="h5" fontWeight="600">
-          {project.name}
-        </Typography>
-      </ProjectHeader>
-      <TabContext value={currentTab}>
-        <TabsHeading>
+    <TabContext value={currentTab}>
+      <Header>
+        <HeadingLine>
+          <Title>{project.name}</Title>
+          <PriorityChip priority={project.priority} />
+          <EditBtn aria-label={t('aria_labels.edit')} />
+        </HeadingLine>
+        <MetaLine>
+          <Properties>
+            <Typography
+              component="div"
+              fontSize="14px"
+              sx={{ color: '#4a4a4a' }}
+            >
+              <Typography component="span" fontWeight="500" fontSize="14px">
+                {t('project.labels.created_at')}
+              </Typography>
+              &nbsp;
+              {formatDate(project.createdAt)}
+            </Typography>
+            <Typography
+              component="div"
+              fontSize="14px"
+              sx={{ color: '#4a4a4a' }}
+            >
+              <Typography component="span" fontWeight="500" fontSize="14px">
+                {t('project.labels.due_date')}
+              </Typography>
+              &nbsp;
+              {(project.dueDate && formatDate(project.dueDate)) ||
+                t('project.no_due_date')}
+            </Typography>
+          </Properties>
+          <Avatars users={project.members} />
+        </MetaLine>
+        <TabsLine>
           <TabList aria-label={t('aria_labels.project_tablist')}>
             {tabs.map((tab) => (
               <Tab
@@ -89,29 +204,39 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
               />
             ))}
           </TabList>
-          <ToggleButtonGroup
-            value={view}
-            exclusive
-            size="small"
-            onChange={changeViewHandler}
-          >
-            <ToggleButton
-              value="kanban"
-              aria-label={t('aria_labels.kanban_view')}
-            >
-              <ViewKanbanIcon />
-            </ToggleButton>
-            <ToggleButton value="list" aria-label={t('aria_labels.list_view')}>
-              <ViewListIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </TabsHeading>
-        {tabs.map((tab) => (
-          <TabPanel key={tab.value} {...tab}>
-            <Outlet context={{ project, view } satisfies ProjectTabsContext} />
-          </TabPanel>
-        ))}
-      </TabContext>
-    </>
+          {currentTab === tabs[1].value && (
+            <ButtonGroup>
+              <Button size="small" startIcon={<AddIcon />}>
+                {t('buttons.new_task')}
+              </Button>
+              <ToggleButtonGroup
+                value={view}
+                exclusive
+                size="small"
+                onChange={changeViewHandler}
+              >
+                <ToggleButton
+                  value="kanban"
+                  aria-label={t('aria_labels.kanban_view')}
+                >
+                  <ViewKanbanIcon />
+                </ToggleButton>
+                <ToggleButton
+                  value="list"
+                  aria-label={t('aria_labels.list_view')}
+                >
+                  <ViewListIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </ButtonGroup>
+          )}
+        </TabsLine>
+      </Header>
+      {tabs.map((tab) => (
+        <TabPanel key={tab.value} {...tab}>
+          <Outlet context={{ project, view } satisfies ProjectTabsContext} />
+        </TabPanel>
+      ))}
+    </TabContext>
   )
 }

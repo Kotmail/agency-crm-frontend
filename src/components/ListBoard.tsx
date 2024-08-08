@@ -11,6 +11,7 @@ import { CounterBadge } from './CounterBadge'
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters defaultExpanded square {...props} />
 ))({
+  border: 'unset',
   boxShadow: 'unset',
   backgroundColor: 'unset',
   '&::before': {
