@@ -9,6 +9,12 @@
     "medium": "Средний",
     "high": "Высокий"
   },
+  "statuses": {
+    "unsorted": "Неразобранное",
+    "in_review": "На проверке",
+    "in_progress": "В работе",
+    "completed": "Выполнено"
+  },
   "order_statuses": {
     "waiting": "В ожидании",
     "accepted": "Принято",
@@ -76,6 +82,11 @@
       "file_size": "Превышен максимальный размер файла"
     }
   },
+  "input_helpers": {
+    "responsibleUsers": {
+      "assign_users": "Назначьте участников проекта для выбора ответственных"
+    }
+  },
   "input_placeholders": {
     "name": "Название",
     "email": "E-mail",
@@ -91,6 +102,7 @@
     "description": "Описание",
     "cost": "Стоимость",
     "priority": "Приоритет",
+    "status": "Статус",
     "due_date": "Крайний срок",
     "creator": {
       "label": "Менеджер",
@@ -98,6 +110,10 @@
     },
     "members": {
       "label": "Участники",
+      "placeholder": "Введите данные для фильтрации"
+    },
+    "responsibleUsers": {
+      "label": "Ответственные",
       "placeholder": "Введите данные для фильтрации"
     }
   },
@@ -131,9 +147,17 @@
       "fail": "Не удалось добавить проект",
       "success": "Проект добавлен"
     },
+    "add_task": {
+      "fail": "Не удалось добавить задачу",
+      "success": "Задача добавлена"
+    },
     "edit_project": {
       "fail": "Не удалось обновить проект",
       "success": "Проект обновлён"
+    },
+    "edit_task": {
+      "fail": "Не удалось обновить задачу",
+      "success": "Задача обновлена"
     },
     "copy_order": {
       "fail": "Не удалось скопировать заказ",
@@ -146,6 +170,10 @@
     "delete_project": {
       "fail": "Не удалось удалить проект",
       "success": "Проект удалён"
+    },
+    "delete_task": {
+      "fail": "Не удалось удалить задачу",
+      "success": "Задача удалена"
     }
   },
   "alerts": {
@@ -185,11 +213,17 @@
     "add_project": {
       "title": "Добавить проект"
     },
+    "add_task": {
+      "title": "Добавить задачу"
+    },
     "edit_order": {
       "title": "Редактировать заказ"
     },
     "edit_project": {
       "title": "Редактировать проект"
+    },
+    "edit_task": {
+      "title": "Редактировать задачу"
     },
     "copy_order": {
       "title": "Копировать заказ"
@@ -294,14 +328,6 @@
   },
   "avatar_uploader": {
     "note": "Разрешенные форматы: JPG, PNG, WEBP.<br />Максимальный размер файла: 500КБ."
-  },
-  "task_board": {
-    "group_labels": {
-      "unsorted": "Неразобранное",
-      "in_review": "На проверке",
-      "in_progress": "В работе",
-      "completed": "Выполнено"
-    }
   },
   "tabs": {
     "about_project": "О проекте",

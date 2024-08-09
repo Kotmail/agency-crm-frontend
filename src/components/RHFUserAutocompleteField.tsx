@@ -13,6 +13,8 @@ type RHFUserAutocompleteFieldProps<
   name: Path<TField>
   options: O[]
   multiple?: boolean
+  disabled?: boolean
+  helperText?: string
 }
 
 export const RHFUserAutocompleteField = <
@@ -23,6 +25,8 @@ export const RHFUserAutocompleteField = <
   name,
   options,
   multiple,
+  disabled,
+  helperText,
 }: RHFUserAutocompleteFieldProps<O, TField>) => {
   const { t } = useTranslation()
 
@@ -64,13 +68,14 @@ export const RHFUserAutocompleteField = <
               label={t(`input_placeholders.${name}.label`)}
               error={!!error}
               inputRef={ref}
-              helperText={t(error?.message || '')}
+              helperText={t(helperText ? helperText : error?.message || '')}
               placeholder={t(`input_placeholders.${name}.placeholder`)}
             />
           )}
           size="small"
           openOnFocus
           onChange={(_, data) => onChange(data)}
+          disabled={disabled}
         />
       )}
     />

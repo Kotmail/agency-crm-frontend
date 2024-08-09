@@ -55,7 +55,7 @@ export const KanbanBoard = ({ groups, groupedTasks }: TaskBoardData) => {
         {groups.map((group) => (
           <Cell key={group}>
             <Header>
-              <Label>{t(`task_board.group_labels.${group}`)}</Label>
+              <Label>{t(`statuses.${group}`)}</Label>
               <CounterBadge value={groupedTasks[group]?.length} />
             </Header>
             {groupedTasks[group]?.length > 0 &&

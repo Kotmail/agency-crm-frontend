@@ -25,6 +25,13 @@ import { formatDate } from '../utils/helpers/formatDate'
 import { PriorityChip } from './PriorityChip'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import AddIcon from '@mui/icons-material/Add'
+import { TaskFormDialog, TaskFormDialogProps } from './dialogs/TaskFormDialog'
+import { useDialogs } from '../hooks/useDialogs'
+import {
+  ProjectFormDialog,
+  ProjectFormDialogProps,
+} from './dialogs/ProjectFormDialog'
+import { DIALOG_BASE_OPTIONS } from '../utils/consts'
 
 const Header = styled(Paper)({
   position: 'relative',
@@ -139,6 +146,11 @@ const tabs = [
   },
 ]
 
+type DialogVariants = {
+  projectForm: ProjectFormDialogProps
+  taskForm: TaskFormDialogProps
+}
+
 export type ProjectTabsContext = {
   project: IProject
   view: TaskBoardView
@@ -152,91 +164,116 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
   )
   const currentTab = match?.pop()?.route.path || tabs[1].value
   const [view, setView] = useState<TaskBoardView>('kanban')
+  const [dialogs, openDialog] = useDialogs<DialogVariants>({
+    projectForm: {
+      open: false,
+    },
+    taskForm: {
+      open: false,
+      project,
+    },
+  })
   const { t } = useTranslation()
 
   const changeViewHandler = (_: MouseEvent<HTMLElement>, view: TaskBoardView) =>
     setView(view)
 
   return (
-    <TabContext value={currentTab}>
-      <Header>
-        <HeadingLine>
-          <Title>{project.name}</Title>
-          <PriorityChip priority={project.priority} />
-          <EditBtn aria-label={t('aria_labels.edit')} />
-        </HeadingLine>
-        <MetaLine>
-          <Properties>
-            <Typography
-              component="div"
-              fontSize="14px"
-              sx={{ color: '#4a4a4a' }}
-            >
-              <Typography component="span" fontWeight="500" fontSize="14px">
-                {t('project.labels.created_at')}
-              </Typography>
-              &nbsp;
-              {formatDate(project.createdAt)}
-            </Typography>
-            <Typography
-              component="div"
-              fontSize="14px"
-              sx={{ color: '#4a4a4a' }}
-            >
-              <Typography component="span" fontWeight="500" fontSize="14px">
-                {t('project.labels.due_date')}
-              </Typography>
-              &nbsp;
-              {(project.dueDate && formatDate(project.dueDate)) ||
-                t('project.no_due_date')}
-            </Typography>
-          </Properties>
-          <Avatars users={project.members} />
-        </MetaLine>
-        <TabsLine>
-          <TabList aria-label={t('aria_labels.project_tablist')}>
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.value}
-                {...tab}
-                label={t(tab.label)}
-                component={Link}
-              />
-            ))}
-          </TabList>
-          {currentTab === tabs[1].value && (
-            <ButtonGroup>
-              <Button size="small" startIcon={<AddIcon />}>
-                {t('buttons.new_task')}
-              </Button>
-              <ToggleButtonGroup
-                value={view}
-                exclusive
-                size="small"
-                onChange={changeViewHandler}
+    <>
+      <TabContext value={currentTab}>
+        <Header>
+          <HeadingLine>
+            <Title>{project.name}</Title>
+            <PriorityChip priority={project.priority} />
+            <EditBtn
+              aria-label={t('aria_labels.edit')}
+              onClick={() =>
+                openDialog('projectForm', {
+                  ...DIALOG_BASE_OPTIONS.form.editProject,
+                  project,
+                })
+              }
+            />
+          </HeadingLine>
+          <MetaLine>
+            <Properties>
+              <Typography
+                component="div"
+                fontSize="14px"
+                sx={{ color: '#4a4a4a' }}
               >
-                <ToggleButton
-                  value="kanban"
-                  aria-label={t('aria_labels.kanban_view')}
+                <Typography component="span" fontWeight="500" fontSize="14px">
+                  {t('project.labels.created_at')}
+                </Typography>
+                &nbsp;
+                {formatDate(project.createdAt)}
+              </Typography>
+              <Typography
+                component="div"
+                fontSize="14px"
+                sx={{ color: '#4a4a4a' }}
+              >
+                <Typography component="span" fontWeight="500" fontSize="14px">
+                  {t('project.labels.due_date')}
+                </Typography>
+                &nbsp;
+                {(project.dueDate && formatDate(project.dueDate)) ||
+                  t('project.no_due_date')}
+              </Typography>
+            </Properties>
+            <Avatars users={project.members} />
+          </MetaLine>
+          <TabsLine>
+            <TabList aria-label={t('aria_labels.project_tablist')}>
+              {tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  {...tab}
+                  label={t(tab.label)}
+                  component={Link}
+                />
+              ))}
+            </TabList>
+            {currentTab === tabs[1].value && (
+              <ButtonGroup>
+                <Button
+                  size="small"
+                  startIcon={<AddIcon />}
+                  onClick={() => openDialog('taskForm')}
                 >
-                  <ViewKanbanIcon />
-                </ToggleButton>
-                <ToggleButton
-                  value="list"
-                  aria-label={t('aria_labels.list_view')}
+                  {t('buttons.new_task')}
+                </Button>
+                <ToggleButtonGroup
+                  value={view}
+                  exclusive
+                  size="small"
+                  onChange={changeViewHandler}
                 >
-                  <ViewListIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </ButtonGroup>
-          )}
-        </TabsLine>
-      </Header>
-      {tabs.map((tab) => (
-        <TabPanel key={tab.value} {...tab}>
-          <Outlet context={{ project, view } satisfies ProjectTabsContext} />
-        </TabPanel>
-      ))}
-    </TabContext>
+                  <ToggleButton
+                    value="kanban"
+                    aria-label={t('aria_labels.kanban_view')}
+                  >
+                    <ViewKanbanIcon />
+                  </ToggleButton>
+                  <ToggleButton
+                    value="list"
+                    aria-label={t('aria_labels.list_view')}
+                  >
+                    <ViewListIcon />
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </ButtonGroup>
+            )}
+          </TabsLine>
+        </Header>
+        {tabs.map((tab) => (
+          <TabPanel key={tab.value} {...tab}>
+            <Outlet context={{ project, view } satisfies ProjectTabsContext} />
+          </TabPanel>
+        ))}
+      </TabContext>
+      <ProjectFormDialog {...dialogs.projectForm} />
+      <TaskFormDialog {...dialogs.taskForm} />
+    </>
   )
 }

@@ -14,11 +14,11 @@ export const ProjectPage = () => {
     isError,
   } = useOneProjectQuery(Number(id) || 0)
   const { t } = useTranslation()
-  const [documentTitle, setDocumentTitle] = useDocumentTitle(t('app_name'))
+  const [, setDocumentTitle] = useDocumentTitle(t('app_name'))
 
   useEffect(() => {
     if (project) {
-      setDocumentTitle(`${documentTitle} — ${t(project.name)}`)
+      setDocumentTitle(`${t('app_name')} — ${t(project.name)}`)
     }
   }, [project])
 

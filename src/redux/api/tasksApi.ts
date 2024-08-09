@@ -1,6 +1,7 @@
 import { apiSlice } from '.'
-import { Priority } from '../../models/IProject'
+import { IProject, Priority } from '../../models/IProject'
 import { ITask, TaskStatus } from '../../models/ITask'
+import { IUser } from '../../models/IUser'
 
 type QueryTasksRequest = {
   take?: number
@@ -11,9 +12,11 @@ type QueryTasksRequest = {
 export interface CreateTaskRequest {
   name: string
   description: string | null
+  project: IProject
   dueDate: Date | null
-  priority: Priority | null
   status: TaskStatus
+  priority: Priority | null
+  responsibleUsers: IUser[]
 }
 
 interface UpdateTaskRequest

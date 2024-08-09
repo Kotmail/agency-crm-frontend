@@ -56,7 +56,7 @@ export const ListBoard = ({ groups, groupedTasks }: TaskBoardData) => {
         aria-controls={`${group}-content`}
         id={`${group}-header`}
       >
-        {t(`task_board.group_labels.${group}`)}
+        {t(`statuses.${group}`)}
         <Counter value={groupedTasks[group]?.length} />
       </AccordionSummary>
       <AccordionDetails>

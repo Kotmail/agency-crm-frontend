@@ -40,6 +40,7 @@ const projectsApi = apiWithTag.injectEndpoints({
       query: (id) => ({
         url: `/projects/${id}`,
       }),
+      providesTags: ['Projects'],
     }),
     addProject: builder.mutation<IProject, CreateProjectRequest>({
       query: (body) => ({
