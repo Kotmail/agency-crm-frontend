@@ -21,6 +21,7 @@ import { AboutProject } from './components/AboutProject'
 import { TaskBoard } from './components/TaskBoard'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import { green } from '@mui/material/colors'
+import { TaskDetails } from './components/TaskDetails'
 
 const theme = createTheme({
   breakpoints: {
@@ -137,7 +138,9 @@ const App = () => {
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/projects/:id" element={<ProjectPage />}>
                   <Route index element={<AboutProject />} />
-                  <Route path="tasks" element={<TaskBoard />} />
+                  <Route path="tasks" element={<TaskBoard />}>
+                    <Route path=":taskId" element={<TaskDetails />} />
+                  </Route>
                 </Route>
               </Route>
             </Route>

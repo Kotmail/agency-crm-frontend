@@ -302,7 +302,15 @@
     },
     "no_due_date": "Не указан"
   },
+  "task": {
+    "labels": {
+      "priority": "Приоритет:",
+      "status": "Статус:",
+      "due_date": "Крайний срок:"
+    }
+  },
   "aria_labels": {
+    "close_task_window": "Закрыть окно с задачей",
     "list_of_pages": "Список страниц",
     "actions": "Действия",
     "project_tablist": "Список вкладок проекта",

@@ -6,6 +6,7 @@ import { KanbanBoard } from './KanbanBoard'
 import { useTasksQuery } from '../redux/api/tasksApi'
 import { CircularProgress } from '@mui/material'
 import { useProjectTabsContext } from '../hooks/useProjectTabsContext'
+import { Outlet } from 'react-router-dom'
 
 export type TaskBoardData = {
   groups: TaskStatus[]
@@ -41,9 +42,14 @@ export const TaskBoard = () => {
     return <CircularProgress />
   }
 
-  return view === 'kanban' ? (
-    <KanbanBoard {...boardData} />
-  ) : (
-    <ListBoard {...boardData} />
+  return (
+    <>
+      {view === 'kanban' ? (
+        <KanbanBoard {...boardData} />
+      ) : (
+        <ListBoard {...boardData} />
+      )}
+      <Outlet />
+    </>
   )
 }

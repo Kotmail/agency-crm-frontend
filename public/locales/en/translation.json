@@ -302,7 +302,15 @@
     },
     "no_due_date": "Not specified"
   },
+  "task": {
+    "labels": {
+      "priority": "Priority:",
+      "status": "Status:",
+      "due_date": "Due Date:"
+    }
+  },
   "aria_labels": {
+    "close_task_window": "Close the task window",
     "list_of_pages": "List of pages",
     "actions": "Actions",
     "project_tablist": "List of project tabs",

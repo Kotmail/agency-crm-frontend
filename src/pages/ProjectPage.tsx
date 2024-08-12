@@ -3,7 +3,7 @@ import { useOneProjectQuery } from '../redux/api/projectsApi'
 import { useTranslation } from 'react-i18next'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { Alert, CircularProgress } from '@mui/material'
-import { ProjectDetail } from '../components/ProjectDetail'
+import { ProjectDetails } from '../components/ProjectDetails'
 import { useEffect } from 'react'
 
 export const ProjectPage = () => {
@@ -30,5 +30,5 @@ export const ProjectPage = () => {
     return <Alert severity="error">{t('alerts.projects.request_error')}</Alert>
   }
 
-  return project && <ProjectDetail project={project} />
+  return project && <ProjectDetails project={project} />
 }

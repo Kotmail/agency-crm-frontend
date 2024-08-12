@@ -39,6 +39,12 @@ const tasksApi = apiWithTag.injectEndpoints({
       }),
       providesTags: ['Tasks'],
     }),
+    oneTask: builder.query<ITask, number>({
+      query: (id) => ({
+        url: `/tasks/${id}`,
+      }),
+      providesTags: ['Tasks'],
+    }),
     addTask: builder.mutation<ITask, CreateTaskRequest>({
       query: (body) => ({
         url: '/tasks',
@@ -67,6 +73,7 @@ const tasksApi = apiWithTag.injectEndpoints({
 
 export const {
   useTasksQuery,
+  useOneTaskQuery,
   useAddTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,

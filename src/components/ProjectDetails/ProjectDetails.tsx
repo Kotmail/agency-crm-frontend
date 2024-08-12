@@ -1,137 +1,23 @@
 import { MouseEvent, useState } from 'react'
-import {
-  Box,
-  Button,
-  IconButton,
-  IconButtonProps,
-  Paper,
-  styled,
-  Tab,
-  ToggleButtonGroup,
-  Typography,
-  TypographyProps,
-} from '@mui/material'
-import MuiToggleButton from '@mui/material/ToggleButton'
+import { Button, Tab, ToggleButtonGroup, Typography } from '@mui/material'
 import { TabContext, TabList } from '@mui/lab'
-import MuiTabPanel from '@mui/lab/TabPanel'
 import ViewKanbanIcon from '@mui/icons-material/ViewKanban'
 import ViewListIcon from '@mui/icons-material/ViewList'
-import { IProject } from '../models/IProject'
+import { IProject } from '../../models/IProject'
 import { Link, matchRoutes, Outlet, useLocation } from 'react-router-dom'
-import { TaskBoardView } from './TaskBoard'
+import { TaskBoardView } from '../TaskBoard'
 import { useTranslation } from 'react-i18next'
-import { AvatarGroup } from './AvatarGroup'
-import { formatDate } from '../utils/helpers/formatDate'
-import { PriorityChip } from './PriorityChip'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import { formatDate } from '../../utils/helpers/formatDate'
+import { PriorityChip } from '../PriorityChip'
 import AddIcon from '@mui/icons-material/Add'
-import { TaskFormDialog, TaskFormDialogProps } from './dialogs/TaskFormDialog'
-import { useDialogs } from '../hooks/useDialogs'
+import { TaskFormDialog, TaskFormDialogProps } from '../dialogs/TaskFormDialog'
+import { useDialogs } from '../../hooks/useDialogs'
 import {
   ProjectFormDialog,
   ProjectFormDialogProps,
-} from './dialogs/ProjectFormDialog'
-import { DIALOG_BASE_OPTIONS } from '../utils/consts'
-
-const Header = styled(Paper)({
-  position: 'relative',
-  padding: '15px 15px 0',
-})
-
-const HeadingLine = styled(Box)({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  gap: '10px',
-  marginBottom: '12px',
-  '@media (width < 576px)': {
-    gap: '6px',
-    paddingRight: '35px',
-  },
-})
-
-const Title = styled((props: TypographyProps) => (
-  <Typography component="h1" variant="h5" {...props} />
-))({
-  fontWeight: 600,
-  '@media (width < 768px)': {
-    fontSize: '1.375rem',
-  },
-  '@media (width < 576px)': {
-    fontSize: '1.125rem',
-  },
-})
-
-const EditBtn = styled((props: IconButtonProps) => (
-  <IconButton size="small" children={<EditOutlinedIcon />} {...props} />
-))({
-  '.MuiSvgIcon-root': {
-    fontSize: '1.33rem',
-  },
-  '@media (width < 576px)': {
-    position: 'absolute',
-    top: 11,
-    right: 10,
-    '.MuiSvgIcon-root': {
-      fontSize: '1.25rem',
-    },
-  },
-})
-
-const MetaLine = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 10,
-  '@media (width >= 576px)': {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-})
-
-const Properties = styled(Box)({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '3px 10px',
-})
-
-const TabsLine = styled(Box)({
-  margin: '15px -15px 0',
-  borderTop: '1px solid rgba(0, 0, 0, 0.12)',
-  '@media (width >= 768px)': {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-})
-
-const ButtonGroup = styled(Box)({
-  display: 'flex',
-  paddingLeft: 15,
-  paddingRight: 15,
-  gap: 12,
-  '@media (width < 768px)': {
-    paddingTop: 12,
-    paddingBottom: 12,
-    borderTop: '1px solid rgba(0, 0, 0, 0.12)',
-  },
-})
-
-const Avatars = styled(AvatarGroup)({
-  width: 'max-content',
-  '.MuiAvatar-root': {
-    width: 28,
-    height: 28,
-  },
-})
-
-const ToggleButton = styled(MuiToggleButton)({
-  padding: '1px 2px',
-})
-
-const TabPanel = styled(MuiTabPanel)({
-  padding: '30px 0 0',
-})
+} from '../dialogs/ProjectFormDialog'
+import { DIALOG_BASE_OPTIONS } from '../../utils/consts'
+import * as S from './ProjectDetails.styles'
 
 const tabs = [
   {
@@ -156,7 +42,7 @@ export type ProjectTabsContext = {
   view: TaskBoardView
 }
 
-export const ProjectDetail = ({ project }: { project: IProject }) => {
+export const ProjectDetails = ({ project }: { project: IProject }) => {
   const location = useLocation()
   const match = matchRoutes(
     tabs.map((tab) => ({ path: tab.value })),
@@ -181,11 +67,11 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
   return (
     <>
       <TabContext value={currentTab}>
-        <Header>
-          <HeadingLine>
-            <Title>{project.name}</Title>
+        <S.Header>
+          <S.HeadingLine>
+            <S.Title>{project.name}</S.Title>
             <PriorityChip priority={project.priority} />
-            <EditBtn
+            <S.EditBtn
               aria-label={t('aria_labels.edit')}
               onClick={() =>
                 openDialog('projectForm', {
@@ -194,9 +80,9 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
                 })
               }
             />
-          </HeadingLine>
-          <MetaLine>
-            <Properties>
+          </S.HeadingLine>
+          <S.MetaLine>
+            <S.Properties>
               <Typography
                 component="div"
                 fontSize="14px"
@@ -220,10 +106,10 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
                 {(project.dueDate && formatDate(project.dueDate)) ||
                   t('project.no_due_date')}
               </Typography>
-            </Properties>
-            <Avatars users={project.members} />
-          </MetaLine>
-          <TabsLine>
+            </S.Properties>
+            <S.Avatars users={project.members} />
+          </S.MetaLine>
+          <S.TabsLine>
             <TabList aria-label={t('aria_labels.project_tablist')}>
               {tabs.map((tab) => (
                 <Tab
@@ -235,7 +121,7 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
               ))}
             </TabList>
             {currentTab === tabs[1].value && (
-              <ButtonGroup>
+              <S.ButtonGroup>
                 <Button
                   size="small"
                   startIcon={<AddIcon />}
@@ -249,27 +135,27 @@ export const ProjectDetail = ({ project }: { project: IProject }) => {
                   size="small"
                   onChange={changeViewHandler}
                 >
-                  <ToggleButton
+                  <S.ToggleButton
                     value="kanban"
                     aria-label={t('aria_labels.kanban_view')}
                   >
                     <ViewKanbanIcon />
-                  </ToggleButton>
-                  <ToggleButton
+                  </S.ToggleButton>
+                  <S.ToggleButton
                     value="list"
                     aria-label={t('aria_labels.list_view')}
                   >
                     <ViewListIcon />
-                  </ToggleButton>
+                  </S.ToggleButton>
                 </ToggleButtonGroup>
-              </ButtonGroup>
+              </S.ButtonGroup>
             )}
-          </TabsLine>
-        </Header>
+          </S.TabsLine>
+        </S.Header>
         {tabs.map((tab) => (
-          <TabPanel key={tab.value} {...tab}>
+          <S.TabPanel key={tab.value} {...tab}>
             <Outlet context={{ project, view } satisfies ProjectTabsContext} />
-          </TabPanel>
+          </S.TabPanel>
         ))}
       </TabContext>
       <ProjectFormDialog {...dialogs.projectForm} />
