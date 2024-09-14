@@ -24,7 +24,7 @@ interface UpdateTaskRequest
     Pick<ITask, 'id'> {}
 
 const apiWithTag = apiSlice.enhanceEndpoints({
-  addTagTypes: ['Tasks'],
+  addTagTypes: ['Tasks', 'Task'],
 })
 
 const tasksApi = apiWithTag.injectEndpoints({
@@ -43,7 +43,7 @@ const tasksApi = apiWithTag.injectEndpoints({
       query: (id) => ({
         url: `/tasks/${id}`,
       }),
-      providesTags: ['Tasks'],
+      providesTags: ['Task'],
     }),
     addTask: builder.mutation<ITask, CreateTaskRequest>({
       query: (body) => ({
@@ -59,7 +59,7 @@ const tasksApi = apiWithTag.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', 'Task'],
     }),
     deleteTask: builder.mutation<{ raw: unknown[]; affected: number }, number>({
       query: (id) => ({

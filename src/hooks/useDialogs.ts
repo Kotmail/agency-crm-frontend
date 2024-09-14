@@ -1,9 +1,12 @@
 import { useState } from 'react'
 
+export type DialogVariants<T> = keyof T
+export type DialogOptions<T> = Partial<T[keyof T]>
+
 export const useDialogs = <T>(initialValue: T) => {
   const [dialogs, setDialogs] = useState(initialValue)
 
-  const closeDialog = (dialogName: keyof T) => {
+  const closeDialog = (dialogName: DialogVariants<T>) => {
     setDialogs((dialogs) => ({
       ...dialogs,
       [dialogName]: {
@@ -14,8 +17,8 @@ export const useDialogs = <T>(initialValue: T) => {
   }
 
   const openDialog = (
-    dialogName: keyof T,
-    dialogOptions?: Partial<T[keyof T]>,
+    dialogName: DialogVariants<T>,
+    dialogOptions?: DialogOptions<T>,
   ) => {
     if (!dialogOptions) {
       dialogOptions = initialValue[dialogName]

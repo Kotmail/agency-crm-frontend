@@ -21,6 +21,14 @@ export const DIALOG_BASE_OPTIONS = {
       title: 'dialogs.edit_project.title',
       successMessage: 'notifications.edit_project.success',
     },
+    addTask: {
+      title: 'dialogs.add_task.title',
+      submitBtnLabel: 'buttons.add',
+    },
+    editTask: {
+      title: 'dialogs.edit_task.title',
+      successMessage: 'notifications.edit_task.success',
+    },
     addUser: {
       title: 'dialogs.add_user.title',
     },
@@ -53,6 +61,11 @@ export const DIALOG_BASE_OPTIONS = {
     deleteProject: {
       title: 'dialogs.delete_project.title',
       description: 'dialogs.delete_project.desc',
+      confirmBtnLabel: 'buttons.delete',
+    },
+    deleteTask: {
+      title: 'dialogs.delete_task.title',
+      description: 'dialogs.delete_task.desc',
       confirmBtnLabel: 'buttons.delete',
     },
     deleteUser: {

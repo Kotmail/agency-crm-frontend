@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { formatDate } from '../../utils/helpers/formatDate'
 import { PriorityChip } from '../PriorityChip'
 import AddIcon from '@mui/icons-material/Add'
-import { TaskFormDialog, TaskFormDialogProps } from '../dialogs/TaskFormDialog'
 import { useDialogs } from '../../hooks/useDialogs'
 import {
   ProjectFormDialog,
@@ -18,6 +17,7 @@ import {
 } from '../dialogs/ProjectFormDialog'
 import { DIALOG_BASE_OPTIONS } from '../../utils/consts'
 import * as S from './ProjectDetails.styles'
+import { TaskFormDialog, TaskFormDialogProps } from '../dialogs/TaskFormDialog'
 
 const tabs = [
   {
@@ -32,7 +32,7 @@ const tabs = [
   },
 ]
 
-type DialogVariants = {
+type Dialogs = {
   projectForm: ProjectFormDialogProps
   taskForm: TaskFormDialogProps
 }
@@ -50,7 +50,7 @@ export const ProjectDetails = ({ project }: { project: IProject }) => {
   )
   const currentTab = match?.pop()?.route.path || tabs[1].value
   const [view, setView] = useState<TaskBoardView>('kanban')
-  const [dialogs, openDialog] = useDialogs<DialogVariants>({
+  const [dialogs, openDialog] = useDialogs<Dialogs>({
     projectForm: {
       open: false,
     },
@@ -125,7 +125,12 @@ export const ProjectDetails = ({ project }: { project: IProject }) => {
                 <Button
                   size="small"
                   startIcon={<AddIcon />}
-                  onClick={() => openDialog('taskForm')}
+                  onClick={() =>
+                    openDialog('taskForm', {
+                      ...DIALOG_BASE_OPTIONS.form.addTask,
+                      project,
+                    })
+                  }
                 >
                   {t('buttons.new_task')}
                 </Button>
