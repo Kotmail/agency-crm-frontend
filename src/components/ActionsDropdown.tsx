@@ -10,12 +10,7 @@ import {
 import { MoreHoriz, SvgIconComponent } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
-export type ActionItemKeys =
-  | 'edit'
-  | 'copy'
-  | 'archive'
-  | 'unarchive'
-  | 'delete'
+export type ActionItemKeys = 'edit' | 'delete'
 
 export type ActionItem = {
   key: ActionItemKeys

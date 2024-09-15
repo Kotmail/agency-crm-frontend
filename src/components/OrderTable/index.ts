@@ -1,1 +1,0 @@
-export { OrderTable } from './OrderTable'

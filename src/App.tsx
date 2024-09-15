@@ -9,9 +9,7 @@ import {
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { useVerifyUserQuery } from './redux/api/authApi'
 import { useLayoutEffect } from 'react'
-import { OrdersPage } from './pages/OrdersPage'
 import { UsersPage } from './pages/UsersPage'
-import { ArchivePage } from './pages/ArchivePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectPage } from './pages/ProjectPage'
 import { AuthGuard } from './components/AuthGuard'
@@ -108,7 +106,7 @@ const App = () => {
 
   useLayoutEffect(() => {
     if (isSuccess && location.pathname === '/') {
-      navigate('orders')
+      navigate('projects')
     }
   }, [isSuccess])
 
@@ -132,9 +130,7 @@ const App = () => {
               }
             >
               <Route element={<DashboardLayout />}>
-                <Route path="/orders" element={<OrdersPage />} />
                 <Route path="/users" element={<UsersPage />} />
-                <Route path="/archive" element={<ArchivePage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/projects/:id" element={<ProjectPage />}>
                   <Route index element={<AboutProject />} />

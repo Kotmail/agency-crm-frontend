@@ -13,8 +13,6 @@ import {
 } from '@mui/material'
 import {
   Menu as MenuIcon,
-  LibraryBooksOutlined,
-  Inventory2Outlined,
   PeopleAltOutlined,
   GridViewOutlined,
 } from '@mui/icons-material'
@@ -25,16 +23,6 @@ import { IUser, UserRole } from '../models/IUser'
 import { useAppSelector } from '../hooks/useAppSelector'
 
 const pages = [
-  {
-    name: 'orders',
-    pathname: '/orders',
-    icon: LibraryBooksOutlined,
-  },
-  {
-    name: 'archive',
-    pathname: '/archive',
-    icon: Inventory2Outlined,
-  },
   {
     name: 'projects',
     pathname: '/projects',

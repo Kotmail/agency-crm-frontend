@@ -15,11 +15,6 @@
     "in_progress": "In Progress",
     "completed": "Completed"
   },
-  "order_statuses": {
-    "waiting": "Waiting",
-    "accepted": "Accepted",
-    "done": "Done"
-  },
   "buttons": {
     "login": "Login",
     "cancel": "Cancel",
@@ -32,7 +27,6 @@
     "upload": "Upload",
     "change": "Change",
     "view_details": "View details",
-    "new_order": "New order",
     "new_project": "New project",
     "new_task": "New task",
     "new_user": "New user",
@@ -135,10 +129,6 @@
       "fail": "The user could not be deleted",
       "success": "The user has been deleted"
     },
-    "add_order": {
-      "fail": "The order could not be added",
-      "success": "The order has been added"
-    },
     "add_project": {
       "fail": "The project could not be added",
       "success": "The project has been added"
@@ -147,10 +137,6 @@
       "fail": "The task could not be added",
       "success": "The task has been added"
     },
-    "edit_order": {
-      "fail": "The order could not be updated",
-      "success": "The order has been updated"
-    },
     "edit_project": {
       "fail": "The project could not be updated",
       "success": "The project has been updated"
@@ -158,14 +144,6 @@
     "edit_task": {
       "fail": "The task could not be updated",
       "success": "The task has been updated"
-    },
-    "copy_order": {
-      "fail": "The order could not be copied",
-      "success": "The order has been copied"
-    },
-    "delete_order": {
-      "fail": "The order could not be deleted",
-      "success": "The order has been deleted"
     },
     "delete_project": {
       "fail": "The project could not be deleted",
@@ -177,10 +155,6 @@
     }
   },
   "alerts": {
-    "orders": {
-      "request_error": "An error occurred when requesting order data",
-      "empty_data": "No orders found"
-    },
     "users": {
       "request_error": "An error occurred when requesting user data..."
     },
@@ -205,10 +179,7 @@
     },
     "delete_user": {
       "title": "Are you sure?",
-      "desc": "All orders belonging to the user will also be deleted!"
-    },
-    "add_order": {
-      "title": "Add order"
+      "desc": "All projects belonging to the user will also be deleted!"
     },
     "add_project": {
       "title": "Add project"
@@ -216,21 +187,11 @@
     "add_task": {
       "title": "Add task"
     },
-    "edit_order": {
-      "title": "Edit order"
-    },
     "edit_project": {
       "title": "Edit project"
     },
     "edit_task": {
       "title": "Edit task"
-    },
-    "copy_order": {
-      "title": "Copy an order"
-    },
-    "delete_order": {
-      "title": "Are you sure?",
-      "desc": "The order will be permanently deleted from the system!"
     },
     "delete_project": {
       "title": "Are you sure?",
@@ -243,27 +204,6 @@
     "not_authorized": {
       "title": "Access error!",
       "desc": "You are not authorized to view this page."
-    },
-    "move_to_archive": {
-      "title": "Move the order to the archive?",
-      "desc": "The order will disappear from the general list and appear in the archive."
-    },
-    "move_from_archive": {
-      "title": "Move the order to the general list?",
-      "desc": "The order will disappear from the archive and appear in the general list."
-    }
-  },
-  "order_list_table": {
-    "label": "List of orders",
-    "headings": {
-      "actions": "Actions",
-      "deadline": "Deadline",
-      "description": "Description",
-      "priority": "Priority",
-      "creator": "Manager",
-      "executor": "Executor",
-      "cost": "Cost",
-      "status": "Status"
     }
   },
   "user_list_table": {
@@ -281,15 +221,11 @@
     "logout": "Logout",
     "edit": "Edit",
     "copy": "Copy",
-    "archive": "Move to archive",
-    "unarchive": "Move from archive",
     "delete": "Delete"
   },
   "pages": {
     "signin": "Sign In",
-    "orders": "Orders",
     "users": "Users",
-    "archive": "Archive",
     "projects": "Projects",
     "error_404": {
       "title": "Page not found!",
@@ -323,21 +259,6 @@
     "edit": "Edit"
   },
   "app_name": "Agency CRM",
-  "filter": {
-    "tooltip": "Filter"
-  },
-  "sorter": {
-    "button_text": "By {{option_label}}",
-    "sortby_label": "Sort by:",
-    "orderby_label": "Direction:",
-    "options": {
-      "created_at": "Date of creation",
-      "deadline": "Deadline",
-      "cost": "Price",
-      "asc": "ASC",
-      "desc": "DESC"
-    }
-  },
   "avatar_uploader": {
     "note": "Allowed formats: JPG, PNG, WEBP.<br />Max file size: 500KB."
   },
