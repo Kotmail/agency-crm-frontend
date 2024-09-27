@@ -1,10 +1,34 @@
-import { Box, styled, Typography, TypographyProps } from '@mui/material'
+import { Box, styled } from '@mui/material'
 import { TaskBoardData } from './TaskBoard'
 import { useTranslation } from 'react-i18next'
 import { TaskCard } from './TaskCard'
-import { CounterBadge } from './CounterBadge'
+import { BoardStatusHeading } from './BoardStatusHeading'
 
-const Wrapper = styled(Box)({
+export const KanbanBoard = ({ statuses, groupedTasks }: TaskBoardData) => {
+  const { t } = useTranslation()
+
+  return (
+    <Board>
+      <Grid>
+        {statuses.map((status) => (
+          <Cell key={status}>
+            <BoardStatusHeading
+              label={t(`statuses.${status}`)}
+              counterValue={groupedTasks[status]?.length}
+              className={status}
+            />
+            {groupedTasks[status]?.length > 0 &&
+              groupedTasks[status].map((task) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+          </Cell>
+        ))}
+      </Grid>
+    </Board>
+  )
+}
+
+const Board = styled(Box)({
   overflowX: 'auto',
   marginLeft: -24,
   marginRight: -24,
@@ -30,41 +54,3 @@ const Cell = styled(Box)({
     marginBottom: 20,
   },
 })
-
-const Header = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  '&:not(:last-child)': {
-    marginBottom: 10,
-  },
-})
-
-const StatusName = styled((props: TypographyProps) => (
-  <Typography component="h2" {...props} />
-))({
-  paddingRight: 10,
-  fontWeight: 500,
-})
-
-export const KanbanBoard = ({ groups, groupedTasks }: TaskBoardData) => {
-  const { t } = useTranslation()
-
-  return (
-    <Wrapper>
-      <Grid>
-        {groups.map((group) => (
-          <Cell key={group}>
-            <Header>
-              <StatusName>{t(`statuses.${group}`)}</StatusName>
-              <CounterBadge value={groupedTasks[group]?.length} />
-            </Header>
-            {groupedTasks[group]?.length > 0 &&
-              groupedTasks[group].map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
-          </Cell>
-        ))}
-      </Grid>
-    </Wrapper>
-  )
-}

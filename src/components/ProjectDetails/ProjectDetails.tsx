@@ -62,7 +62,7 @@ export const ProjectDetails = ({ project }: { project: IProject }) => {
   const { t } = useTranslation()
 
   const changeViewHandler = (_: MouseEvent<HTMLElement>, view: TaskBoardView) =>
-    setView(view)
+    view && setView(view)
 
   return (
     <>

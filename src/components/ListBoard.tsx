@@ -1,4 +1,4 @@
-import { styled, Typography, TypographyProps } from '@mui/material'
+import { styled } from '@mui/material'
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
@@ -6,7 +6,33 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { TaskRow } from './TaskRow'
 import { useTranslation } from 'react-i18next'
 import { TaskBoardData } from './TaskBoard'
-import { CounterBadge } from './CounterBadge'
+import { BoardStatusHeading } from './BoardStatusHeading'
+
+export const ListBoard = ({ statuses, groupedTasks }: TaskBoardData) => {
+  const { t } = useTranslation()
+
+  return statuses.map((status) => (
+    <Board key={status}>
+      <Summary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls={`${status}-content`}
+        id={`${status}-header`}
+      >
+        <BoardStatusHeading
+          label={t(`statuses.${status}`)}
+          counterValue={groupedTasks[status]?.length}
+          className={status}
+        />
+      </Summary>
+      <Tasks>
+        {groupedTasks[status]?.length > 0 &&
+          groupedTasks[status].map((task) => (
+            <TaskRow key={task.id} task={task} />
+          ))}
+      </Tasks>
+    </Board>
+  ))
+}
 
 const Board = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters defaultExpanded square {...props} />
@@ -42,33 +68,3 @@ const Tasks = styled(MuiAccordionDetails)({
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
   },
 })
-
-const StatusName = styled((props: TypographyProps) => (
-  <Typography component="h2" {...props} />
-))({
-  paddingRight: 10,
-  fontWeight: 500,
-})
-
-export const ListBoard = ({ groups, groupedTasks }: TaskBoardData) => {
-  const { t } = useTranslation()
-
-  return groups.map((group) => (
-    <Board key={group}>
-      <Summary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls={`${group}-content`}
-        id={`${group}-header`}
-      >
-        <StatusName>{t(`statuses.${group}`)}</StatusName>
-        <CounterBadge value={groupedTasks[group]?.length} />
-      </Summary>
-      <Tasks>
-        {groupedTasks[group]?.length > 0 &&
-          groupedTasks[group].map((task) => (
-            <TaskRow key={task.id} task={task} />
-          ))}
-      </Tasks>
-    </Board>
-  ))
-}

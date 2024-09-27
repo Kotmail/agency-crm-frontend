@@ -17,7 +17,7 @@ import { IProject } from '../models/IProject'
 import { ActionItemKeys } from './ActionsDropdown'
 
 export type TaskBoardData = {
-  groups: TaskStatus[]
+  statuses: TaskStatus[]
   groupedTasks: Dictionary<ITask[]>
 }
 
@@ -44,7 +44,7 @@ export const TaskBoard = () => {
   const [deleteTask, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteTaskMutation()
   const [boardData, setBoardData] = useState<TaskBoardData>({
-    groups: [
+    statuses: [
       TaskStatus.UNSORTED,
       TaskStatus.IN_PROGRESS,
       TaskStatus.IN_REVIEW,
