@@ -247,7 +247,8 @@
       "priority": "Приоритет:",
       "status": "Статус:",
       "due_date": "Крайний срок:"
-    }
+    },
+    "no_due_date": "Не указан"
   },
   "aria_labels": {
     "close_task_window": "Закрыть окно с задачей",

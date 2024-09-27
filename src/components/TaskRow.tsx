@@ -5,41 +5,12 @@ import Link from '@mui/material/Link'
 import { Box, Typography } from '@mui/material'
 import { AvatarGroup } from './AvatarGroup'
 import { PriorityChip } from './PriorityChip'
-
-const TaskWrapper = styled(Box)({
-  display: 'grid',
-  gridTemplateColumns: 'max-content 1fr',
-  gridTemplateAreas: `"heading heading"
-                      "avatars priority"`,
-  alignItems: 'center',
-  gap: '6px 5px',
-  padding: '10px 15px',
-  backgroundColor: '#fff',
-  '.MuiTypography-subtitle2': {
-    gridArea: 'heading',
-  },
-  '.MuiChip-root': {
-    gridArea: 'priority',
-    justifySelf: 'flex-start',
-  },
-  '.MuiAvatarGroup-root': {
-    gridArea: 'avatars',
-  },
-  '@media (width >= 768px)': {
-    gridTemplateAreas: '"heading priority avatars"',
-    gridTemplateColumns: 'max-content max-content 1fr',
-    gap: '6px 10px',
-    '.MuiAvatarGroup-root': {
-      marginLeft: 0,
-      marginRight: -2,
-    },
-  },
-})
+import { DeadlineProperty } from './DeadlineProperty'
 
 export const TaskRow = ({ task }: { task: ITask }) => {
   return (
-    <TaskWrapper>
-      <Typography component="h2" variant="subtitle2">
+    <Row>
+      <Typography component="h3" variant="subtitle2">
         <Link
           component={RouterLink}
           to={`${task.id}`}
@@ -49,8 +20,47 @@ export const TaskRow = ({ task }: { task: ITask }) => {
           {task.name}
         </Link>
       </Typography>
-      <PriorityChip priority={task.priority} />
-      <AvatarGroup users={task.responsibleUsers} />
-    </TaskWrapper>
+      <Properties>
+        <PriorityChip priority={task.priority} />
+        <DeadlineProperty date={task.dueDate} />
+      </Properties>
+      <Users users={task.responsibleUsers} />
+    </Row>
   )
 }
+
+const Row = styled(Box)({
+  padding: '8px 15px',
+  backgroundColor: '#fff',
+  '@media (width >= 768px)': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 15,
+    '.MuiAvatarGroup-root': {
+      marginLeft: 0,
+      marginRight: -2,
+    },
+  },
+})
+
+const Properties = styled(Box)({
+  display: 'flex',
+  gap: 10,
+  marginRight: 'auto',
+  '@media (width < 768px)': {
+    marginBottom: 2,
+    '&:not(:last-child)': {
+      marginBottom: 10,
+    },
+    paddingTop: 10,
+  },
+})
+
+const Users = styled(AvatarGroup)({
+  width: 'max-content',
+  '.MuiAvatar-root': {
+    width: 26,
+    height: 26,
+  },
+})

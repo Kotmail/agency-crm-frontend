@@ -1,4 +1,4 @@
-import { styled } from '@mui/material'
+import { styled, Typography, TypographyProps } from '@mui/material'
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { TaskBoardData } from './TaskBoard'
 import { CounterBadge } from './CounterBadge'
 
-const Accordion = styled((props: AccordionProps) => (
+const Board = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters defaultExpanded square {...props} />
 ))({
   border: 'unset',
@@ -23,22 +23,19 @@ const Accordion = styled((props: AccordionProps) => (
   },
 })
 
-const AccordionSummary = styled(MuiAccordionSummary)({
+const Summary = styled(MuiAccordionSummary)({
   minHeight: 'auto',
-  padding: '12px 15px',
+  padding: '10px 0',
   borderTop: '1px solid rgba(0, 0, 0, 0.12)',
   backgroundColor: '#f3f5f7',
   '& .MuiAccordionSummary-content': {
+    alignItems: 'center',
     margin: 0,
     fontWeight: 500,
   },
 })
 
-const Counter = styled(CounterBadge)({
-  marginLeft: 10,
-})
-
-const AccordionDetails = styled(MuiAccordionDetails)({
+const Tasks = styled(MuiAccordionDetails)({
   padding: 0,
   borderTop: '1px solid rgba(0, 0, 0, 0.12)',
   '& > .MuiBox-root:not(:last-child)': {
@@ -46,25 +43,32 @@ const AccordionDetails = styled(MuiAccordionDetails)({
   },
 })
 
+const StatusName = styled((props: TypographyProps) => (
+  <Typography component="h2" {...props} />
+))({
+  paddingRight: 10,
+  fontWeight: 500,
+})
+
 export const ListBoard = ({ groups, groupedTasks }: TaskBoardData) => {
   const { t } = useTranslation()
 
   return groups.map((group) => (
-    <Accordion key={group}>
-      <AccordionSummary
+    <Board key={group}>
+      <Summary
         expandIcon={<ExpandMoreIcon />}
         aria-controls={`${group}-content`}
         id={`${group}-header`}
       >
-        {t(`statuses.${group}`)}
-        <Counter value={groupedTasks[group]?.length} />
-      </AccordionSummary>
-      <AccordionDetails>
+        <StatusName>{t(`statuses.${group}`)}</StatusName>
+        <CounterBadge value={groupedTasks[group]?.length} />
+      </Summary>
+      <Tasks>
         {groupedTasks[group]?.length > 0 &&
           groupedTasks[group].map((task) => (
             <TaskRow key={task.id} task={task} />
           ))}
-      </AccordionDetails>
-    </Accordion>
+      </Tasks>
+    </Board>
   ))
 }

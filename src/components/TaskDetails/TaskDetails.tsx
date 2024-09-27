@@ -82,7 +82,9 @@ export const TaskDetails = () => {
               <S.Property>
                 <S.PropertyLabel>{t('task.labels.due_date')}</S.PropertyLabel>
                 <Typography component="span">
-                  {task.dueDate ? formatDate(task.dueDate) : '—'}
+                  {task.dueDate
+                    ? formatDate(task.dueDate)
+                    : t('task.no_due_date')}
                 </Typography>
               </S.Property>
             </S.Properties>

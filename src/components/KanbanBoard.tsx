@@ -39,7 +39,7 @@ const Header = styled(Box)({
   },
 })
 
-const Label = styled((props: TypographyProps) => (
+const StatusName = styled((props: TypographyProps) => (
   <Typography component="h2" {...props} />
 ))({
   paddingRight: 10,
@@ -55,7 +55,7 @@ export const KanbanBoard = ({ groups, groupedTasks }: TaskBoardData) => {
         {groups.map((group) => (
           <Cell key={group}>
             <Header>
-              <Label>{t(`statuses.${group}`)}</Label>
+              <StatusName>{t(`statuses.${group}`)}</StatusName>
               <CounterBadge value={groupedTasks[group]?.length} />
             </Header>
             {groupedTasks[group]?.length > 0 &&

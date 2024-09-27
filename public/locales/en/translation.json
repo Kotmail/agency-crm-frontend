@@ -247,7 +247,8 @@
       "priority": "Priority:",
       "status": "Status:",
       "due_date": "Due Date:"
-    }
+    },
+    "no_due_date": "Not specified"
   },
   "aria_labels": {
     "close_task_window": "Close the task window",

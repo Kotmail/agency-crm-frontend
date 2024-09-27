@@ -101,10 +101,10 @@ export const PropertyLabel = styled((props: TypographyProps) => (
 
 export const Avatars = styled(Box)({
   display: 'flex',
-  gap: '10px',
-  marginTop: '12px',
+  gap: 10,
+  marginTop: 12,
   flexWrap: 'wrap',
-  paddingTop: '12px',
+  paddingTop: 12,
   borderTop: `1px solid ${grey[300]}`,
 })
 
