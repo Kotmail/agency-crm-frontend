@@ -141,6 +141,7 @@ export const TaskFormDialog = ({
 
     reset({
       ...values,
+      priority: values.priority || defaultValues.priority,
       project,
     })
   }, [task, project, reset])

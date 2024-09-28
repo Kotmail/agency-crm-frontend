@@ -31,7 +31,7 @@ type Dialogs = {
 export type TaskBoardContext = {
   project: IProject
   taskDrawerOpened: boolean
-  toggleTaskDrawer: () => void
+  toggleTaskDrawer: (is_opened: boolean) => void
   onSelectTaskActionHandler: (action: ActionItemKeys, task: ITask) => void
 }
 
@@ -67,10 +67,10 @@ export const TaskBoard = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const toggleTaskDrawer = () => {
-    setTaskDrawerOpened(!taskDrawerOpened)
+  const toggleTaskDrawer = (is_opened: boolean) => {
+    setTaskDrawerOpened(is_opened)
 
-    if (taskDrawerOpened) {
+    if (!is_opened) {
       setTimeout(() => navigate('.'), 225)
     }
   }
@@ -90,7 +90,7 @@ export const TaskBoard = () => {
           confirmBtnHandler: () => {
             deleteTask(task.id)
             closeDialog('confirm')
-            toggleTaskDrawer()
+            toggleTaskDrawer(false)
           },
         })
         break

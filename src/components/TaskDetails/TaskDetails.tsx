@@ -35,11 +35,11 @@ export const TaskDetails = () => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    setTimeout(() => toggleTaskDrawer(), 0)
+    setTimeout(() => toggleTaskDrawer(true), 0)
   }, [])
 
   return (
-    <S.Drawer open={taskDrawerOpened} onClose={toggleTaskDrawer}>
+    <S.Drawer open={taskDrawerOpened} onClose={() => toggleTaskDrawer(false)}>
       {isTaskLoading && <CircularProgress />}
       {task && (
         <>
@@ -59,7 +59,7 @@ export const TaskDetails = () => {
               />
               <S.CloseButton
                 aria-label={t('aria_labels.close_task_window')}
-                onClick={toggleTaskDrawer}
+                onClick={() => toggleTaskDrawer(false)}
               />
             </S.Buttons>
           </S.TopLine>
