@@ -17,8 +17,11 @@ import { IProject } from '../models/IProject'
 import { ActionItemKeys } from './ActionsDropdown'
 
 export type TaskBoardData = {
-  statuses: TaskStatus[]
-  groupedTasks: Dictionary<ITask[]>
+  taskData: {
+    statuses: TaskStatus[]
+    groupedTasks: Dictionary<ITask[]>
+  }
+  onAddTaskHandler: (statusFieldValue: TaskStatus) => void
 }
 
 export type TaskBoardView = 'kanban' | 'list'
@@ -43,7 +46,7 @@ export const TaskBoard = () => {
   })
   const [deleteTask, { isSuccess: isDeleteSuccess, isError: isDeleteError }] =
     useDeleteTaskMutation()
-  const [boardData, setBoardData] = useState<TaskBoardData>({
+  const [taskData, setTaskData] = useState<TaskBoardData['taskData']>({
     statuses: [
       TaskStatus.UNSORTED,
       TaskStatus.IN_PROGRESS,
@@ -75,6 +78,14 @@ export const TaskBoard = () => {
     }
   }
 
+  const onAddTaskHandler = (statusFieldValue: TaskStatus) => {
+    openDialog('taskForm', {
+      ...DIALOG_BASE_OPTIONS.form.addTask,
+      statusFieldValue,
+      project,
+    })
+  }
+
   const onSelectTaskActionHandler = (action: ActionItemKeys, task: ITask) => {
     switch (action) {
       case 'edit':
@@ -98,7 +109,7 @@ export const TaskBoard = () => {
   }
 
   useEffect(() => {
-    setBoardData((data) => ({
+    setTaskData((data) => ({
       ...data,
       groupedTasks: groupBy(tasks?.items, ({ status }) => status),
     }))
@@ -125,9 +136,9 @@ export const TaskBoard = () => {
   return (
     <>
       {view === 'kanban' ? (
-        <KanbanBoard {...boardData} />
+        <KanbanBoard taskData={taskData} onAddTaskHandler={onAddTaskHandler} />
       ) : (
-        <ListBoard {...boardData} />
+        <ListBoard taskData={taskData} onAddTaskHandler={onAddTaskHandler} />
       )}
       <Outlet
         context={

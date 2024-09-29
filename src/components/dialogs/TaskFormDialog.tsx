@@ -102,6 +102,7 @@ export type TaskFormDialogProps = {
   title?: string
   task?: ITask | null
   project: IProject
+  statusFieldValue?: TaskStatus
   successMessage?: string
   submitBtnLabel?: string
 } & DialogProps
@@ -117,6 +118,7 @@ export const TaskFormDialog = ({
   task,
   project,
   title,
+  statusFieldValue,
   successMessage,
   submitBtnLabel,
   onClose,
@@ -142,9 +144,10 @@ export const TaskFormDialog = ({
     reset({
       ...values,
       priority: values.priority || defaultValues.priority,
+      status: statusFieldValue || values.status || defaultValues.status,
       project,
     })
-  }, [task, project, reset])
+  }, [task, project, statusFieldValue, reset])
 
   const onSubmit: SubmitHandler<TaskFormFields> = async (data) => {
     try {

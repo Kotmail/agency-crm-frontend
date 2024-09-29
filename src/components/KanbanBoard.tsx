@@ -1,10 +1,15 @@
-import { Box, styled } from '@mui/material'
+import { Box, Button, ButtonProps, styled } from '@mui/material'
 import { TaskBoardData } from './TaskBoard'
 import { useTranslation } from 'react-i18next'
 import { TaskCard } from './TaskCard'
 import { BoardStatusHeading } from './BoardStatusHeading'
+import { blueGrey } from '@mui/material/colors'
+import AddIcon from '@mui/icons-material/Add'
 
-export const KanbanBoard = ({ statuses, groupedTasks }: TaskBoardData) => {
+export const KanbanBoard = ({
+  taskData: { statuses, groupedTasks },
+  onAddTaskHandler,
+}: TaskBoardData) => {
   const { t } = useTranslation()
 
   return (
@@ -21,6 +26,9 @@ export const KanbanBoard = ({ statuses, groupedTasks }: TaskBoardData) => {
               groupedTasks[status].map((task) => (
                 <TaskCard key={task.id} task={task} />
               ))}
+            <AddTaskButton onClick={() => onAddTaskHandler(status)}>
+              {t('buttons.add_task')}
+            </AddTaskButton>
           </Cell>
         ))}
       </Grid>
@@ -52,5 +60,24 @@ const Grid = styled(Box)({
 const Cell = styled(Box)({
   '.MuiPaper-root:not(:last-child)': {
     marginBottom: 20,
+  },
+})
+
+const AddTaskButton = styled((props: ButtonProps) => (
+  <Button variant="outlined" startIcon={<AddIcon />} {...props} />
+))({
+  width: '100%',
+  padding: '7px 15px',
+  border: `1px dashed ${blueGrey[200]}`,
+  fontWeight: 400,
+  lineHeight: 'normal',
+  color: blueGrey[400],
+  '& .MuiTouchRipple-root': {
+    opacity: 0.5,
+  },
+  '&:hover': {
+    border: `1px dashed ${blueGrey[300]}`,
+    backgroundColor: blueGrey[50],
+    color: blueGrey[500],
   },
 })
