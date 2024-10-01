@@ -4,15 +4,7 @@ import MuiAvatarGroup, {
 import { IUser } from '../models/IUser'
 import { UserAvatar } from './UserAvatar'
 import { styled } from '@mui/material'
-
-const Group = styled(MuiAvatarGroup)({
-  marginLeft: '-2px',
-  '.MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-})
+import { getUserFullName } from '../utils/helpers/getUserFullName'
 
 type AvatarGroupProps = {
   users: IUser[]
@@ -26,8 +18,17 @@ export const AvatarGroup = ({ users, ...props }: AvatarGroupProps) => {
   return (
     <Group total={users.length} max={4} {...props}>
       {users.map((user) => (
-        <UserAvatar user={user} key={user.id} />
+        <UserAvatar user={user} tooltip={getUserFullName(user)} key={user.id} />
       ))}
     </Group>
   )
 }
+
+const Group = styled(MuiAvatarGroup)({
+  marginLeft: '-2px',
+  '.MuiAvatar-root': {
+    width: 24,
+    height: 24,
+    fontSize: 12,
+  },
+})

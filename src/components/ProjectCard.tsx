@@ -19,6 +19,7 @@ import { Hider } from './Hider'
 import { UserRole } from '../models/IUser'
 import { UserAvatar } from './UserAvatar'
 import { AvatarGroup } from './AvatarGroup'
+import { getUserFullName } from '../utils/helpers/getUserFullName'
 
 type ProjectCardProps = {
   item: IProject
@@ -131,6 +132,7 @@ export const ProjectCard = ({
             </Typography>
             <UserAvatar
               user={item.creator}
+              tooltip={getUserFullName(item.creator)}
               sx={{
                 marginTop: '2px',
               }}

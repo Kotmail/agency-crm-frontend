@@ -9,6 +9,7 @@ import { PriorityChip } from '../PriorityChip'
 import { formatDate } from '../../utils/helpers/formatDate'
 import * as S from './TaskDetails.styles'
 import { useTaskBoardContext } from '../../hooks/useTaskBoardContext'
+import { getUserFullName } from '../../utils/helpers/getUserFullName'
 
 const actions: ActionItem[] = [
   {
@@ -91,7 +92,11 @@ export const TaskDetails = () => {
             {task.responsibleUsers && (
               <S.Avatars>
                 {task.responsibleUsers.map((user) => (
-                  <S.Avatar key={user.id} user={user} />
+                  <S.Avatar
+                    key={user.id}
+                    user={user}
+                    tooltip={getUserFullName(user)}
+                  />
                 ))}
               </S.Avatars>
             )}
