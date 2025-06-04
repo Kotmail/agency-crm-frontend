@@ -30,6 +30,8 @@
     "new_project": "New project",
     "new_task": "New task",
     "add_task": "Add task",
+    "add_checklist": "Add checklist",
+    "add_checklist_item": "Add item",
     "new_user": "New user",
     "return_to_main_page": "Go to home"
   },
@@ -75,7 +77,8 @@
     "avatar": {
       "file_type": "Incorrect file format",
       "file_size": "The maximum file size has been exceeded"
-    }
+    },
+    "checklist_field": "This field is required"
   },
   "input_helpers": {
     "responsibleUsers": {
@@ -99,6 +102,8 @@
     "priority": "Priority",
     "status": "Status",
     "due_date": "Due Date",
+    "checklist_name": "Checklist title",
+    "checklist_item_name": "Item title",
     "creator": {
       "label": "Manager",
       "placeholder": "Enter filtering information"
@@ -202,6 +207,10 @@
       "title": "Are you sure?",
       "desc": "The task will be permanently deleted from the system!"
     },
+    "delete_checklist_item": {
+      "title": "Are you sure?",
+      "desc": "The item will be permanently deleted!"
+    },
     "not_authorized": {
       "title": "Access error!",
       "desc": "You are not authorized to view this page."
@@ -266,6 +275,8 @@
   },
   "tabs": {
     "about_project": "About project",
-    "tasks": "Tasks"
-  }
+    "tasks": "Tasks",
+    "checklists": "Checklists"
+  },
+  "checklist_item_warning": "There are unsaved changes"
 }

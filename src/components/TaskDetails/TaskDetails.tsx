@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { CircularProgress, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Box, CircularProgress, Tab, Typography } from '@mui/material'
 import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
 import { useParams } from 'react-router-dom'
 import { useOneTaskQuery } from '../../redux/api/tasksApi'
@@ -10,6 +10,8 @@ import { formatDate } from '../../utils/helpers/formatDate'
 import * as S from './TaskDetails.styles'
 import { useTaskBoardContext } from '../../hooks/useTaskBoardContext'
 import { getUserFullName } from '../../utils/helpers/getUserFullName'
+import { Checklists } from '../checklists/Checklists'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 
 const actions: ActionItem[] = [
   {
@@ -33,7 +35,12 @@ export const TaskDetails = () => {
   const { data: task, isLoading: isTaskLoading } = useOneTaskQuery(
     Number(taskId) || 0,
   )
+  const [value, setValue] = useState('1')
   const { t } = useTranslation()
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue)
+  }
 
   useEffect(() => {
     setTimeout(() => toggleTaskDrawer(true), 0)
@@ -100,6 +107,16 @@ export const TaskDetails = () => {
                 ))}
               </S.Avatars>
             )}
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleChange}>
+                  <Tab label={t('tabs.checklists')} value="1" />
+                </TabList>
+              </Box>
+              <TabPanel value="1" sx={{ padding: '20px 0 0' }}>
+                <Checklists taskId={Number(taskId) || 0} />
+              </TabPanel>
+            </TabContext>
           </S.Content>
         </>
       )}
