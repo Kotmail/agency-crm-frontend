@@ -14,12 +14,14 @@ import { UserAvatar } from '../UserAvatar'
 export const Drawer = styled((props: DrawerProps) => (
   <MuiDrawer
     anchor="right"
-    PaperProps={{
-      sx: {
-        width: '100%',
-        maxWidth: 460,
-        border: 'unset',
-        boxSizing: 'border-box',
+    slotProps={{
+      paper: {
+        sx: {
+          width: '100%',
+          maxWidth: 460,
+          border: 'unset',
+          boxSizing: 'border-box',
+        },
       },
     }}
     {...props}

@@ -58,7 +58,7 @@ export const ChecklistItem = ({
               updateItemHandler({ ...item, isDone: e.target.checked })
             }
             checked={item.isDone}
-            inputProps={{ 'aria-labelledby': labelId }}
+            slotProps={{ input: { 'aria-labelledby': labelId } }}
           />
         ) : undefined
       }

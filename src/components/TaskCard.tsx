@@ -11,7 +11,7 @@ import { ITask } from '../models/ITask'
 import { Link as RouterLink } from 'react-router-dom'
 import { AvatarGroup } from './AvatarGroup'
 import { PriorityChip } from './PriorityChip'
-import grey from '@mui/material/colors/grey'
+import { grey } from '@mui/material/colors'
 import { DeadlineProperty } from './DeadlineProperty'
 
 export const TaskCard = ({ task }: { task: ITask }) => {

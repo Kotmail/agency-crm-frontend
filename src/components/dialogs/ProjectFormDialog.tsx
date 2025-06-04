@@ -21,7 +21,6 @@ import {
   Stack,
   TextField,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 import { isQueryError } from '../../redux/api/helpers'
 import { enqueueSnackbar } from 'notistack'
@@ -201,9 +200,11 @@ export const ProjectFormDialog = ({
       fullWidth
       maxWidth="xs"
       onClose={onClose}
-      PaperProps={{
-        component: 'form',
-        onSubmit: handleSubmit(onSubmit),
+      slotProps={{
+        paper: {
+          component: 'form',
+          onSubmit: handleSubmit(onSubmit),
+        },
       }}
       {...props}
     >
@@ -298,9 +299,9 @@ export const ProjectFormDialog = ({
         <Button variant="outlined" onClick={closeDialogHandler}>
           {t('buttons.cancel')}
         </Button>
-        <LoadingButton type="submit" loading={isSubmitting} variant="contained">
+        <Button type="submit" loading={isSubmitting} variant="contained">
           {t(submitBtnLabel || (project ? 'buttons.save' : 'buttons.add'))}
-        </LoadingButton>
+        </Button>
       </DialogActions>
     </Dialog>
   )

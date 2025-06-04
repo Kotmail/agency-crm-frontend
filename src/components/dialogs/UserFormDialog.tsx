@@ -23,7 +23,6 @@ import {
   Stack,
   TextField,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { useTranslation } from 'react-i18next'
 import {
   useAddUserMutation,
@@ -213,10 +212,12 @@ export const UserFormDialog = ({
       fullWidth
       maxWidth="xs"
       onClose={onClose}
-      PaperProps={{
-        component: 'form',
-        ref: formRef,
-        onSubmit: handleSubmit(onSubmit),
+      slotProps={{
+        paper: {
+          component: 'form',
+          ref: formRef,
+          onSubmit: handleSubmit(onSubmit),
+        },
       }}
       {...props}
     >
@@ -310,9 +311,9 @@ export const UserFormDialog = ({
         <Button variant="outlined" onClick={closeDialogHandler}>
           {t('buttons.cancel')}
         </Button>
-        <LoadingButton type="submit" loading={isSubmitting} variant="contained">
+        <Button type="submit" loading={isSubmitting} variant="contained">
           {t(`buttons.${user ? 'save' : 'add'}`)}
-        </LoadingButton>
+        </Button>
       </DialogActions>
     </Dialog>
   )

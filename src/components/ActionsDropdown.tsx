@@ -62,8 +62,10 @@ export const ActionsDropdown = ({
         anchorEl={dropdownAnchor}
         open={isDropdownOpened}
         onClose={closeDropdownHandler}
-        MenuListProps={{
-          'aria-labelledby': buttonId,
+        slotProps={{
+          list: {
+            'aria-labelledby': buttonId,
+          },
         }}
         transformOrigin={transformOrigin}
         anchorOrigin={anchorOrigin}

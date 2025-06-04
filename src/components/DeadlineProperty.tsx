@@ -1,5 +1,5 @@
 import { styled, Typography } from '@mui/material'
-import blueGrey from '@mui/material/colors/blueGrey'
+import { blueGrey } from '@mui/material/colors'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { formatDate } from '../utils/helpers/formatDate'
 import { useTranslation } from 'react-i18next'

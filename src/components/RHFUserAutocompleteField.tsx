@@ -50,17 +50,19 @@ export const RHFUserAutocompleteField = <
             (option.firstName && option.lastName && getUserFullName(option)) ||
             ''
           }
-          PopperComponent={(props) => (
-            <Popper
-              {...props}
-              popperOptions={{
-                modifiers: [{ name: 'offset', options: { offset: [0, 15] } }],
-              }}
-              placement="top"
-            />
-          )}
+          slots={{
+            popper: (props) => (
+              <Popper
+                {...props}
+                popperOptions={{
+                  modifiers: [{ name: 'offset', options: { offset: [0, 15] } }],
+                }}
+                placement="top"
+              />
+            ),
+          }}
           renderOption={(props, user) => (
-            <AutocompleteUserOption key={user.id} user={user} {...props} />
+            <AutocompleteUserOption user={user} {...props} key={user.id} />
           )}
           renderInput={(params) => (
             <TextField

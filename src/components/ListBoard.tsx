@@ -7,7 +7,7 @@ import { TaskRow } from './TaskRow'
 import { useTranslation } from 'react-i18next'
 import { TaskBoardData } from './TaskBoard'
 import { BoardStatusHeading } from './BoardStatusHeading'
-import blueGrey from '@mui/material/colors/blueGrey'
+import { blueGrey } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
 
 export const ListBoard = ({

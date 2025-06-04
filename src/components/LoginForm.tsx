@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { Box, Stack, TextField } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { Box, Stack, TextField, Button } from '@mui/material'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -75,14 +74,14 @@ export const LoginForm = () => {
           error={!!errors.password}
           helperText={t(errors.password?.message || '')}
         />
-        <LoadingButton
+        <Button
           type="submit"
           loading={isSubmitting}
           size="large"
           variant="contained"
         >
           {t('buttons.login')}
-        </LoadingButton>
+        </Button>
       </Stack>
     </Box>
   )
