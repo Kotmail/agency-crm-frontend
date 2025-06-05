@@ -10,6 +10,13 @@ import {
 import { Checklist } from './Checklist'
 import { ChecklistForm } from './ChecklistForm'
 import { useTranslation } from 'react-i18next'
+import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog'
+import { useDialogs } from '../../hooks/useDialogs'
+import { DIALOG_BASE_OPTIONS } from '../../utils/consts'
+
+type DialogVariants = {
+  confirm: ConfirmDialogProps
+}
 
 export const Checklists = ({ taskId }: { taskId: number }) => {
   const { data: checklists, isLoading } = useChecklistsQuery({
@@ -19,6 +26,13 @@ export const Checklists = ({ taskId }: { taskId: number }) => {
   const [addChecklist] = useAddChecklistMutation()
   const [updateChecklist] = useUpdateChecklistMutation()
   const [deleteChecklist] = useDeleteChecklistMutation()
+  const [dialogs, openDialog, closeDialog] = useDialogs<DialogVariants>({
+    confirm: {
+      open: false,
+      ...DIALOG_BASE_OPTIONS.confirm.deleteChecklist,
+      confirmBtnHandler: () => {},
+    },
+  })
   const { t } = useTranslation()
 
   const onAddHandler = (name: string) => {
@@ -29,9 +43,15 @@ export const Checklists = ({ taskId }: { taskId: number }) => {
   const onUpdateHandler = (checklist: IChecklist) =>
     updateChecklist({ ...checklist, taskId })
 
-  const onDeleteHandler = (checklistId: number) => {
-    deleteChecklist({ checklistId, taskId })
-  }
+  const onDeleteHandler = (checklistId: number) =>
+    openDialog('confirm', {
+      ...dialogs.confirm,
+      confirmBtnHandler: () => {
+        deleteChecklist({ checklistId, taskId })
+
+        closeDialog('confirm')
+      },
+    })
 
   if (isLoading) {
     return <CircularProgress />
@@ -64,6 +84,7 @@ export const Checklists = ({ taskId }: { taskId: number }) => {
           {t('buttons.add_checklist')}
         </Button>
       )}
+      <ConfirmDialog {...dialogs.confirm} />
     </>
   )
 }

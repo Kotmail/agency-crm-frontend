@@ -45,6 +45,11 @@ export const DIALOG_BASE_OPTIONS = {
       description: 'dialogs.delete_user.desc',
       confirmBtnLabel: 'buttons.delete',
     },
+    deleteChecklist: {
+      title: 'dialogs.delete_checklist.title',
+      description: 'dialogs.delete_checklist.desc',
+      confirmBtnLabel: 'buttons.delete',
+    },
     deleteChecklistItem: {
       title: 'dialogs.delete_checklist_item.title',
       description: 'dialogs.delete_checklist_item.desc',

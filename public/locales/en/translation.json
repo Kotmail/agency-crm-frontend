@@ -207,6 +207,10 @@
       "title": "Are you sure?",
       "desc": "The task will be permanently deleted from the system!"
     },
+    "delete_checklist": {
+      "title": "Are you sure?",
+      "desc": "The checklist and its items will be deleted!"
+    },
     "delete_checklist_item": {
       "title": "Are you sure?",
       "desc": "The item will be permanently deleted!"

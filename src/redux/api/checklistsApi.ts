@@ -33,9 +33,7 @@ interface UpdateChecklistItemRequest
   checklistId: number
 }
 
-const apiWithTag = apiSlice.enhanceEndpoints({
-  addTagTypes: ['Checklists'],
-})
+const apiWithTag = apiSlice.enhanceEndpoints({})
 
 const checklistsApi = apiWithTag
   .injectEndpoints({
